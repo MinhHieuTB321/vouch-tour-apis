@@ -1,0 +1,34 @@
+image: mcr.microsoft.com/dotnet/sdk:7.0
+
+before_script:
+  - dotnet restore
+
+stages:          # List of stages for jobs, and their order of execution
+  - build-n-test
+  # - test
+  # - deploy
+
+build-and-test-job:       # This job runs in the build stage, which runs first.
+  stage: build-n-test
+  script:
+    - echo "Compiling the code..."
+    - dotnet build --no-restore
+    # - cd Apis
+    # - dotnet run --project webapi
+    # make sure health check are 200
+    # - Get https://localhost:5001/healthchecks
+    - echo "Compile completed build."
+    - echo "Running unit tests... This will take about 60 seconds."
+    - dotnet test --no-restore
+    - echo "Code coverage is 90%"
+    # unit-test-job:   # This job runs in the test stage.
+    #   stage: test    # It only starts when the job in the build stage completes successfully.
+    #   script:
+    #     - echo "Running unit tests... This will take about 60 seconds."
+    #     - echo "Code coverage is 90%"
+
+    # deploy-job:      # This job runs in the deploy stage.
+    #   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+    #   script:
+    #     - echo "Deploying application..."
+    #     - echo "Application successfully deployed."

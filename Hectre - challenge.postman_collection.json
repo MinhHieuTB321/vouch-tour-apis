@@ -1,0 +1,203 @@
+{
+	"info": {
+		"_postman_id": "29257d1b-5e28-4f3b-b643-c97f0c58b360",
+		"name": "Hextre - challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13288034"
+	},
+	"item": [
+		{
+			"name": "Chemical Module",
+			"item": [
+				{
+					"name": "Create Chemical",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"const schema = {\r",
+									"  \"properties\": {\r",
+									"    \"_Id\": { \"type\": \"string\" },\r",
+									"    \"chemicalType\": { \"type\": \"string\" },\r",
+									"    \"preHarvestIntervalInDays\": { \"type\": \"number\" },\r",
+									"    \"activeIngredient\": { \"type\": \"string\" },\r",
+									"    \"name\": { \"type\": \"string\" },\r",
+									"    \"creationDate\": { \"type\": \"string\" },\r",
+									"  }\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', () => {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test models of the response\", () => {\r",
+									"  pm.expect(jsonData).to.be.an(\"object\");\r",
+									"  pm.expect(jsonData._Id).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.chemicalType).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.preHarvestIntervalInDays).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData.activeIngredient).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.name).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.creationDate).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"expected the result\", () => {\r",
+									"  pm.expect(jsonData.chemicalType).to.be.eql(\"chemicalType mock\");\r",
+									"  pm.expect(jsonData.preHarvestIntervalInDays).to.be.eql(1);\r",
+									"  pm.expect(jsonData.activeIngredient).to.be.eql(\"activeIngredient mock\");\r",
+									"  pm.expect(jsonData.name).to.be.eql(\"mock\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"chemicalType\": \"chemicalType mock\",\r\n  \"preHarvestIntervalInDays\": 1,\r\n  \"activeIngredient\": \"activeIngredient mock\",\r\n  \"name\": \"mock\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/{{ApiFrefix}}/Chemical/CreateChemical",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"{{ApiFrefix}}",
+								"Chemical",
+								"CreateChemical"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chemiclas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"const schema = {\r",
+									"  \"properties\": {\r",
+									"    \"totalItemsCount\": { \"type\": \"number\" },\r",
+									"    \"pageSize\": { \"type\": \"number\" },\r",
+									"    \"totalPagesCount\": { \"type\": \"number\" },\r",
+									"    \"pageIndex\": { \"type\": \"number\" },\r",
+									"    \"next\": { \"type\": \"boolean\" },\r",
+									"    \"previous\": { \"type\": \"boolean\" },\r",
+									"    \"items\": { \"type\": \"array\" },\r",
+									"  }\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', () => {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test models of the response\", () => {\r",
+									"  pm.expect(jsonData).to.be.an(\"object\");\r",
+									"  pm.expect(jsonData.totalItemsCount).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData.pageSize).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData.totalPagesCount).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData.pageIndex).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData.next).to.be.a(\"boolean\");\r",
+									"  pm.expect(jsonData.previous).to.be.a(\"boolean\");\r",
+									"  pm.expect(jsonData.items).to.be.a(\"array\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"chemicalType\": \"chemicalType mock\",\r\n  \"preHarvestIntervalInDays\": 1,\r\n  \"activeIngredient\": \"activeIngredient mock\",\r\n  \"name\": \"mock\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/{{ApiFrefix}}/Chemical/GetChemicalPagingsion?pageIndex=0&pageSize=10",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"{{ApiFrefix}}",
+								"Chemical",
+								"GetChemicalPagingsion"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "0"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "healthchecks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseURL}}/healthchecks",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"healthchecks"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
