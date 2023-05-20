@@ -34,7 +34,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ftps://waws-prod-sg1-083.ftp.azurewebsites.windows.net/site/wwwroot
+          creds: vouch-tour-apis\$vouch-tour-apis
 
   deploy:
     runs-on: windows-latest
