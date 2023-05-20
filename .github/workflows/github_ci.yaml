@@ -33,6 +33,7 @@ jobs:
           
       - name: Set up Azure CLI
         uses: azure/setup-azure-cli@v1
+
           
       - name: Azure Login
         uses: azure/login@v1
