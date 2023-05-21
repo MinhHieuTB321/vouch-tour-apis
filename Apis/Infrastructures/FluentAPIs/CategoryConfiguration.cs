@@ -8,17 +8,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructures.FluentAPIs
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<Category> builder)
         {
            builder.HasKey(x => x.Id);
-           
-           // Role Relationship Configuration
-           builder.HasOne(x => x.Role).WithMany(r => r.Users)
-           .HasForeignKey(x => x.RoleId);
-
-            
         }
     }
 }

@@ -7,4 +7,10 @@
         Out,
         OnTrack
     }
+
+    public enum ActiveEnum 
+    {
+        Active,
+        InActive
+    }
 }

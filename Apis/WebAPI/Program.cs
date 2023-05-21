@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddInfrastructuresService();
+builder.Services.AddInfrastructuresService(builder.Configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddWebAPIService();
 
 var app = builder.Build();
