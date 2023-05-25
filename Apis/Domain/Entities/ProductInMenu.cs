@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class DiscountProduct : BaseEntity
+    public class ProductInMenu : BaseEntity
     {
         public double ActualPrice {get;set;}
-        public DateTime DateExpired {get;set;}
-        public int Quantity {get;set;}
+        public double SupplierPrice { get; set;}
         public string Status {get;set;} = default!;
 
         public Guid MenuId {get;set;} 

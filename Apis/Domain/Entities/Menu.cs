@@ -12,8 +12,11 @@ namespace Domain.Entities
         public string Status {get;set;} = nameof(ActiveEnum.Active);
 
         public Guid TourGuideId {get;set;} 
-        public User TourGuide {get;set;} = default!;
+        public TourGuide TourGuide {get;set;} = default!;
 
-        public ICollection<DiscountProduct> DiscountProducts {get;set;} = default!;
+        public ICollection<ProductInMenu> ProductInMenus {get;set;} = default!;
+
+        public ICollection<Group> Groups { get; set; } = default!;
+
     }
 }

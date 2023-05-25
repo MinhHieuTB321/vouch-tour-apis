@@ -13,11 +13,15 @@ namespace Domain.Entities
         public string Status {get;set;} = default!;
 
         // Supplier
-        public Guid SupplierId {get;set;}
-        public User Supplier {get;set;} = default!;
+        public Guid SupplierId { get; set;} = default!;
+        public Supplier Supplier { get; set; } = default!;
 
-        public Guid CategoryId {get;set;}
-        public Category Category {get;set;} = default!;
-        public ICollection<DiscountProduct> DiscountProducts {get;set;} = default!;
+        public Guid CategoryId { get; set; } = default!;
+        public Category Category { get; set; } = default!;
+        public ICollection<ProductInMenu> ProductInMenus { get; set;} = default!;
+
+
+
+
     }
 }

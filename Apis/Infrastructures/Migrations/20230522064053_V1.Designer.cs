@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230521163038_V1")]
+    [Migration("20230522064053_V1")]
     partial class V1
     {
         /// <inheritdoc />
@@ -58,7 +58,7 @@ namespace Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Domain.Entities.DiscountProduct", b =>
@@ -113,7 +113,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("DiscountProducts");
+                    b.ToTable("DiscountProduct");
                 });
 
             modelBuilder.Entity("Domain.Entities.Group", b =>
@@ -160,7 +160,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("TourGuideId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Group");
                 });
 
             modelBuilder.Entity("Domain.Entities.Menu", b =>
@@ -204,7 +204,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("TourGuideId");
 
-                    b.ToTable("Menus");
+                    b.ToTable("Menu");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
@@ -248,7 +248,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Domain.Entities.OrderDetail", b =>
@@ -281,8 +281,18 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -290,7 +300,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetail");
                 });
 
             modelBuilder.Entity("Domain.Entities.Payment", b =>
@@ -335,7 +345,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payment");
                 });
 
             modelBuilder.Entity("Domain.Entities.Product", b =>
@@ -391,7 +401,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
@@ -408,7 +418,7 @@ namespace Infrastructures.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -463,7 +473,7 @@ namespace Infrastructures.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.DiscountProduct", b =>

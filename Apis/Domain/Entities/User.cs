@@ -16,12 +16,5 @@ namespace Domain.Entities
         public int RoleId {get;set;}
         public Role Role {get;set;} = default!;
 
-
-        // Configuration For Supplier
-        public ICollection<Product> Products {get;set;} = default!;
-
-        // Configuration For TourGuide
-        public ICollection<Group> Groups {get;set;} = default!;
-        public ICollection<Menu> Menus {get;set;} = default!;
     }
 }

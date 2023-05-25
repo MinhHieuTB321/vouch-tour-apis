@@ -13,12 +13,9 @@ namespace Infrastructures.FluentAPIs
         public void Configure(EntityTypeBuilder<User> builder)
         {
            builder.HasKey(x => x.Id);
-           
-           // Role Relationship Configuration
-           builder.HasOne(x => x.Role).WithMany(r => r.Users)
-           .HasForeignKey(x => x.RoleId);
-
-            
+            builder.HasOne(u => u.Role)
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleId);
         }
     }
 }

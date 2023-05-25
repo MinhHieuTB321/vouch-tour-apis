@@ -10,9 +10,11 @@ namespace Domain.Entities
         public string GroupName {get;set;} = default!;
         public int Quantity {get;set;} = default!;
         public DateTime EndDate {get;set;}
-
         public Guid TourGuideId {get;set;}
-        public User TourGuide {get;set;} = default!;
+        public TourGuide TourGuide {get;set;} = default!;
         public ICollection<Order> Orders {get;set;} = default!;
+
+        public Guid MenuId { get; set;} = default!; 
+        public Menu Menu { get; set;} = default!;
     }
 }

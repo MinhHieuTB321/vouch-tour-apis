@@ -9,8 +9,8 @@ namespace Domain.Entities
     {
         public double TotalPrice { get; set;}
         public string Status { get; set; } = "Created";
-
-        public Guid GroupId {get;set;}
+        public string CustomerName { get; set; } = default!;
+        public Guid GroupId { get;set; }
         public Group Group {get;set;} = default!;
         public ICollection<OrderDetail> OrderDetails {get;set;} = default!;
         public ICollection<Payment> Payments {get;set;} = default!;

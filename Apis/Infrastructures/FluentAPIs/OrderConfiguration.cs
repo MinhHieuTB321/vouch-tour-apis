@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructures.FluentAPIs
 {
@@ -15,6 +16,7 @@ namespace Infrastructures.FluentAPIs
 
             builder.HasKey(x => x.Id);
             builder.HasOne(o => o.Group).WithMany(g => g.Orders).HasForeignKey(o => o.GroupId);
+            
             
         }
     }

@@ -8,16 +8,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructures.FluentAPIs
 {
-    public class DiscountProductConfiguration : IEntityTypeConfiguration<DiscountProduct>
+    public class DiscountProductConfiguration : IEntityTypeConfiguration<ProductInMenu>
     {
-         public void Configure(EntityTypeBuilder<DiscountProduct> builder)
+         public void Configure(EntityTypeBuilder<ProductInMenu> builder)
         {
            builder.HasKey(x => x.Id);
-           builder.HasOne(d => d.Product).WithMany(p => p.DiscountProducts)
+           builder.HasOne(d => d.Product).WithMany(p => p.ProductInMenus)
            .HasForeignKey(d => d.ProductId)
            .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne(d => d.Menu).WithMany(m => m.DiscountProducts)
+            builder.HasOne(d => d.Menu).WithMany(m => m.ProductInMenus)
             .HasForeignKey(d => d.MenuId)
             .OnDelete(DeleteBehavior.NoAction);
         }

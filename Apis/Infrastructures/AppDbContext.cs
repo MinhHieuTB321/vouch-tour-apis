@@ -12,17 +12,19 @@ namespace Infrastructures
         }
 
         #region DbSet
-        public DbSet<User> Users {get;set;} = default!;
-        public DbSet<Product> Products {get;set;} = default!;
-        public DbSet<Group> Groups {get;set;} = default!;
-        public DbSet<DiscountProduct> DiscountProducts {get;set;} = default!;
-        public DbSet<Menu> Menus{get;set;} = default!;
-        public DbSet<Order> Orders {get;set;} = default!;
-        public DbSet<OrderDetail> OrderDetails {get;set;} = default!;
-        public DbSet<Role> Roles {get;set;} = default!;
-        public DbSet<Category> Categories {get;set;} = default!;
-
-        public DbSet<Payment> Payments {get;set;} = default!;
+        public DbSet<User> User {get;set;} = default!;
+        public DbSet<Product> Product {get;set;} = default!;
+        public DbSet<Group> Group {get;set;} = default!;
+        public DbSet<ProductInMenu> ProductInMenu {get;set;} = default!;
+        public DbSet<Menu> Menu {get;set;} = default!;
+        public DbSet<Order> Order {get;set;} = default!;
+        public DbSet<OrderDetail> OrderDetail {get;set;} = default!;
+        public DbSet<Role> Role {get;set;} = default!;
+        public DbSet<Category> Category {get;set;} = default!;
+        public DbSet<TourGuide> TourGuide { get; set; } = default!;
+        public DbSet<Supplier> Supplier { get; set; } = default!;
+        public DbSet<Admin> Admin { get; set;} = default!;
+        public DbSet<Payment> Payment {get;set;} = default!;
         
         #endregion
 
