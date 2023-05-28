@@ -13,10 +13,14 @@ namespace Infrastructures
     {
         public static IServiceCollection AddInfrastructuresService(this IServiceCollection services, string DbConnection)
         {
+            #region DI_SERVICES
+            services.AddScoped<IUserService, UserService>();
+            #endregion
 
-
+            #region DI_REPOSITORY
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+            services.AddScoped<IUserRepository, UserRepository>();
+            #endregion
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddDbContext<AppDbContext>(
                 option => option.UseSqlServer(DbConnection));
