@@ -20,5 +20,7 @@ namespace Application.Services
         {
             return await _unitOfWork.UserRepository.GetAllAsync();
         }
+
+        public async Task<User?> GetUserById(Guid Id) => await _unitOfWork.UserRepository.GetByIdAsync(Id);
     }
 }
