@@ -1,8 +1,11 @@
 ﻿using Application.Interfaces;
+using Application.ViewModels;
+using AutoMapper;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,16 +14,20 @@ namespace Application.Services
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UserService(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<List<UserViewDTO>> GetAllUsers()
         {
-            return await _unitOfWork.UserRepository.GetAllAsync();
+            var users = await _unitOfWork.UserRepository.GetAllAsync();
+            return _mapper.Map<List<UserViewDTO>>(users);
         }
 
-        public async Task<User?> GetUserById(Guid Id) => await _unitOfWork.UserRepository.GetByIdAsync(Id);
+        public async Task<UserViewDTO?> GetUserById(Guid Id) =>  
+            _mapper.Map<UserViewDTO>(await _unitOfWork.UserRepository.GetByIdAsync(Id));
     }
 }

@@ -27,10 +27,11 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetById(Guid Id)
         {
             var result = await _userService.GetUserById(Id);
-            if(result is not null)
+            if(result is null)
             {
                 return BadRequest("Not found");
-            }return Ok(result);
+            } else
+            return Ok(result);
         }
 
 

@@ -2,6 +2,7 @@
 using AutoMapper;
 using Application.Commons;
 using Domain.Entities;
+using Application.ViewModels;
 
 namespace Infrastructures.Mappers
 {
@@ -9,7 +10,7 @@ namespace Infrastructures.Mappers
     {
         public MapperConfigurationsProfile()
         {
-
+            CreateMap<User, UserViewDTO>().ReverseMap();
         }
     }
 }

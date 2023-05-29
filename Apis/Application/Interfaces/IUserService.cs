@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.ViewModels;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Application.Interfaces
 {
     public interface IUserService
     {
-        Task<List<User>> GetAllUsers();
-        Task<User?> GetUserById(Guid Id);
+        Task<List<UserViewDTO>> GetAllUsers();
+        Task<UserViewDTO?> GetUserById(Guid Id);
     }
 }
