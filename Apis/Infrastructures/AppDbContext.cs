@@ -25,7 +25,7 @@ namespace Infrastructures
         public DbSet<Supplier> Supplier { get; set; } = default!;
         public DbSet<Admin> Admin { get; set;} = default!;
         public DbSet<Payment> Payment {get;set;} = default!;
-        
+        public DbSet<ProductImage> ProductImage { get; set;} = default!;
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

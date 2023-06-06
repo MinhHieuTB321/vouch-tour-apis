@@ -15,6 +15,15 @@ namespace Infrastructures.FluentAPIs
         public void Configure(EntityTypeBuilder<Admin> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.HasData(new Admin
+            {
+                PhoneNumber = "0909014406",
+                Email = "quangtm0152@gmail.com",
+               DateOfBirth = DateTime.Now,
+               Name = "QuangDepTry",
+               Sex = 1,
+               Status = "Active"
+            });
 
         }
     }

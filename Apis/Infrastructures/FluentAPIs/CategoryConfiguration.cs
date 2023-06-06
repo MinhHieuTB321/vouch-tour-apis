@@ -13,6 +13,11 @@ namespace Infrastructures.FluentAPIs
         public void Configure(EntityTypeBuilder<Category> builder)
         {
            builder.HasKey(x => x.Id);
+            builder.HasData(new Category
+            {
+                CategoryName = "Do Kho",
+                
+            });
         }
     }
 }

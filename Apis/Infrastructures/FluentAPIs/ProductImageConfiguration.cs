@@ -9,15 +9,14 @@ using System.Threading.Tasks;
 
 namespace Infrastructures.FluentAPIs
 {
-    public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
+    public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
     {
-        public void Configure(EntityTypeBuilder<Supplier> builder)
+        public void Configure(EntityTypeBuilder<ProductImage> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.HasOne(t => t.Admin)
-                .WithMany(a => a.Suppliers)
-                .HasForeignKey(t => t.AdminId);
-            
+            builder.HasOne(x => x.Product)
+                .WithMany(p => p.Images).HasForeignKey(x => x.ProductId);
+
         }
     }
 }
