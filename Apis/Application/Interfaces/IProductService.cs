@@ -11,7 +11,10 @@ namespace Application.Interfaces
     public interface IProductService
     {
         Task<Product> CreateProduct(CreateProductDTO createDTO);
-        Task<Product> GetById(Guid id);
+        Task<IEnumerable<ViewProductDTO>> GetAll();
+        Task<ViewProductDTO> GetById(Guid id);
+        Task<bool> UpdateProduct(UpdateProductDTO updateDTO);
+        Task<bool> DeleteProduct(Guid id);
 
         
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.ViewModels.CategoryDTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace Application.Interfaces
 {
     public interface ICategoryService
     {
+        Task<IEnumerable<CategoryViewDTO>> GetAll();
     }
 }

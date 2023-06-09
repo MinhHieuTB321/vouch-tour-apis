@@ -6,10 +6,11 @@ using Infrastructures.Mappers;
 using Infrastructures.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json.Serialization;
 
 namespace Infrastructures
 {
-    public static class DenpendencyInjection
+    public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructuresService(this IServiceCollection services, string DbConnection)
         {
@@ -17,6 +18,8 @@ namespace Infrastructures
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductImageService, ProductImageService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISupplierService, SupplierService>();
             #endregion
 
             #region DI_REPOSITORY
@@ -34,6 +37,7 @@ namespace Infrastructures
             // services.AddDbContext<AppDbContext>(
             //     option => option.UseInMemoryDatabase("test"));
             services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
+            services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             return services;
         }
     }

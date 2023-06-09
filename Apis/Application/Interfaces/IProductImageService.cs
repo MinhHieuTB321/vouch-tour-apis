@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.ViewModels.Product.ProductImage;
+using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,10 @@ namespace Application.Interfaces
     public interface IProductImageService
     {
         public Task<ProductImage?> AddImageAsync(IFormFile file, Guid productId);
+
+
+        public Task<bool> DeleteImage(Guid id);
+        public Task<IEnumerable<ProductImageViewDTO>> GetAll();
+        public Task<ProductImageViewDTO> GetById(Guid id);
     }
 }
