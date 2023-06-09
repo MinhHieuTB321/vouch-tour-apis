@@ -10,5 +10,6 @@ namespace Application.Interfaces
     public interface ICategoryService
     {
         Task<IEnumerable<CategoryViewDTO>> GetAll();
+        Task<CategoryViewDTO> GetById(Guid Id);
     }
 }

@@ -12,6 +12,10 @@ namespace WebAPI.Controllers
             _userService = userService;
         }
 
+
+        /// <summary>
+        /// Get All Users
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> DemoApi()
         {
@@ -22,6 +26,10 @@ namespace WebAPI.Controllers
             }
             return Ok(result);
         }
+
+        /// <summary>
+        /// Get user by Id
+        /// </summary>
 
         [HttpGet("{Id}")] 
         public async Task<IActionResult> GetById(Guid Id)
