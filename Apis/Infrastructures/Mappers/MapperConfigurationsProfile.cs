@@ -7,6 +7,7 @@ using Application.ViewModels.Product;
 using Application.ViewModels.Product.ProductImage;
 using Application.ViewModels.SupplierDTO;
 using Application.ViewModels.CategoryDTO;
+using Application.ViewModels.TourGuideDTO;
 
 namespace Infrastructures.Mappers
 {
@@ -41,6 +42,10 @@ namespace Infrastructures.Mappers
             CreateMap<Category, CategoryCreateDTO>().ReverseMap();
             CreateMap<CategoryViewDTO, Category>().ReverseMap();
             CreateMap<CategoryCreateDTO, Category>().ReverseMap();
+            #endregion
+
+            #region TourGuides 
+            CreateMap<TourGuide, TourGuideViewDTO>();
             #endregion
         }
     }

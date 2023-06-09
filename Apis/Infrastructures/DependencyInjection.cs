@@ -20,6 +20,8 @@ namespace Infrastructures
             services.AddScoped<IProductImageService, ProductImageService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISupplierService, SupplierService>();
+            services.AddScoped<ITourGuideService, TourGuideService>();
+            services.AddScoped<IGroupService, GroupService>();
             #endregion
 
             #region DI_REPOSITORY
@@ -29,7 +31,9 @@ namespace Infrastructures
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
             services.AddScoped<IProductImageRepository, ProductImageRepository>();
-            
+            services.AddScoped<ITourGuideRepository, TourGuideRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IGroupRepository, GroupRepository>();
             #endregion
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddDbContext<AppDbContext>(
