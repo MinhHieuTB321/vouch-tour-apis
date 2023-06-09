@@ -12,6 +12,9 @@ namespace WebAPI.Controllers
                _tourGuideService = tourGuideService;
         }
 
+        /// <summary>
+        /// Get All tourGuides
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -19,6 +22,9 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get tourGuide by Id
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {

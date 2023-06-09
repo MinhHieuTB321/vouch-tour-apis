@@ -35,9 +35,11 @@ namespace Application.Services
             else throw new Exception("Not have any supplier");
         }
 
-        public Task<SupplierViewDTO> GetById(Guid id)
+        public async Task<SupplierViewDTO> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _unitOfWork.SupplierRepository.GetByIdAsync(id);
+            if (result != null) return _mapper.Map<SupplierViewDTO>(result);
+            else throw new Exception("Not found");
         }
 
         public Task<bool> Update(SupplierUpdateDTO updatedItem)

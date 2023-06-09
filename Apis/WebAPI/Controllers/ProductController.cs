@@ -16,7 +16,9 @@ namespace WebAPI.Controllers
 
         }
 
-
+        /// <summary>
+        /// Delete product
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -24,6 +26,10 @@ namespace WebAPI.Controllers
             if (result) return NoContent();
             else return BadRequest("Deleted Failed");
         }
+
+        /// <summary>
+        /// Get all products
+        /// </summary>
         [HttpGet] 
         public async Task<IActionResult> GetAll()
         {
@@ -33,6 +39,9 @@ namespace WebAPI.Controllers
             
         }
 
+        /// <summary>
+        /// Update product
+        /// </summary>
         [HttpPut]
         public async Task<IActionResult> Update(UpdateProductDTO updatedItem)
         {
@@ -40,6 +49,10 @@ namespace WebAPI.Controllers
             if (result) return NoContent();
             else return BadRequest();
         }
+
+        /// <summary>
+        /// Create product
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateProductDTO createProductDTO)
         {
@@ -64,12 +77,16 @@ namespace WebAPI.Controllers
 
 
                 }
-                return Ok(result);
+                return CreatedAtAction(nameof(GetById), new {id = result.Id},result );
                     
             }
             else return BadRequest("Can not create Product");
         }
 
+
+        /// <summary>
+        /// Get product by Id
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {

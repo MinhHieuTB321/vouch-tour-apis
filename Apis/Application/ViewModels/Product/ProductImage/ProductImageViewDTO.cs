@@ -9,7 +9,7 @@ namespace Application.ViewModels.Product.ProductImage
     public class ProductImageViewDTO
     {
         public Guid Id { get; set; }
-        public string URL { get; set; } = default!;
+        public string FileURL { get; set; } = default!;
         public string FileName { get; set; } = default!;
 
         public Guid ProductId { get; set; } = default!;

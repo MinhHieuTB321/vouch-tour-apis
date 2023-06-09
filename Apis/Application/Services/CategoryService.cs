@@ -25,5 +25,12 @@ namespace Application.Services
             if (result.Count() > 0) return _mapper.Map<IEnumerable<CategoryViewDTO>>(result);
             else throw new Exception("Not have any category");
         }
+
+        public async Task<CategoryViewDTO> GetById(Guid id)
+        {
+            var result = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+            if (result is not null) return _mapper.Map<CategoryViewDTO>(result);
+            else throw new Exception("Not Found");
+        }
     }
 }

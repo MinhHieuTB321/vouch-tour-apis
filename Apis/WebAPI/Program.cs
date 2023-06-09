@@ -1,6 +1,7 @@
 using Infrastructures;
 using WebAPI.Middlewares;
 using WebAPI;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,9 @@ builder.Services.AddInfrastructuresService(builder.Configuration.GetConnectionSt
 builder.Services.AddWebAPIService();
 builder.Services.AddSwaggerGen(c =>
 {
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
     c.SwaggerDoc("v1", new() { Title = "BasketAPI", Version = "v1" });
 });
 
