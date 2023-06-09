@@ -16,6 +16,30 @@ namespace WebAPI.Controllers
 
         }
 
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _productService.DeleteProduct(id);
+            if (result) return NoContent();
+            else return BadRequest("Deleted Failed");
+        }
+        [HttpGet] 
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _productService.GetAll();
+            if(result.Count() > 0) { return Ok(result); }
+            else return BadRequest();
+            
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateProductDTO updatedItem)
+        {
+            var result = await _productService.UpdateProduct(updatedItem);
+            if (result) return NoContent();
+            else return BadRequest();
+        }
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateProductDTO createProductDTO)
         {
@@ -37,7 +61,6 @@ namespace WebAPI.Controllers
                         
                     }
                     else throw new Exception("Image is null");
-
 
 
                 }

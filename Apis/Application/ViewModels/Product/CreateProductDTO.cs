@@ -17,4 +17,9 @@ namespace Application.ViewModels.Product
         public Guid SupplierId { get; set; } = default!;
         public Guid CategoryId { get; set; } = default!;
     }
+
+    public class UpdateProductDTO : CreateProductDTO
+    {
+        public Guid ProductId { get; set; }
+    }
 }

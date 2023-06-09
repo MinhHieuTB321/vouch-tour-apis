@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.ViewModels.Product;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,10 +37,45 @@ namespace Application.Services
                 
         }
 
-        public async Task<Product> GetById(Guid id)
+        public async Task<bool> DeleteProduct(Guid id)
+        {
+            var deletedItem = await _unitOfWork.ProductRepository.GetByIdAsync(id, x => x.Images);
+            if (deletedItem != null)
+            {
+                _unitOfWork.ProductRepository.SoftRemove(deletedItem);
+                if (await _unitOfWork.SaveChangeAsync() > 0) return true;
+                else throw new Exception("Save change failed!");
+
+            }
+            else throw new Exception("Not found");
+        }
+
+        public async Task<IEnumerable<ViewProductDTO>> GetAll()
+        {
+            var result =  await _unitOfWork.ProductRepository.GetAllAsync(x => x.Images, x => x.Category, x=> x.Supplier);
+            if (result.Count > 0) return _mapper.Map<IEnumerable<ViewProductDTO>>(result);
+            else throw new Exception("Not have any product");
+
+
+        }
+
+        public async Task<ViewProductDTO> GetById(Guid id)
         {
             var result = await _unitOfWork.ProductRepository.GetByIdAsync(id);
-            if (result is not null) return result;
+            if (result is not null) return _mapper.Map<ViewProductDTO>(result);
+            else throw new Exception("Not found");
+        }
+
+        public async Task<bool> UpdateProduct(UpdateProductDTO updateDTO)
+        {
+            var updatedItem = await _unitOfWork.ProductRepository.GetByIdAsync(updateDTO.ProductId);
+            if (updatedItem != null)
+            {
+                updatedItem = (Product)_mapper.Map(updateDTO, typeof(UpdateProductDTO), typeof(Product));
+                _unitOfWork.ProductRepository.Update(updatedItem);
+                if (await _unitOfWork.SaveChangeAsync() > 0) return true;
+                else throw new Exception("Save change failed!");
+            }
             else throw new Exception("Not found");
         }
     }
