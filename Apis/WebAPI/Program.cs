@@ -2,20 +2,14 @@ using Infrastructures;
 using WebAPI.Middlewares;
 using WebAPI;
 using System.Reflection;
+using Application.GlobalExceptionHandling.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddInfrastructuresService(builder.Configuration.GetConnectionString("DefaultConnection")!);
-builder.Services.AddWebAPIService();
-builder.Services.AddSwaggerGen(c =>
-{
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath);
-    c.SwaggerDoc("v1", new() { Title = "BasketAPI", Version = "v1" });
-});
+builder.Services.AddWebAPIService(builder.Configuration["JWTSecretKey"]!);
 
 var app = builder.Build();
 
@@ -30,14 +24,17 @@ else
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasketAPI v1"));
 }
+app.UseCors();
 
-
+app.UseMiddleware(typeof(GlobalErrorHandlingMiddleware));
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<PerformanceMiddleware>();
 app.MapHealthChecks("/healthchecks");
 app.UseHttpsRedirection();
 // todo authentication
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 

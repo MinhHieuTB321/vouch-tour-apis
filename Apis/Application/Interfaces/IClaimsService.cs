@@ -2,6 +2,10 @@
 {
     public interface IClaimsService
     {
-        public Guid GetCurrentUserId { get; }
+        public Guid GetId { get; }
+
+        public Guid GetUserRoleId { get; }
+
+        public string GetEmail { get; }
     }
 }

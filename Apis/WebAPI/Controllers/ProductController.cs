@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Update product
         /// </summary>
-        [HttpPut]
+        [HttpPut("/api/Product")]
         public async Task<IActionResult> Update(UpdateProductDTO updatedItem)
         {
             var result = await _productService.UpdateProduct(updatedItem);
@@ -53,7 +53,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Create product
         /// </summary>
-        [HttpPost]
+        [HttpPost("/api/Product")]
         public async Task<IActionResult> Create([FromForm] CreateProductDTO createProductDTO)
         {
             /*createProductDTO.File = formFile;*/

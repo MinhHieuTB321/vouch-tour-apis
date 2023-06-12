@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -17,8 +18,7 @@ namespace Infrastructures.FluentAPIs
             builder.HasOne(t => t.Admin)
                 .WithMany(a => a.TourGuides)
                 .HasForeignKey(t => t.AdminId);
-            
-
+            builder.Property(t => t.Status).HasDefaultValue(ActiveEnum.Active.ToString());
         }
     }
 }

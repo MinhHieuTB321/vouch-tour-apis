@@ -12,5 +12,7 @@ namespace Application.Interfaces
         public Task<IEnumerable<TourGuideViewDTO>> GetAll();
 
         public Task<TourGuideViewDTO> GetById(Guid id);
+
+        public Task<TourGuideViewDTO> AddTourGuide(TourGuideCreateDTO dto);
     }
 }

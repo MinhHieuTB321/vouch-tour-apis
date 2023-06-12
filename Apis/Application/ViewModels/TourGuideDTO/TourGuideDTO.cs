@@ -21,7 +21,11 @@ namespace Application.ViewModels.TourGuideDTO
 
     public class TourGuideCreateDTO
     {
-
+        public string Email { get; set; } = default!;
+        public string Name { get; set; } = default!;
+        public DateTime? DateOfBirth { get; set; } = default;
+        public byte? Sex { get; set; }
+        public string? PhoneNumber { get; set; } = default!;     
     }
 
     public class TourGuideUpdateDTO : TourGuideCreateDTO

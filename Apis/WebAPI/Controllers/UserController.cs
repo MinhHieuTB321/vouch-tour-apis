@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.ViewModels.UserDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -40,6 +41,22 @@ namespace WebAPI.Controllers
                 return BadRequest("Not found");
             } else
             return Ok(result);
+        }
+
+
+        /// <summary>
+        /// Get authenticate token
+        /// </summary>
+        [HttpPost("/api/Authentication")]
+        public async Task<IActionResult> LoginAsync(LoginDTO loginDTO)
+        {
+            var authToken = await _userService.LoginAsync(loginDTO);
+            //_logger.LogInformation("Auth Token: " + authToken);
+            if (authToken == null)
+            {
+                return BadRequest("Login Fail!");
+            }
+            return Ok(authToken);
         }
 
 

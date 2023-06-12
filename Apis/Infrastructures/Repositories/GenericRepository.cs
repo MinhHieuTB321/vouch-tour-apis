@@ -38,21 +38,21 @@ namespace Infrastructures.Repositories
         public async Task AddAsync(TEntity entity)
         {
             entity.CreationDate = _timeService.GetCurrentTime();
-            entity.CreatedBy = _claimsService.GetCurrentUserId;
+            entity.CreatedBy = _claimsService.GetUserRoleId;
             await _dbSet.AddAsync(entity);
         }
 
         public void SoftRemove(TEntity entity)
         {
             entity.IsDeleted = true;
-            entity.DeleteBy = _claimsService.GetCurrentUserId;
+            entity.DeleteBy = _claimsService.GetUserRoleId;
             _dbSet.Update(entity);
         }
 
         public void Update(TEntity entity)
         {
             entity.ModificationDate = _timeService.GetCurrentTime();
-            entity.ModificationBy = _claimsService.GetCurrentUserId;
+            entity.ModificationBy = _claimsService.GetUserRoleId;
             _dbSet.Update(entity);
         }
 
@@ -61,7 +61,7 @@ namespace Infrastructures.Repositories
             foreach (var entity in entities)
             {
                 entity.CreationDate = _timeService.GetCurrentTime();
-                entity.CreatedBy = _claimsService.GetCurrentUserId;
+                entity.CreatedBy = _claimsService.GetUserRoleId;
             }
             await _dbSet.AddRangeAsync(entities);
         }
@@ -72,7 +72,7 @@ namespace Infrastructures.Repositories
             {
                 entity.IsDeleted = true;
                 entity.DeletionDate = _timeService.GetCurrentTime();
-                entity.DeleteBy = _claimsService.GetCurrentUserId;
+                entity.DeleteBy = _claimsService.GetUserRoleId;
             }
             _dbSet.UpdateRange(entities);
         }
@@ -101,9 +101,16 @@ namespace Infrastructures.Repositories
             foreach (var entity in entities)
             {
                 entity.CreationDate = _timeService.GetCurrentTime();
-                entity.CreatedBy = _claimsService.GetCurrentUserId;
+                entity.CreatedBy = _claimsService.GetUserRoleId;
             }
             _dbSet.UpdateRange(entities);
         }
+
+        public async Task<TEntity> FindByField(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] includes)
+        => await includes
+           .Aggregate(_dbSet.AsQueryable(),
+               (entity, property) => entity.Include(property)).AsNoTracking()
+           .Where(expression).FirstOrDefaultAsync(x=>x.IsDeleted==false);
     }
 }
+

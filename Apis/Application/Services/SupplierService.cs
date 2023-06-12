@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.ViewModels.SupplierDTO;
 using AutoMapper;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,32 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public SupplierService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IClaimsService _claimsService;
+        public SupplierService(IUnitOfWork unitOfWork, IMapper mapper,IClaimsService claimsService)
         {
-                _mapper = mapper;
+             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _claimsService = claimsService;
         }
-        public Task<SupplierViewDTO> Create(SupplierCreateDTO createdItem)
+        public async Task<SupplierViewDTO> Create(SupplierCreateDTO createdItem)
         {
-            throw new NotImplementedException();
+            var createDTO = _mapper.Map<Supplier>(createdItem);
+            createDTO.AdminId = _claimsService.GetUserRoleId;
+            var supplier= await _unitOfWork.SupplierRepository.AddSupplierAsync(createDTO);
+            var user = _mapper.Map<User>(createdItem);
+            user.UserId = supplier.Id;
+            user.RoleId = 2;
+            await _unitOfWork.UserRepository.AddAsync(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<SupplierViewDTO>(supplier);
         }
 
+
+        //private Task CreateUser(User user)
+        //{
+
+        //}
         public Task<bool> Delete(Guid id)
         {
             throw new NotImplementedException();

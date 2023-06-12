@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Domain.Entities
         public byte? Sex { get; set; }
         public string PhoneNumber { get; set; } = default!;
         public string Email { get; set; } = default!;
-        public string Status { get; set; } = default!;
+        public string Status { get; set; } = ActiveEnum.Active.ToString()!;
 
         public ICollection<Group> Groups { get; set; } = default!;
         public ICollection<Menu> Menus { get; set; } = default!;

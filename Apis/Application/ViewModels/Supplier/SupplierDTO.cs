@@ -9,6 +9,7 @@ namespace Application.ViewModels.SupplierDTO
     public class SupplierViewDTO
     {
         public Guid Id { get; set; }
+        public string Email { get; set; } = default!;
         public string SupplierName { get; set; } = default!;
         public string Address { get; set; } = default!;
         public string PhoneNumber { get; set; } = default!;
@@ -17,6 +18,7 @@ namespace Application.ViewModels.SupplierDTO
 
     public class SupplierCreateDTO
     {
+        public string Email { get; set; } = default!;
         public string SupplierName { get; set; } = default!;
         public string Address { get; set; } = default!;
         public string PhoneNumber { get; set; } = default!;

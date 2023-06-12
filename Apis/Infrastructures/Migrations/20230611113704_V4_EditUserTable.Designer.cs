@@ -4,6 +4,7 @@ using Infrastructures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructures.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230611113704_V4_EditUserTable")]
+    partial class V4EditUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,9 +81,9 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7b572c63-8308-4c30-912d-8c9a94f34c10"),
-                            CreationDate = new DateTime(2023, 6, 12, 13, 23, 25, 197, DateTimeKind.Local).AddTicks(9365),
-                            DateOfBirth = new DateTime(2023, 6, 12, 13, 23, 25, 197, DateTimeKind.Local).AddTicks(9381),
+                            Id = new Guid("ca2356fd-e7ea-48f7-a2c3-cb817ee4ecfe"),
+                            CreationDate = new DateTime(2023, 6, 11, 18, 37, 4, 295, DateTimeKind.Local).AddTicks(552),
+                            DateOfBirth = new DateTime(2023, 6, 11, 18, 37, 4, 295, DateTimeKind.Local).AddTicks(564),
                             Email = "quangtm0152@gmail.com",
                             IsDeleted = false,
                             Name = "QuangDepTry",
@@ -128,9 +131,9 @@ namespace Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0d6dcb2f-e7ae-4630-aa58-719cb2fc1b62"),
+                            Id = new Guid("a6650cc2-0dd5-4c7d-89fd-f9bc1b84194c"),
                             CategoryName = "Do Kho",
-                            CreationDate = new DateTime(2023, 6, 12, 13, 23, 25, 198, DateTimeKind.Local).AddTicks(1357),
+                            CreationDate = new DateTime(2023, 6, 11, 18, 37, 4, 295, DateTimeKind.Local).AddTicks(2747),
                             IsDeleted = false
                         });
                 });
@@ -571,10 +574,6 @@ namespace Infrastructures.Migrations
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -649,9 +648,7 @@ namespace Infrastructures.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("Active");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

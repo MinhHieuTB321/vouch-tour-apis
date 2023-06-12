@@ -9,5 +9,6 @@ namespace Application.Repositories
 {
     public interface ITourGuideRepository : IGenericRepository<TourGuide>
     {
+        public Task<TourGuide> AddTourGuideAsync(TourGuide tourGuide);
     }
 }

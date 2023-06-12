@@ -1,4 +1,6 @@
 ﻿using Application.Interfaces;
+using Application.ViewModels.SupplierDTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -33,6 +35,21 @@ namespace WebAPI.Controllers
         {
             var result = await _supplerService.GetById(id);
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Create Supplier
+        /// </summary>
+        [Authorize]
+        [HttpPost("/api/Supplier")]
+        public async Task<IActionResult> CreateUser( SupplierCreateDTO createDTO)
+        {
+            var result = await _supplerService.Create(createDTO);
+            if (result == null)
+            {
+                return BadRequest("Can not add " + createDTO.Email + " into Db"!);
+            }
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
     }
 }

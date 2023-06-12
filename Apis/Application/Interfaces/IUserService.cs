@@ -1,4 +1,5 @@
 ﻿using Application.ViewModels;
+using Application.ViewModels.UserDTOs;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,6 @@ namespace Application.Interfaces
     {
         Task<List<UserViewDTO>> GetAllUsers();
         Task<UserViewDTO?> GetUserById(Guid Id);
+        Task<AuthToken> LoginAsync(LoginDTO loginDTO);
     }
 }

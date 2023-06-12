@@ -17,6 +17,18 @@ namespace Infrastructures.Mappers
         {
             #region UserMapping
             CreateMap<User, UserViewDTO>().ReverseMap();
+            CreateMap<User,TourGuideCreateDTO>()
+                .ForMember(des=>des.Name,options=>options.MapFrom(src=>src.FullName))
+                .ForMember(des => des.Email, options => options.MapFrom(src => src.Email))
+                .ForMember(des => des.Sex, options => options.MapFrom(src => src.Sex))
+                .ForMember(des => des.DateOfBirth, options => options.MapFrom(src => src.DateOfBirth))
+                .ForMember(des => des.PhoneNumber, options => options.MapFrom(src => src.PhoneNumber))
+                .ReverseMap();
+            CreateMap<User,SupplierCreateDTO>()
+                .ForMember(des => des.SupplierName, options => options.MapFrom(src => src.FullName))
+                .ForMember(des => des.Email, options => options.MapFrom(src => src.Email))
+                .ForMember(des => des.PhoneNumber, options => options.MapFrom(src => src.PhoneNumber))
+                .ReverseMap();
             #endregion
 
             #region ProductMapping
@@ -45,7 +57,8 @@ namespace Infrastructures.Mappers
             #endregion
 
             #region TourGuides 
-            CreateMap<TourGuide, TourGuideViewDTO>();
+            CreateMap<TourGuide, TourGuideViewDTO>().ReverseMap();
+            CreateMap<TourGuide,TourGuideCreateDTO>().ReverseMap();
             #endregion
         }
     }
