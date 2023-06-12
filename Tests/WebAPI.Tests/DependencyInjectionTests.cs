@@ -19,7 +19,7 @@ namespace WebAPI.Tests
         public DependencyInjectionTests()
         {
             var service = new ServiceCollection();
-            service.AddWebAPIService();
+            service.AddWebAPIService("");
             service.AddDbContext<AppDbContext>(
                 option => option.UseInMemoryDatabase("test"));
             _serviceProvider = service.BuildServiceProvider();
