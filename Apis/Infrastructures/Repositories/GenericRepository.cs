@@ -38,21 +38,22 @@ namespace Infrastructures.Repositories
         public async Task AddAsync(TEntity entity)
         {
             entity.CreationDate = _timeService.GetCurrentTime();
-            entity.CreatedBy = _claimsService.GetUserRoleId;
+            entity.CreatedBy = _claimsService.GetCurrentUser;
             await _dbSet.AddAsync(entity);
         }
 
         public void SoftRemove(TEntity entity)
         {
             entity.IsDeleted = true;
-            entity.DeleteBy = _claimsService.GetUserRoleId;
+            entity.DeleteBy = _claimsService.GetCurrentUser;
+            entity.DeletionDate=_timeService.GetCurrentTime();
             _dbSet.Update(entity);
         }
 
         public void Update(TEntity entity)
         {
             entity.ModificationDate = _timeService.GetCurrentTime();
-            entity.ModificationBy = _claimsService.GetUserRoleId;
+            entity.ModificationBy = _claimsService.GetCurrentUser;
             _dbSet.Update(entity);
         }
 
@@ -61,7 +62,7 @@ namespace Infrastructures.Repositories
             foreach (var entity in entities)
             {
                 entity.CreationDate = _timeService.GetCurrentTime();
-                entity.CreatedBy = _claimsService.GetUserRoleId;
+                entity.CreatedBy = _claimsService.GetCurrentUser;
             }
             await _dbSet.AddRangeAsync(entities);
         }
@@ -72,7 +73,7 @@ namespace Infrastructures.Repositories
             {
                 entity.IsDeleted = true;
                 entity.DeletionDate = _timeService.GetCurrentTime();
-                entity.DeleteBy = _claimsService.GetUserRoleId;
+                entity.DeleteBy = _claimsService.GetCurrentUser;
             }
             _dbSet.UpdateRange(entities);
         }
@@ -101,7 +102,7 @@ namespace Infrastructures.Repositories
             foreach (var entity in entities)
             {
                 entity.CreationDate = _timeService.GetCurrentTime();
-                entity.CreatedBy = _claimsService.GetUserRoleId;
+                entity.CreatedBy = _claimsService.GetCurrentUser;
             }
             _dbSet.UpdateRange(entities);
         }

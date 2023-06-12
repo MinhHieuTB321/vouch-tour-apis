@@ -28,8 +28,12 @@ namespace Application.ViewModels.TourGuideDTO
         public string? PhoneNumber { get; set; } = default!;     
     }
 
-    public class TourGuideUpdateDTO : TourGuideCreateDTO
-    {
+    public class TourGuideUpdateDTO
+     {
+        public string Name { get; set; } = default!;
+        public byte? Sex { get; set; }
+        public string PhoneNumber { get; set; } = default!;
+        public string Address { get; set; } = default!;
 
     }
 }

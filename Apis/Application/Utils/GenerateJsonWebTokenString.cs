@@ -14,10 +14,8 @@ namespace Application.Utils
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim("Id", user.Id.ToString()),
+                new Claim("UserId", user.UserId.ToString()),
                 new Claim("Email", user.Email),
-                new Claim("UserRoleId",user.UserId.ToString()),
-                new Claim(ClaimTypes.NameIdentifier ,value: user.FullName),
                 new Claim(ClaimTypes.Role, user.Role.RoleName),
             };
             var token = new JwtSecurityToken(

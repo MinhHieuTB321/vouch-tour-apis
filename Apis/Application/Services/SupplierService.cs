@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.ViewModels.Product;
 using Application.ViewModels.SupplierDTO;
 using AutoMapper;
 using Domain.Entities;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WApplication.GlobalExceptionHandling.Exceptions;
 
 namespace Application.Services
 {
@@ -24,25 +26,24 @@ namespace Application.Services
         public async Task<SupplierViewDTO> Create(SupplierCreateDTO createdItem)
         {
             var createDTO = _mapper.Map<Supplier>(createdItem);
-            createDTO.AdminId = _claimsService.GetUserRoleId;
+            createDTO.AdminId = _claimsService.GetCurrentUser;
             var supplier= await _unitOfWork.SupplierRepository.AddSupplierAsync(createDTO);
-            var user = _mapper.Map<User>(createdItem);
-            user.UserId = supplier.Id;
-            user.RoleId = 2;
-            await _unitOfWork.UserRepository.AddAsync(user);
+            var newUser = new User{UserId=supplier.Id,RoleId=2,Email=createdItem.Email}; 
+            await _unitOfWork.UserRepository.AddAsync(newUser);
             await _unitOfWork.SaveChangeAsync();
-
             return _mapper.Map<SupplierViewDTO>(supplier);
         }
-
-
-        //private Task CreateUser(User user)
-        //{
-
-        //}
-        public Task<bool> Delete(Guid id)
+        
+        public async Task<bool> Delete(Guid id)
         {
-            throw new NotImplementedException();
+           var supplier=await _unitOfWork.SupplierRepository.GetByIdAsync(id);
+            if(supplier == null)
+            {
+                throw new NotFoundException("Supplier is not exist in system!");
+            }
+             _unitOfWork.SupplierRepository.SoftRemove(supplier);
+            var result = await _unitOfWork.SaveChangeAsync();
+            return result > 0;
         }
 
         public async Task<IEnumerable<SupplierViewDTO>> GetAll()
@@ -59,9 +60,18 @@ namespace Application.Services
             else throw new Exception("Not found");
         }
 
-        public Task<bool> Update(SupplierUpdateDTO updatedItem)
+        public async Task<bool> Update(SupplierUpdateDTO updatedItem)
         {
-            throw new NotImplementedException();
+            var supplier = await _unitOfWork.SupplierRepository.GetByIdAsync(_claimsService.GetCurrentUser);
+            if(supplier == null)
+            {
+                throw new NotFoundException("Suppler is not exist!");
+            }
+            supplier = _mapper.Map(updatedItem,supplier);
+            _unitOfWork.SupplierRepository.Update(supplier);
+            var result = await _unitOfWork.SaveChangeAsync();
+            return result > 0;
+            
         }
     }
 }

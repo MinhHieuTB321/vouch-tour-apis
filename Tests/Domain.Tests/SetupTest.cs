@@ -41,7 +41,7 @@ namespace Domain.Tests
             _dbContext = new AppDbContext(options);
 
             _currentTimeMock.Setup(x => x.GetCurrentTime()).Returns(DateTime.UtcNow);
-            _claimsServiceMock.Setup(x => x.GetUserRoleId).Returns(Guid.Empty);
+            _claimsServiceMock.Setup(x => x.GetCurrentUser).Returns(Guid.Empty);
 
         }
 

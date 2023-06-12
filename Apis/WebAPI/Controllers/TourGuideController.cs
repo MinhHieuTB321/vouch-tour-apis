@@ -1,5 +1,8 @@
 ﻿using Application.Interfaces;
+using Application.Services;
 using Application.ViewModels.TourGuideDTO;
+using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
@@ -18,6 +21,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get All tourGuides
         /// </summary>
+        [Authorize(Roles = nameof(RoleEnums.Admin))]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -28,6 +32,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get tourGuide by Id
         /// </summary>
+        [Authorize(Roles = "Admin,TourGuide")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -39,7 +44,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Create tour guide
         /// </summary>
-        [Authorize]
+        [Authorize(Roles =nameof(RoleEnums.Admin))]
         [HttpPost]
         public async Task<IActionResult> AddTourGuide(TourGuideCreateDTO dto)
         {
@@ -49,6 +54,36 @@ namespace WebAPI.Controllers
                 return BadRequest("Can not add new tour guide!");
             }
             return CreatedAtAction(nameof(GetById), new {id=result.Id},result);
+        }
+
+        /// <summary>
+        /// Update tour-guide
+        /// </summary>
+        [Authorize(Roles =nameof(RoleEnums.TourGuide))]
+        [HttpPut]
+        public async Task<IActionResult> UpdateTourGuide(TourGuideUpdateDTO dto)
+        {
+            var result = await _tourGuideService.UpdateTourGuideAsync(dto);
+            if (result)
+            {
+                return NoContent();
+            }
+            throw new Exception("Not Found!");
+        }
+
+        /// <summary>
+        /// Soft remove tour-guide
+        /// </summary>
+        [Authorize(Roles = nameof(RoleEnums.Admin))]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveSupplier(Guid id)
+        {
+            var result = await _tourGuideService.DeleteTourGuideAsync(id);
+            if (result)
+            {
+                return Ok("Remove Successfully");
+            }
+            return BadRequest("Remove Fail!");
         }
     }
 }

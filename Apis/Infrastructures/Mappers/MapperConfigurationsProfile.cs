@@ -17,18 +17,6 @@ namespace Infrastructures.Mappers
         {
             #region UserMapping
             CreateMap<User, UserViewDTO>().ReverseMap();
-            CreateMap<User,TourGuideCreateDTO>()
-                .ForMember(des=>des.Name,options=>options.MapFrom(src=>src.FullName))
-                .ForMember(des => des.Email, options => options.MapFrom(src => src.Email))
-                .ForMember(des => des.Sex, options => options.MapFrom(src => src.Sex))
-                .ForMember(des => des.DateOfBirth, options => options.MapFrom(src => src.DateOfBirth))
-                .ForMember(des => des.PhoneNumber, options => options.MapFrom(src => src.PhoneNumber))
-                .ReverseMap();
-            CreateMap<User,SupplierCreateDTO>()
-                .ForMember(des => des.SupplierName, options => options.MapFrom(src => src.FullName))
-                .ForMember(des => des.Email, options => options.MapFrom(src => src.Email))
-                .ForMember(des => des.PhoneNumber, options => options.MapFrom(src => src.PhoneNumber))
-                .ReverseMap();
             #endregion
 
             #region ProductMapping
@@ -47,7 +35,11 @@ namespace Infrastructures.Mappers
             #region SupplierMapping
             CreateMap<Supplier, SupplierViewDTO>().ReverseMap();
             CreateMap<SupplierCreateDTO, Supplier>().ReverseMap();
-            CreateMap<SupplierUpdateDTO, Supplier>().ReverseMap();
+            CreateMap<SupplierUpdateDTO, Supplier>()
+                .ForMember(des=>des.SupplierName,opt=>opt.MapFrom(src=>src.SupplierName))
+                .ForMember(des => des.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(des => des.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ReverseMap();
             #endregion
 
             #region Categories
@@ -59,6 +51,7 @@ namespace Infrastructures.Mappers
             #region TourGuides 
             CreateMap<TourGuide, TourGuideViewDTO>().ReverseMap();
             CreateMap<TourGuide,TourGuideCreateDTO>().ReverseMap();
+            CreateMap<TourGuide,TourGuideUpdateDTO>().ReverseMap();
             #endregion
         }
     }

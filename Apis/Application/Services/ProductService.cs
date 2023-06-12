@@ -17,15 +17,18 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProductService( IMapper mapper, IUnitOfWork unitOfWork)
+        private readonly IClaimsService _claimsService;
+        public ProductService( IMapper mapper, IUnitOfWork unitOfWork,IClaimsService claimsService)
         {
            
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _claimsService = claimsService;
         }
         public async Task<Product> CreateProduct(CreateProductDTO createDTO)
         {   
-                var createItem = _mapper.Map<Product>(createDTO);
+            var createItem = _mapper.Map<Product>(createDTO);
+            createItem.SupplierId = _claimsService.GetCurrentUser;
             if (createItem != null)
             {
                 await _unitOfWork.ProductRepository.AddAsync(createItem);

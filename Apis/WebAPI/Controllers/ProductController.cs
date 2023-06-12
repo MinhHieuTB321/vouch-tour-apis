@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.ViewModels.Product;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -53,6 +54,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Create product
         /// </summary>
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateProductDTO createProductDTO)
         {

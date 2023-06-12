@@ -24,9 +24,12 @@ namespace Application.ViewModels.SupplierDTO
         public string PhoneNumber { get; set; } = default!;
     }
 
-    public class  SupplierUpdateDTO : SupplierCreateDTO
-    { 
-        public Guid Id { get; set; } 
+    public class  SupplierUpdateDTO
+    {
+        public string SupplierName { get; set; } = default!;
+        public string Address { get; set; } = default!;
+        public string PhoneNumber { get; set; } = default!;
+
     }
 
    

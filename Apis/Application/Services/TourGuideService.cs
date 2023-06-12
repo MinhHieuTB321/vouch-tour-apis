@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WApplication.GlobalExceptionHandling.Exceptions;
 
 namespace Application.Services
 {
@@ -27,30 +28,23 @@ namespace Application.Services
         public async Task<TourGuideViewDTO> AddTourGuide(TourGuideCreateDTO dto)
         {
             var createDTO = _mapper.Map<TourGuide>(dto);
-            createDTO.AdminId = _claimsService.GetUserRoleId;
+            createDTO.AdminId = _claimsService.GetCurrentUser;
             var tourGuide = await _unitOfWork.TourGuideRepository.AddTourGuideAsync(createDTO);
-            var createUser = _mapper.Map<User>(dto);
-            createUser.UserId = tourGuide.Id;
-            createUser.RoleId = 3;
-            var checkUser = await CheckUser(dto.Email, tourGuide.Id);
-            if (!checkUser)
-            {
-                await _unitOfWork.UserRepository.AddAsync(createUser);
-            }
+            var createUser = new User{UserId=tourGuide.Id,RoleId=3,Email=tourGuide.Email};
+            await _unitOfWork.UserRepository.AddAsync(createUser);
             await _unitOfWork.SaveChangeAsync();
             var result = _mapper.Map<TourGuideViewDTO>(tourGuide);
             return result;
         }
 
-        private async Task<bool> CheckUser(string email,Guid id)
+        public async Task<bool> DeleteTourGuideAsync(Guid id)
         {
-            var checkUser= await _unitOfWork.UserRepository.FindByField(x=>x.Email == email);
-            if(checkUser==null) {
-                return false;
-            }
-            checkUser.UserId = id;
-            _unitOfWork.UserRepository.Update(checkUser);
-            return true;
+            var tourguide=await _unitOfWork.TourGuideRepository.GetByIdAsync(id);
+            if (tourguide == null) throw new NotFoundException("Tour-Guide is not exist in system!");
+
+            _unitOfWork.TourGuideRepository.SoftRemove(tourguide);
+            var result = await _unitOfWork.SaveChangeAsync();
+            return result > 0;
         }
 
         public async Task<IEnumerable<TourGuideViewDTO>> GetAll()
@@ -71,6 +65,19 @@ namespace Application.Services
                 return _mapper.Map<TourGuideViewDTO>(result);
             }
             throw new Exception("Not found!");
+        }
+
+        public async Task<bool> UpdateTourGuideAsync(TourGuideUpdateDTO dto)
+        {
+            var tourguide = await _unitOfWork.TourGuideRepository.GetByIdAsync(_claimsService.GetCurrentUser);
+            if(tourguide==null)
+            {
+                throw new NotFoundException("Tour-Guide is not exist!");
+            }
+            tourguide = _mapper.Map(dto, tourguide);
+            _unitOfWork.TourGuideRepository.Update(tourguide);
+            var result = await _unitOfWork.SaveChangeAsync();
+            return result > 0;
         }
     }
 }
