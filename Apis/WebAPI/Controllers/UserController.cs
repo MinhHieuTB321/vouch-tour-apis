@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    
     public class UserController:BaseController
     {
         private readonly IUserService _userService;
@@ -32,7 +31,7 @@ namespace WebAPI.Controllers
         /// Get user by Id
         /// </summary>
 
-        [HttpGet("{Id}")] 
+        [HttpGet("{id}")] 
         public async Task<IActionResult> GetById(Guid Id)
         {
             var result = await _userService.GetUserById(Id);
@@ -47,7 +46,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get authenticate token
         /// </summary>
-        [HttpPost("/api/Authentication")]
+        [HttpPost("/api/authentication")]
         public async Task<IActionResult> LoginAsync(LoginDTO loginDTO)
         {
             var authToken = await _userService.LoginAsync(loginDTO);

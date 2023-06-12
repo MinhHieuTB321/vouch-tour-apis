@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace WebAPI.Controllers
 {
+    [Route("api/tour-guides")]
     public class TourGuideController : BaseController
     {
         private readonly ITourGuideService _tourGuideService;
@@ -39,7 +40,7 @@ namespace WebAPI.Controllers
         /// Create tour guide
         /// </summary>
         [Authorize]
-        [HttpPost("/api/TourGuide")]
+        [HttpPost]
         public async Task<IActionResult> AddTourGuide(TourGuideCreateDTO dto)
         {
             var result = await _tourGuideService.AddTourGuide(dto);

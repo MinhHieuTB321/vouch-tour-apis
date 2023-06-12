@@ -41,7 +41,7 @@ namespace WebAPI.Controllers
         /// Create Supplier
         /// </summary>
         [Authorize]
-        [HttpPost("/api/Supplier")]
+        [HttpPost]
         public async Task<IActionResult> CreateUser( SupplierCreateDTO createDTO)
         {
             var result = await _supplerService.Create(createDTO);

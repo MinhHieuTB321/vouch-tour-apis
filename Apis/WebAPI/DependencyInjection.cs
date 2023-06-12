@@ -25,7 +25,7 @@ namespace WebAPI
             services.AddScoped<IClaimsService, ClaimsService>();
             services.AddHttpContextAccessor();
 
-
+            services.AddRouting(options => options.LowercaseUrls = true);
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
             services.AddCors(options

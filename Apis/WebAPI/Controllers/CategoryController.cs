@@ -4,7 +4,7 @@ using System.Diagnostics.Eventing.Reader;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/categories")]
+    
     public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;
