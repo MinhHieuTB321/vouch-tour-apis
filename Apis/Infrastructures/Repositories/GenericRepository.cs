@@ -35,11 +35,12 @@ namespace Infrastructures.Repositories
                .FirstOrDefaultAsync(x => x.Id.Equals(id) && x.IsDeleted == false);
         }
 
-        public async Task AddAsync(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
             entity.CreationDate = _timeService.GetCurrentTime();
             entity.CreatedBy = _claimsService.GetCurrentUser;
-            await _dbSet.AddAsync(entity);
+            var result=await _dbSet.AddAsync(entity);
+            return result.Entity;
         }
 
         public void SoftRemove(TEntity entity)

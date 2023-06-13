@@ -14,6 +14,7 @@ namespace Domain.Entities
         public byte? Sex { get; set; }
         public string PhoneNumber { get; set; } = default!;
         public string Email { get; set; } = default!;
+        public string Address { get; set; } = default!;
         public string Status { get; set; } = ActiveEnum.Active.ToString()!;
 
         public ICollection<Group> Groups { get; set; } = default!;

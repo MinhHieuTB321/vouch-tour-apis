@@ -11,17 +11,29 @@ namespace Application.ViewModels.GroupDTOs
     {
         public Guid Id { get; set; }
         public string GroupName { get; set; } = default!;
+        public string Description { get; set; } = default!;
         public int Quantity { get; set; }
-        public TourGuideViewDTO TourGuide { get; set; } = default!;
+        public DateTime EndDate { get; set; }
+        public DateTime StartDate { get; set; } 
+        public Guid MenuId { get; set; }
         
     }
 
     public class GroupCreateDTO
     {
-
+        public string GroupName { get; set; } = default!;
+        public string Description { get; set; } = default!;
+        public int Quantity { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime StartDate { get; set; }
     }
-    public class GroupUpdateDTO : GroupCreateDTO
+    public class GroupUpdateDTO
     {
-
+        public Guid Id { get; set; }
+        public string GroupName { get; set; } = default!;
+        public string Description { get; set; } = default!;
+        public int Quantity { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime StartDate { get; set; }
     }
 }
