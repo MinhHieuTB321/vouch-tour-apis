@@ -20,6 +20,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Delete product
         /// </summary>
+        [Authorize(Roles =nameof(RoleEnums.Supplier))]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -31,6 +32,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get all products
         /// </summary>
+        [Authorize]
         [HttpGet] 
         public async Task<IActionResult> GetAll()
         {
@@ -43,6 +45,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Update product
         /// </summary>
+        [Authorize(Roles =nameof(RoleEnums.Supplier))]
         [HttpPut]
         public async Task<IActionResult> Update(UpdateProductDTO updatedItem)
         {
@@ -54,7 +57,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Create product
         /// </summary>
-        [Authorize]
+        [Authorize(Roles =nameof(RoleEnums.Supplier))]
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateProductDTO createProductDTO)
         {
@@ -89,6 +92,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get product by Id
         /// </summary>
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
