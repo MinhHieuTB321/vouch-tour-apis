@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.ViewModels.Product;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
