@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get all categories
         /// </summary>
-        [Authorize(Roles = nameof(RoleEnums.Admin))]
+        [Authorize(Roles = "Admin,TourGuide")]
         [HttpGet] 
         public async Task<IActionResult> GetAll()
         {
@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
         /// Get category by Id
         /// </summary>
         /// 
-        [Authorize(Roles =nameof(RoleEnums.Admin))]
+        [Authorize(Roles = "Admin,TourGuide")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
