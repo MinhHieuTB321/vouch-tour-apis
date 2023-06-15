@@ -14,9 +14,12 @@ namespace Domain.Entities
         public Guid TourGuideId {get;set;} 
         public TourGuide TourGuide {get;set;} = default!;
 
-        public ICollection<ProductInMenu> ProductInMenus {get;set;} = default!;
+        public ICollection<ProductInMenu>? ProductInMenus {get;set;} = default!;
+        public Guid GroupId { get;set;}
+        public Group Group { get; set; } = default!;
 
-        public ICollection<Group> Groups { get; set; } = default!;
+       // public ICollection<Group> Groups { get; set; } = default!;
 
     }
 }
+

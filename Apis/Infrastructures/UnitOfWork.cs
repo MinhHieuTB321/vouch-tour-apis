@@ -14,12 +14,17 @@ namespace Infrastructures
         private readonly ITourGuideRepository _tourGuideRepository;
         private readonly IGroupRepository _groupRepository;
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IMenuRepository _menuRepository;
+        private readonly IProductMenuRepository _productMenuRepository;
         public UnitOfWork(AppDbContext dbContext, IUserRepository userRepository, 
             IProductRepository productRepository, 
             IProductImageRepository productImageRepository, ICategoryRepository categoryRepository
             , ISupplierRepository supplierRepository
             , ITourGuideRepository tourGuideRepository,
-            IGroupRepository groupRepository, IPaymentRepository paymentRepository)
+            IGroupRepository groupRepository,
+            IPaymentRepository paymentRepository,
+            IMenuRepository menuRepository,
+            IProductMenuRepository productMenuRepository)
         {
             _dbContext = dbContext;
             _userRepository = userRepository;
@@ -30,6 +35,8 @@ namespace Infrastructures
             _tourGuideRepository = tourGuideRepository;
             _groupRepository = groupRepository;
             _paymentRepository = paymentRepository;
+            _menuRepository = menuRepository;
+            _productMenuRepository = productMenuRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
@@ -41,6 +48,11 @@ namespace Infrastructures
         public ITourGuideRepository TourGuideRepository => _tourGuideRepository;    
         public IGroupRepository GroupRepository => _groupRepository;
         public IPaymentRepository PaymentRepository => _paymentRepository;
+
+        public IMenuRepository MenuRepository => _menuRepository;
+
+        public IProductMenuRepository ProductMenuRepository => _productMenuRepository;
+
         public async Task<int> SaveChangeAsync()
         {
             return await _dbContext.SaveChangesAsync();

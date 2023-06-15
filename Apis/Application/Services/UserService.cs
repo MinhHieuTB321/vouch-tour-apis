@@ -49,6 +49,7 @@ namespace Application.Services
             var secretKey = _config["JWTSecretKey"];
             var authToken = new AuthToken
             {
+                Id=user.UserId,
                 AccessToken = GenerateJsonWebTokenString.GenerateJsonWebToken(user, secretKey),
                 RefreshToken = GenerateRefreshTokenString.GenerateRefreshToken()
             };

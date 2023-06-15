@@ -31,20 +31,36 @@ namespace Application.Services
             var groupDTO = _mapper.Map<Group>(createDTO);
             groupDTO.TourGuideId=_claimsService.GetCurrentUser;
             var result= await _unitOfWork.GroupRepository.AddAsync(groupDTO);
-            if(await _unitOfWork.SaveChangeAsync() > 0)
+            var menuCreate = new Menu { GroupId = result.Id, Quantity = 0, TourGuideId = _claimsService.GetCurrentUser };
+            await _unitOfWork.MenuRepository.AddAsync(menuCreate);
+            if (await _unitOfWork.SaveChangeAsync() > 0)
             {
-                return _mapper.Map<GroupViewDTO>(result);
+                var groupView = _mapper.Map<GroupViewDTO>(result);
+                groupView.MenuId = menuCreate.Id;
+                return groupView;
             }
             throw new BadRequestException("Create fail!");
         }
 
         public async Task<List<GroupViewDTO>> GetAllGroupAsync()
         {
-            var listGroup = (await _unitOfWork.GroupRepository.GetAllAsync()).Where(x=>x.TourGuideId==_claimsService.GetCurrentUser).ToList();
+            var listGroup = (await _unitOfWork.GroupRepository.GetAllAsync(x=>x.Menus)).Where(x=>x.TourGuideId==_claimsService.GetCurrentUser).ToList();
             if (listGroup.Count==0) throw new NotFoundException("No Group!");
             var mapper = _mapper.Map<List<GroupViewDTO>>(listGroup);
-            return mapper;
-            
+            return GetMenuId(mapper,listGroup);
+        }
+
+        private List<GroupViewDTO> GetMenuId(List<GroupViewDTO> list,List<Group> groups)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                var menu = groups[i].Menus.FirstOrDefault();
+                if(menu!= null)
+                {
+                    list[i].MenuId = menu.Id;
+                }
+            }
+            return list;
         }
 
         public async Task<GroupViewDTO> GetGroupByIdAsyn(Guid groupId)
@@ -52,6 +68,7 @@ namespace Application.Services
             var group= await _unitOfWork.GroupRepository.FindByField(x=>x.Id==groupId&& x.TourGuideId==_claimsService.GetCurrentUser);
             if (group == null) throw new NotFoundException("There is no group " + groupId + " in system!");
             var result= _mapper.Map<GroupViewDTO>(group);
+            result.MenuId=group.Menus.First().Id;
             return result;
         }
 

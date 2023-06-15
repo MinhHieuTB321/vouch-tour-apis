@@ -16,7 +16,7 @@ namespace Infrastructures.FluentAPIs
            
            builder.HasOne(m => m.TourGuide)
            .WithMany(t => t.Menus).HasForeignKey(m => m.TourGuideId);
-           
+          builder.HasOne(x=>x.Group).WithMany(x=>x.Menus).HasForeignKey(x=>x.GroupId).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

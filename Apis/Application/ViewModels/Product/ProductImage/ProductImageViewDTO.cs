@@ -14,4 +14,10 @@ namespace Application.ViewModels.Product.ProductImage
 
         public Guid ProductId { get; set; } = default!;
     }
+
+    public class ProductImageMenuViewDTO
+    {
+        public string FileURL { get; set; } = default!;
+        public string FileName { get; set; } = default!;
+    }
 }

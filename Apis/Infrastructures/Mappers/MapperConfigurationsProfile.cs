@@ -9,6 +9,8 @@ using Application.ViewModels.SupplierDTO;
 using Application.ViewModels.CategoryDTO;
 using Application.ViewModels.TourGuideDTO;
 using Application.ViewModels.GroupDTOs;
+using Application.ViewModels.MenuDTOs;
+using Application.ViewModels.ProductInMenuDTOs;
 
 namespace Infrastructures.Mappers
 {
@@ -31,6 +33,7 @@ namespace Infrastructures.Mappers
 
             #region ProductImageMapping
             CreateMap<ProductImageViewDTO, ProductImage>().ReverseMap();
+            CreateMap<ProductImageMenuViewDTO, ProductImage>().ReverseMap();
             #endregion
 
             #region SupplierMapping
@@ -59,6 +62,38 @@ namespace Infrastructures.Mappers
             CreateMap<Group,GroupViewDTO>().ReverseMap();
             CreateMap<Group, GroupCreateDTO>().ReverseMap();
             CreateMap<Group, GroupUpdateDTO>().ReverseMap();
+            #endregion
+
+            #region MenuMapping
+            CreateMap<Menu, MenuViewDTO>()
+                .ForMember(des => des.Id, opt => opt.MapFrom(opt => opt.Id))
+                .ForMember(des => des.TourGuideId, opt => opt.MapFrom(opt => opt.TourGuideId))
+                .ForMember(des => des.Quantity, opt => opt.MapFrom(opt => opt.Quantity))
+                .ForMember(des => des.Status, opt => opt.MapFrom(opt => opt.Status))
+                .ReverseMap();
+            CreateMap<Menu, MenuCreateDTO>().ReverseMap();
+            #endregion
+
+            #region ProductInMenu
+            CreateMap<ProductInMenu,ProductMenuViewDTO>()
+                .ForMember(v => v.MenuId, r => r.MapFrom(x => x.MenuId))
+                .ForMember(v => v.ActualPrice, r => r.MapFrom(x => x.ActualPrice))
+                .ForMember(v => v.SupplierPrice, r => r.MapFrom(x => x.SupplierPrice))
+                .ReverseMap();
+
+            CreateMap<ProductMenuViewDTO, Product>()
+                .ForPath(v => v.ProductName, r => r.MapFrom(x => x.ProductName))
+                .ForPath(v => v.Category.CategoryName, r => r.MapFrom(x => x.CategoryName))
+                .ForPath(v => v.Supplier.SupplierName, r => r.MapFrom(x => x.SupplierName))
+                .ForPath(v => v.Supplier.Address, r => r.MapFrom(x => x.Address))
+                .ReverseMap();
+
+
+            CreateMap<ProductInMenu,ProductMenuCreateDTO>()
+                .ForMember(v => v.ProductId, r => r.MapFrom(x => x.ProductId))
+                .ForMember(v => v.ResellPrice, r => r.MapFrom(x => x.ActualPrice))
+                .ForMember(v => v.ResellPrice, r => r.MapFrom(x => x.SupplierPrice))
+                .ReverseMap();
             #endregion
         }
     }

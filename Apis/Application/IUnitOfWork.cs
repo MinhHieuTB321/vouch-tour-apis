@@ -12,7 +12,8 @@ namespace Application
         public ITourGuideRepository TourGuideRepository { get; }
         public IGroupRepository GroupRepository { get; }
         public IPaymentRepository PaymentRepository { get; }
-       
+        public IMenuRepository MenuRepository { get; }
+        public IProductMenuRepository ProductMenuRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }
