@@ -20,4 +20,10 @@ namespace Application.ViewModels.Product.ProductImage
         public string FileURL { get; set; } = default!;
         public string FileName { get; set; } = default!;
     }
+
+    public class ImageViewDTO
+    {
+        public string FileName { get; set; } = default!;
+        public string FileURL { get; set; } = default!;
+    }
 }

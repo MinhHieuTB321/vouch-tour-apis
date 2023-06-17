@@ -2,7 +2,6 @@
 using System.Text.Json;
 using Application.GlobalExceptionHandling.Exceptions;
 using Microsoft.AspNetCore.Http;
-using WApplication.GlobalExceptionHandling.Exceptions;
 using KeyNotFoundException = Application.GlobalExceptionHandling.Exceptions.KeyNotFoundException;
 using NotImplementedException = Application.GlobalExceptionHandling.Exceptions.NotImplementedException;
 using UnauthorizedAccessException = Application.GlobalExceptionHandling.Exceptions.UnauthorizedAccessException;

@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WApplication.GlobalExceptionHandling.Exceptions;
 
 namespace Application.Services
 {
@@ -65,7 +64,7 @@ namespace Application.Services
 
         public async Task<GroupViewDTO> GetGroupByIdAsyn(Guid groupId)
         {
-            var group= await _unitOfWork.GroupRepository.FindByField(x=>x.Id==groupId&& x.TourGuideId==_claimsService.GetCurrentUser);
+            var group= await _unitOfWork.GroupRepository.FindByField(x=>x.Id==groupId&& x.TourGuideId==_claimsService.GetCurrentUser,x=>x.Menus);
             if (group == null) throw new NotFoundException("There is no group " + groupId + " in system!");
             var result= _mapper.Map<GroupViewDTO>(group);
             result.MenuId=group.Menus.First().Id;

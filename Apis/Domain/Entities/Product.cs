@@ -11,7 +11,7 @@ namespace Domain.Entities
         public double ResellPrice {get;set;} = default!;
         public double RetailPrice {get;set;} = default!;
         public string Status {get;set;} = default!;
-
+        public string Description { get;set;} = default!;
 
         // Images 
         public ICollection<ProductImage> Images { get; set; } = default!;

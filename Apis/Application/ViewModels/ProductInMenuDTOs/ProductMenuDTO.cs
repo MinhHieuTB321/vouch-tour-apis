@@ -13,6 +13,8 @@ namespace Application.ViewModels.ProductInMenuDTOs
         public string ProductName = default!;
         public double ActualPrice { get; set; }
         public double SupplierPrice { get; set; }
+        public string Description { get; set; } = default!;
+        public Guid SupplierId { get; set; } = default!;
         public string SupplierName { get; set; } = default!;
         public string CategoryName { get; set; } = default!;
         public string Address { get; set; } = default!;

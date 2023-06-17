@@ -16,6 +16,7 @@ namespace Application.ViewModels.Product
         public string ProductName { get; set; } = default!;
         public double ResellPrice { get; set; } = default!;
         public double RetailPrice { get;set; } = default!;
+        public string Description { get; set; } = default!; 
         public string Status { get; set; } = default!;
         public ICollection<ProductImageViewDTO> Images { get; set; } = default!;
         public SupplierViewDTO Supplier { get; set; } = default!;

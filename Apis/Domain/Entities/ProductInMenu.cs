@@ -9,7 +9,7 @@ namespace Domain.Entities
     {
         public double ActualPrice {get;set;}
         public double SupplierPrice { get; set;}
-
+        public string Description { get; set; } = default!;
         public Guid MenuId {get;set;} 
         public Menu Menu {get;set;} = default!;
 

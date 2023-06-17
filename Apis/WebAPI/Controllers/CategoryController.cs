@@ -77,7 +77,7 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get category by Id
+        /// Get product by category
         /// </summary>
         /// 
         [Authorize]

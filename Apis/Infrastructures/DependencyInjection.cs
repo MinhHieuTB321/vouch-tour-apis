@@ -24,6 +24,7 @@ namespace Infrastructures
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<IProductMenuService, ProductMenuService>();
+            services.AddScoped<ICartService, CartService>();
             #endregion
 
             #region DI_REPOSITORY

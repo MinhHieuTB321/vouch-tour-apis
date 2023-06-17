@@ -1,4 +1,4 @@
-﻿namespace WApplication.GlobalExceptionHandling.Exceptions
+﻿namespace Application.GlobalExceptionHandling.Exceptions
 {
     public class NotFoundException : Exception
     {

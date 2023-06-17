@@ -12,6 +12,7 @@ namespace Application.ViewModels.Product
         public string ProductName { get; set; } = default!;
         public double ResellPrice { get; set; } = default!;
         public double RetailPrice { get; set; } = default!;
+        public string Description { get; set; } = default!;
         public string Status { get; set; } = "Active";
         public IEnumerable<IFormFile?> File { get; set; } = default!;
         public Guid CategoryId { get; set; } = default!;

@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructuresService(builder.Configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddWebAPIService(builder.Configuration["JWTSecretKey"]!);
-
+builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = builder.Configuration["RedisCacheUrl"]; });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

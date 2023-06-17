@@ -12,7 +12,6 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using WApplication.GlobalExceptionHandling.Exceptions;
 
 namespace Application.Services
 {
@@ -50,11 +49,14 @@ namespace Application.Services
             var authToken = new AuthToken
             {
                 Id=user.UserId,
-                AccessToken = GenerateJsonWebTokenString.GenerateJsonWebToken(user, secretKey),
+                AccessToken = GenerateJsonWebTokenString.GenerateJsonWebToken(user, secretKey!),
                 RefreshToken = GenerateRefreshTokenString.GenerateRefreshToken()
             };
 
             return authToken;
         }
+
+
+
     }
 }
