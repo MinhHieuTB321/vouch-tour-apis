@@ -1,4 +1,5 @@
 ﻿using Application.ViewModels.CartDTO;
+using Application.ViewModels.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace Application.Interfaces
         Task<bool> UpdateItem(ItemUpdateDTO updateDTO);
         Task<bool> DeleteItem(string cartId,string id);
         Task<ItemViewDTO> GetItemById(String cartid,string id);
+        Task<List<ViewProductDTO>> GetAllProductOutCart(string cartId);
     }
 }

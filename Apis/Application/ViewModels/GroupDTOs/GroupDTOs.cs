@@ -35,5 +35,12 @@ namespace Application.ViewModels.GroupDTOs
         public int Quantity { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime StartDate { get; set; }
+        public Guid MenuId { get; set; }
+    }
+
+    public class GroupMenuDTO
+    {
+        public Guid Id { get; set; } 
+        public Guid MenuId { get; set;}
     }
 }

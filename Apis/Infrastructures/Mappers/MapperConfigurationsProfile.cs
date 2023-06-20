@@ -63,17 +63,27 @@ namespace Infrastructures.Mappers
             #region GroupMapping
             CreateMap<Group,GroupViewDTO>().ReverseMap();
             CreateMap<Group, GroupCreateDTO>().ReverseMap();
-            CreateMap<Group, GroupUpdateDTO>().ReverseMap();
+            CreateMap<Group, GroupUpdateDTO>()
+                .ForMember(d=>d.Id,o=>o.MapFrom(s=>s.Id))
+                .ForMember(d => d.GroupName, o => o.MapFrom(s => s.GroupName))
+                .ForMember(d => d.Description, o => o.MapFrom(s => s.Description))
+                .ForMember(d => d.Quantity, o => o.MapFrom(s => s.Quantity))
+                .ForMember(d => d.EndDate, o => o.MapFrom(s => s.EndDate))
+                .ForMember(d => d.StartDate, o => o.MapFrom(s => s.StartDate))
+                .ForMember(d => d.MenuId, o => o.MapFrom(s => s.MenuId))
+                .ReverseMap();
             #endregion
 
             #region MenuMapping
             CreateMap<Menu, MenuViewDTO>()
                 .ForMember(des => des.Id, opt => opt.MapFrom(opt => opt.Id))
+                .ForMember(des => des.Title, opt => opt.MapFrom(opt => opt.Title))
                 .ForMember(des => des.TourGuideId, opt => opt.MapFrom(opt => opt.TourGuideId))
                 .ForMember(des => des.Quantity, opt => opt.MapFrom(opt => opt.Quantity))
                 .ForMember(des => des.Status, opt => opt.MapFrom(opt => opt.Status))
                 .ReverseMap();
             CreateMap<Menu, MenuCreateDTO>().ReverseMap();
+            CreateMap<Menu, MenuUdpateDTO>().ReverseMap();
             #endregion
 
             #region ProductInMenu
@@ -98,6 +108,7 @@ namespace Infrastructures.Mappers
                 .ForMember(v => v.ProductId, r => r.MapFrom(x => x.ProductId))
                 .ForMember(v => v.ResellPrice, r => r.MapFrom(x => x.ActualPrice))
                 .ForMember(v => v.ResellPrice, r => r.MapFrom(x => x.SupplierPrice))
+                .ForMember(v => v.Description, r => r.MapFrom(x => x.Description))
                 .ReverseMap();
             #endregion
 
@@ -107,11 +118,26 @@ namespace Infrastructures.Mappers
                 .ForMember(d => d.ProductName, o => o.MapFrom(s => s.ProductName))
                 .ForMember(d=>d.Description,o=>o.MapFrom(s => s.Description))
                 .ForPath(d => d.Supplier.SupplierName, o => o.MapFrom(s => s.SupplierName))
-                .ForPath(d => d.Supplier.Id, o => o.MapFrom(s => s.Id))
+                .ForPath(d => d.Supplier.Id, o => o.MapFrom(s => s.SupplerId))
                 .ForPath(d => d.Category.CategoryName, o => o.MapFrom(s => s.CategoryName))
                 .ForMember(d => d.ResellPrice, o => o.MapFrom(s => s.SuppleirPrice))
                 .ReverseMap();
 
+            #endregion
+
+            #region OrderMapping
+            CreateMap<OrderCreateDTO, Order>()
+                .ForMember(d=>d.GroupId,o=>o.MapFrom(s=>s.GroupId))
+                .ForMember(d => d.CustomerName, o => o.MapFrom(s => s.CustomerName))
+                .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.PhoneNumber))
+                .ForMember(d => d.Note, o => o.MapFrom(s => s.Note))
+                .ReverseMap();
+            CreateMap<OrderViewDTO, Order>().ReverseMap();
+            #endregion
+
+            #region OrderDetailMapping
+            CreateMap<OrderDetailCreateDTO, OrderDetail>().ReverseMap();
+            CreateMap<OrderDetailViewDTO, OrderDetail>().ReverseMap();
             #endregion
         }
     }

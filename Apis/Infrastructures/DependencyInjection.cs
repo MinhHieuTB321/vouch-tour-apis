@@ -25,6 +25,7 @@ namespace Infrastructures
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<IProductMenuService, ProductMenuService>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IOrderService, OrderService>();
             #endregion
 
             #region DI_REPOSITORY
@@ -39,6 +40,9 @@ namespace Infrastructures
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IMenuRepository, MenuRepository>();
             services.AddScoped<IProductMenuRepository,ProductMenuRepository>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
             #endregion
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddDbContext<AppDbContext>(

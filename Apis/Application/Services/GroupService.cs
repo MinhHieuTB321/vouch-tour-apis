@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static StackExchange.Redis.Role;
 
 namespace Application.Services
 {
@@ -30,12 +31,9 @@ namespace Application.Services
             var groupDTO = _mapper.Map<Group>(createDTO);
             groupDTO.TourGuideId=_claimsService.GetCurrentUser;
             var result= await _unitOfWork.GroupRepository.AddAsync(groupDTO);
-            var menuCreate = new Menu { GroupId = result.Id, Quantity = 0, TourGuideId = _claimsService.GetCurrentUser };
-            await _unitOfWork.MenuRepository.AddAsync(menuCreate);
             if (await _unitOfWork.SaveChangeAsync() > 0)
             {
                 var groupView = _mapper.Map<GroupViewDTO>(result);
-                groupView.MenuId = menuCreate.Id;
                 return groupView;
             }
             throw new BadRequestException("Create fail!");
@@ -43,42 +41,56 @@ namespace Application.Services
 
         public async Task<List<GroupViewDTO>> GetAllGroupAsync()
         {
-            var listGroup = (await _unitOfWork.GroupRepository.GetAllAsync(x=>x.Menus)).Where(x=>x.TourGuideId==_claimsService.GetCurrentUser).ToList();
+            var listGroup = (await _unitOfWork.GroupRepository.GetAllAsync(x=>x.Menu)).Where(x=>x.TourGuideId==_claimsService.GetCurrentUser).ToList();
             if (listGroup.Count==0) throw new NotFoundException("No Group!");
             var mapper = _mapper.Map<List<GroupViewDTO>>(listGroup);
-            return GetMenuId(mapper,listGroup);
+            return mapper;
         }
 
-        private List<GroupViewDTO> GetMenuId(List<GroupViewDTO> list,List<Group> groups)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                var menu = groups[i].Menus.FirstOrDefault();
-                if(menu!= null)
-                {
-                    list[i].MenuId = menu.Id;
-                }
-            }
-            return list;
-        }
 
         public async Task<GroupViewDTO> GetGroupByIdAsyn(Guid groupId)
         {
-            var group= await _unitOfWork.GroupRepository.FindByField(x=>x.Id==groupId&& x.TourGuideId==_claimsService.GetCurrentUser,x=>x.Menus);
+            var group= await _unitOfWork.GroupRepository.FindByField(x=>x.Id==groupId&& x.TourGuideId==_claimsService.GetCurrentUser,x=>x.Menu);
             if (group == null) throw new NotFoundException("There is no group " + groupId + " in system!");
             var result= _mapper.Map<GroupViewDTO>(group);
-            result.MenuId=group.Menus.First().Id;
             return result;
         }
 
         public async Task<bool> UpdateGroupAsync(GroupUpdateDTO updateDTO)
         {
-            var group = await _unitOfWork.GroupRepository.GetByIdAsync(updateDTO.Id);
+            var group = await _unitOfWork.GroupRepository.GetByIdAsync(updateDTO.Id,x=>x.Menu);
             if(group == null) throw new NotFoundException("There is no group " + updateDTO.Id + " in system!");
+            if (group.Menu == null)
+            {
+                return await Update(updateDTO, group);
+            }
+            else
+            {
+                if (group.Menu.IsDeleted == false) throw new BadRequestException("Already existing menu for group");
+                return await Update(updateDTO, group);
+            }
+
+
+            throw new BadRequestException("Already existing menu for group");
+        }
+
+
+        private async Task<bool> Update(GroupUpdateDTO updateDTO,Group group)
+        {
             var mapper = _mapper.Map(updateDTO, group);
+            mapper.Menu = await _unitOfWork.MenuRepository.GetByIdAsync(updateDTO.MenuId);
             _unitOfWork.GroupRepository.Update(group);
             var result = await _unitOfWork.SaveChangeAsync();
-            return result>0;
+            return result > 0;
+        }
+        public async Task AddMenu(GroupMenuDTO updateDTO)
+        {
+            var group = await _unitOfWork.GroupRepository.GetByIdAsync(updateDTO.Id,x=>x.Menu);
+            if (group == null) throw new NotFoundException("There is no group " + updateDTO.Id + " in system!");
+            if (group.Menu==null) throw new BadRequestException("Already existing menu for group");
+            group.MenuId = updateDTO.MenuId;
+            _unitOfWork.GroupRepository.Update(group);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

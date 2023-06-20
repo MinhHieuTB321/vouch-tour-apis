@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Services;
+using Application.ViewModels.MenuDTOs;
 using Application.ViewModels.ProductInMenuDTOs;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +18,7 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get menu by id of tour-guide
+        /// Get product in menu
         /// </summary>
         [Authorize(Roles = nameof(RoleEnums.TourGuide))]
         [HttpGet("{id}/products-menu")]
@@ -35,8 +36,53 @@ namespace WebAPI.Controllers
         [HttpPost("{id}/products")]
         public async Task<IActionResult> AddProductToMenu(Guid id,[FromBody]List<ProductMenuCreateDTO> products)
         {
-            var result = await _menuService.AddProductToMenu(id,products);
-            return CreatedAtAction(nameof(GetMenuById), new { id = result });
+            var result = await _menuService.AddListProductToMenu(id,products);
+            return CreatedAtAction(nameof(GetMenuById), new { id = result },null);
+        }
+
+        /// <summary>
+        /// create menu
+        /// </summary>
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        [HttpPost]
+        public async Task<IActionResult> CreateMenu(MenuCreateDTO createDTO)
+        {
+            var result = await _menuService.CreateMenu(createDTO);
+            return CreatedAtAction(nameof(GetMenuById), new { id = result }, null);
+        }
+
+        /// <summary>
+        /// Get all menu of tourguide
+        /// </summary>
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        [HttpGet]
+        public async Task<IActionResult> GetAllMenu()
+        {
+            var result = await _menuService.GetAllMenu();
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Delete menu
+        /// </summary>
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        [HttpDelete("{menuId}")]
+        public async Task<IActionResult> DeleteMenu(Guid menuId)
+        {
+            var result = await _menuService.DeleteMenu(menuId);
+            return Ok("Delete successfully");
+        }
+
+
+        /// <summary>
+        /// Update menu
+        /// </summary>
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        [HttpPut]
+        public async Task<IActionResult> UpdateMenu(MenuUdpateDTO udpateDTO)
+        {
+            await _menuService.UpdateMenu(udpateDTO);
+            return Ok("Update successfully");
         }
     }
 }

@@ -10,10 +10,17 @@ namespace Application.Interfaces
 {
     public interface IMenuService
     {
-        Task<MenuViewDTO> GetMenuViewAsync(Guid groupId);
+        Task<MenuViewDTO> GetMenuViewAsync(Guid menuId);
 
-        Task<Guid> AddProductToMenu(Guid menuId,List<ProductMenuCreateDTO> productMenus);
+        Task<Guid> AddListProductToMenu(Guid menuId,List<ProductMenuCreateDTO> productMenus);
 
-        
+        Task<Guid> CreateMenu(MenuCreateDTO createDTO);
+
+        Task<List<MenuViewDTO>> GetAllMenu();
+        Task<bool> DeleteMenu(Guid menuId);
+
+        Task UpdateMenu(MenuUdpateDTO updateDTO);
     }
+
+   
 }

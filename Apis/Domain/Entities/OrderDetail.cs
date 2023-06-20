@@ -7,15 +7,12 @@ namespace Domain.Entities
 {
     public class OrderDetail : BaseEntity
     {
-        public Guid DiscountProductId { get; set; }
-        public Guid OrderId { get; set; }
-
-        public Order Order { get; set; } = default!;
-        public ProductInMenu DiscountProduct { get; set; } = default!;
-
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
-        public string Note { get; set; } = default!;
-        
+        public Guid OrderId { get; set; }
+        public Order Order { get; set; } = default!;
+        public Guid ProductMenuId { get; set; }
+        public ProductInMenu ProductMenu { get; set; } = default!;
+   
     }
 }

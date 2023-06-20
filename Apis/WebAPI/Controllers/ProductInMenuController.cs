@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
+    [Route("/api/product-menus")]
     public class ProductInMenuController:BaseController
     {
         private readonly IProductMenuService _productMenuService;
@@ -16,7 +17,7 @@ namespace WebAPI.Controllers
 
 
         /// <summary>
-        /// Get category by Id
+        /// Delete product in menu by id
         /// </summary>
         /// 
         [Authorize(Roles = nameof(RoleEnums.TourGuide))]

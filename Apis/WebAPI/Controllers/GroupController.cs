@@ -40,7 +40,7 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get groups by id of tour-guide
+        /// Get groups by id 
         /// </summary>
         [Authorize(Roles = nameof(RoleEnums.TourGuide))]
         [HttpGet("{id}")]
@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Update group
         /// </summary>
-        [Authorize(Roles =nameof(RoleEnums.TourGuide))]
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(GroupUpdateDTO updateDTO)
         {
@@ -76,5 +76,7 @@ namespace WebAPI.Controllers
 
             return BadRequest("Update fail!");
         }
+
+        
     }
 }

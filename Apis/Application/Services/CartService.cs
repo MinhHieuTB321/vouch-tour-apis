@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Application.ViewModels.Product.ProductImage;
 using Application.GlobalExceptionHandling.Exceptions;
+using Application.ViewModels.Product;
 
 namespace Application.Services
 {
@@ -37,6 +38,12 @@ namespace Application.Services
 
         public async Task<bool> AddToCart(ItemAddDTO addDTO)
         {
+            var root = "Cart-" + _claimsService.GetCurrentUser;
+            var cart = await GetItems(root);
+            if(cart != null)
+            {
+                if (CheckExist(cart,addDTO.ProductId)) throw new BadRequestException("Product already exist in Cart!");
+            }
             var product=await _unitOfWork.ProductRepository.GetByIdAsync(addDTO.ProductId,x=>x.Category,x=>x.Supplier,x=>x.Images);
             if (product == null) throw new NotFoundException("Not found product");
             var checkPrice= (product.ResellPrice - addDTO.ActualPrice)/product.ResellPrice;
@@ -47,7 +54,16 @@ namespace Application.Services
             var result =await SetToFirebase(items); 
             return result;
         }
+            
 
+        private bool CheckExist(List<ItemViewDTO> items,Guid productId)
+        {
+            foreach (var item in items)
+            {
+                if(item.ProductId==productId)return true;
+            }
+            return false;
+        }
         private async Task<bool> SetToFirebase(ItemViewDTO data)
         {
             var root = "Cart-" + _claimsService.GetCurrentUser;
@@ -106,6 +122,34 @@ namespace Application.Services
             ItemViewDTO data = JsonConvert.DeserializeObject<ItemViewDTO>(response.Body);
             if (data == null) throw new NotFoundException("Not found item with" + id);
             return data;
+        }
+
+        public async Task<List<ViewProductDTO>> GetAllProductOutCart(string cartId)
+        {
+            var items = await GetItems(cartId);
+            var products = await _unitOfWork.ProductRepository.GetAllAsync(x => x.Images, x => x.Category, x => x.Supplier);
+            if (items.Count > 0)
+            {
+                var listProductId = items.Select(x => x.ProductId).ToList();
+                products = products.Where(x => !listProductId.Contains(x.Id)).ToList();
+            }
+            var result= _mapper.Map<List<ViewProductDTO>>(products);
+            return result;
+        }
+
+        private async Task<List<ItemViewDTO>> GetItems(string cartId)
+        {
+            FirebaseResponse response = await _client.GetAsync(cartId);
+            dynamic data = JsonConvert.DeserializeObject<dynamic>(response.Body);
+            var list = new List<ItemViewDTO>();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    list.Add(JsonConvert.DeserializeObject<ItemViewDTO>(((JProperty)item).Value.ToString()));
+                }
+            }
+            return list;
         }
     }
 }

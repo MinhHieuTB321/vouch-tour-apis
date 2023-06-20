@@ -16,6 +16,8 @@ namespace Infrastructures
         private readonly IPaymentRepository _paymentRepository;
         private readonly IMenuRepository _menuRepository;
         private readonly IProductMenuRepository _productMenuRepository;
+        private readonly IOrderDetailRepository _orderDetailRepository;
+        private readonly IOrderRepository _orderRepository;
         public UnitOfWork(AppDbContext dbContext, IUserRepository userRepository, 
             IProductRepository productRepository, 
             IProductImageRepository productImageRepository, ICategoryRepository categoryRepository
@@ -24,7 +26,9 @@ namespace Infrastructures
             IGroupRepository groupRepository,
             IPaymentRepository paymentRepository,
             IMenuRepository menuRepository,
-            IProductMenuRepository productMenuRepository)
+            IProductMenuRepository productMenuRepository,
+            IOrderRepository orderRepository,
+            IOrderDetailRepository orderDetailRepository)
         {
             _dbContext = dbContext;
             _userRepository = userRepository;
@@ -37,6 +41,8 @@ namespace Infrastructures
             _paymentRepository = paymentRepository;
             _menuRepository = menuRepository;
             _productMenuRepository = productMenuRepository;
+            _orderRepository = orderRepository;
+            _orderDetailRepository = orderDetailRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
@@ -52,6 +58,10 @@ namespace Infrastructures
         public IMenuRepository MenuRepository => _menuRepository;
 
         public IProductMenuRepository ProductMenuRepository => _productMenuRepository;
+
+        public IOrderDetailRepository OrderDetailRepository => _orderDetailRepository;
+
+        public IOrderRepository OrderRepository => _orderRepository;
 
         public async Task<int> SaveChangeAsync()
         {

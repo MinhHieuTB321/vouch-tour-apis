@@ -17,6 +17,9 @@ namespace Application.ViewModels.TourGuideDTO
         public string Status { get; set; } = default!;
         public string Address { get; set; } = default!;
         public Guid AdminId { get; set; } = default!;
+        public int NumberOfGroup { get; set; }=default!;
+        public int NumberOfProductSold { get;set; }=default!;
+        public int Point { get; set; } = default!;
     }
 
     public class TourGuideCreateDTO

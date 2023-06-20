@@ -27,7 +27,7 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Guid> AddProductToMenu(Guid menuId,List<ProductMenuCreateDTO> productMenus)
+        public async Task<Guid> AddListProductToMenu(Guid menuId,List<ProductMenuCreateDTO> productMenus)
         {
             var listCreate = _mapper.Map<List<ProductInMenu>>(productMenus);
             for (int i = 0; i < listCreate.Count; i++)
@@ -45,14 +45,15 @@ namespace Application.Services
             var menu= await _unitOfWork.MenuRepository.GetByIdAsync(menuId);
             if(menu != null) 
             {
-                menu.Quantity = quantity;
+                menu.Quantity += quantity;
                 _unitOfWork.MenuRepository.Update(menu);
             }
         }
 
-        public async Task<MenuViewDTO> GetMenuViewAsync(Guid groupId)
+        public async Task<MenuViewDTO> GetMenuViewAsync(Guid menuId)
         {
-            var menu = await _unitOfWork.MenuRepository.FindByField(x => x.GroupId == groupId && x.TourGuideId==_claimsService.GetCurrentUser);
+            var menu = await _unitOfWork.MenuRepository.FindByField(x => x.Id == menuId);
+            if (menu == null) throw new NotFoundException("Can not found menu" + menuId);
             var productMenus = await _unitOfWork.ProductMenuRepository.GetProductByMenuId(menu.Id);
             var result = _mapper.Map<MenuViewDTO>(menu);
             if(menu!=null)
@@ -88,6 +89,46 @@ namespace Application.Services
             return result;
         }
 
-        
+        public async Task<Guid> CreateMenu(MenuCreateDTO createDTO)
+        {
+            var newMenu = new Menu { Title = createDTO.Title, Quantity = createDTO.ProductMenus.Count,TourGuideId=_claimsService.GetCurrentUser };
+            var result=await _unitOfWork.MenuRepository.AddAsync(newMenu);
+            var listCreate = _mapper.Map<List<ProductInMenu>>(createDTO.ProductMenus);
+            for (int i = 0; i < listCreate.Count; i++)
+            {
+                listCreate[i].MenuId = result.Id;
+            }
+            await _unitOfWork.ProductMenuRepository.AddRangeAsync(listCreate);
+            await _unitOfWork.SaveChangeAsync();
+            return result.Id;
+        }
+
+        public async Task<List<MenuViewDTO>> GetAllMenu()
+        {
+            var listMenu= await _unitOfWork.MenuRepository.FindListByField(x=>x.CreatedBy==_claimsService.GetCurrentUser&&x.IsDeleted==false);
+            if (listMenu.Count == 0) throw new NotFoundException("There is no menu!");
+            var result= _mapper.Map<List<MenuViewDTO>>(listMenu);
+            return result;
+        }
+
+        public async Task<bool> DeleteMenu(Guid menuId)
+        {
+            var menu= await _unitOfWork.MenuRepository.GetByIdAsync(menuId);
+            if (menu == null) throw new NotFoundException($"Can not found menu {menuId} ");
+            menu.IsDeleted = true;
+            _unitOfWork.MenuRepository.SoftRemove(menu);
+            var result= await _unitOfWork.SaveChangeAsync();
+            return result > 0;
+        }
+
+        public async Task UpdateMenu(MenuUdpateDTO updateDTO)
+        {
+            var menu =await _unitOfWork.MenuRepository.GetByIdAsync(updateDTO.MenuId);
+            if (menu == null) throw new NotFoundException("Can not found menu " + updateDTO.MenuId + "!");
+            var update = _mapper.Map(updateDTO, menu);
+            
+            _unitOfWork.MenuRepository.Update(update);
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

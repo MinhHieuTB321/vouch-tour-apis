@@ -25,6 +25,7 @@ namespace Application.ViewModels.ProductInMenuDTOs
     {
         public Guid ProductId { get; set; }
         public double ResellPrice { get;set; }
+        public string Description { get; set; } = default!;
     }
 
 }

@@ -48,7 +48,7 @@ namespace WebAPI.Controllers
         /// </summary>
         [Authorize(Roles =nameof(RoleEnums.Supplier))]
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateProductDTO updatedItem)
+        public async Task<IActionResult> Update([FromForm]UpdateProductDTO updatedItem)
         {
             var result = await _productService.UpdateProduct(updatedItem);
             if (result) return NoContent();

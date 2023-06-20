@@ -12,10 +12,36 @@ namespace Application.ViewModels
     {
         public Guid Id { get; set; }
         public double TotalPrice { get; set; }
+        public string Status { get; set; } = "Created";
         public string CustomerName { get; set; } = default!;
+        public string PhoneNumber { get; set; } = default!;
+        public string Note { get; set; } = default!;
         public GroupViewDTO Group { get; set; } = default!;
-        public ICollection<OrderDetail> OrderDetails { get; set; } = default!;
+        public ICollection<OrderDetailViewDTO> OrderDetails { get; set; } = default!;
         public ICollection<PaymentViewDTO> Payments { get; set; } = default!;
+    }
+
+    public class OrderDetailViewDTO
+    {
+        public Guid ProductMenuId { get; set; }
+        public string ProductName { get; set; }=default!;
+        public int Quantity { get; set; }
+        public double UnitPrice { get; set; }
 
     }
-}
+    public class OrderCreateDTO
+    {
+        public Guid GroupId { get; set; }
+        public string CustomerName { get; set; } = default!;
+        public string PhoneNumber { get; set; } =default!;
+        public string Note { get;set; } =default!;
+        public List<OrderDetailCreateDTO> OrderProductDetails { get; set; } = default!;
+    }
+
+    public class OrderDetailCreateDTO
+    {
+        public Guid ProductMenuId { get; set; }
+        public int Quantity { get;set; }
+        public double UnitPrice { get;set; }
+    }
+} 

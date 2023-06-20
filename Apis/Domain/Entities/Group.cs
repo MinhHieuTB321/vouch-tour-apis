@@ -1,3 +1,4 @@
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,14 @@ namespace Domain.Entities
         public string GroupName {get;set;} = default!;
         public string Description { get;set;} = default!;
         public int Quantity {get;set;} = default!;
+        public string Status { get; set;} = nameof(GroupEnums.UpComming);
         public DateTime StartDate { get;set;} = default!;
         public DateTime EndDate {get;set;}
         public Guid TourGuideId {get;set;}
         public TourGuide TourGuide {get;set;} = default!;
         public ICollection<Order> Orders {get;set;} = default!;
-        public ICollection<Menu> Menus { get; set; } = default!;
-        //public Guid? MenuId { get; set;} = default!; 
-        //public Menu? Menu { get; set;} = default!;
+        //public ICollection<Menu> Menus { get; set; } = default!;
+        public Guid? MenuId { get;set;} = default!;
+        public Menu? Menu { get;set;} = default!;
     }
 }

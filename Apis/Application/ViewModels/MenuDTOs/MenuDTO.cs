@@ -12,6 +12,7 @@ namespace Application.ViewModels.MenuDTOs
     public class MenuViewDTO
     {
         public Guid Id { get; set; }
+        public string Title { get; set; } = default!;
         public Guid TourGuideId {get;set;}
         public int Quantity { get; set;}
         public string Status { get; set; } = default!;
@@ -22,7 +23,13 @@ namespace Application.ViewModels.MenuDTOs
 
     public class MenuCreateDTO
     {
-        public Guid GroupId { get; set; }
+        public string Title { get; set; } = default!;
+        public List<ProductMenuCreateDTO> ProductMenus { get;set; } = default!;
+    }
 
+    public class MenuUdpateDTO
+    {
+        public Guid MenuId { get; set; } 
+        public string Title { get; set; } = default!;
     }
 }
