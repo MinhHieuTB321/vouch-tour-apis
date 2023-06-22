@@ -66,10 +66,10 @@ namespace WebAPI.Controllers
         /// Delete menu
         /// </summary>
         [Authorize(Roles = nameof(RoleEnums.TourGuide))]
-        [HttpDelete("{menuId}")]
-        public async Task<IActionResult> DeleteMenu(Guid menuId)
+        [HttpDelete("{menuid}")]
+        public async Task<IActionResult> DeleteMenu(Guid menuid)
         {
-            var result = await _menuService.DeleteMenu(menuId);
+            var result = await _menuService.DeleteMenu(menuid);
             return Ok("Delete successfully");
         }
 

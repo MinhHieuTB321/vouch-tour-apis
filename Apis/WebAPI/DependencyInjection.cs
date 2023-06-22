@@ -1,6 +1,9 @@
 ﻿using Application.Interfaces;
+using FirebaseAdmin;
 using FluentValidation.AspNetCore;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Diagnostics;
@@ -78,6 +81,13 @@ namespace WebAPI
                 new string[]{}
             }
         });
+            });
+
+
+            FirebaseApp.Create(new AppOptions()
+            {
+
+                Credential = GoogleCredential.FromFile("C:\\Users\\minhh\\OneDrive\\Desktop\\SWD\\vouch-tour-apis\\Apis\\WebAPI\\private_key.json")
             });
 
             return services;

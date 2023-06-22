@@ -16,5 +16,7 @@ namespace Application.Interfaces
         Task<bool> DeleteItem(string cartId,string id);
         Task<ItemViewDTO> GetItemById(String cartid,string id);
         Task<List<ViewProductDTO>> GetAllProductOutCart(string cartId);
+
+        Task DemoNoti();
     }
 }

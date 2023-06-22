@@ -10,6 +10,7 @@ using AutoMapper;
 using Application.ViewModels.Product.ProductImage;
 using Application.GlobalExceptionHandling.Exceptions;
 using Application.ViewModels.Product;
+using Application.Commons;
 
 namespace Application.Services
 {
@@ -80,8 +81,13 @@ namespace Application.Services
         
         public async Task<bool> DeleteItem(string cartId,string id)
         {
+            //var root = "Cart-" + _claimsService.GetCurrentUser;
             FirebaseResponse response = await _client.DeleteAsync($"{cartId}/" + id);
-            return true;
+            if(response.StatusCode== System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task<List<ItemViewDTO>> GetAllItems()
@@ -150,6 +156,12 @@ namespace Application.Services
                 }
             }
             return list;
+        }
+
+        public async Task DemoNoti()
+        {
+             await FirebaseDatabase.SendNotification("Demo", "Demo");
+            //if (count == 0) throw new BadRequestException("Send Fail!");
         }
     }
 }

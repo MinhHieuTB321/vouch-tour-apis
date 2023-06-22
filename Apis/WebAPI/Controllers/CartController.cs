@@ -81,14 +81,21 @@ namespace WebAPI.Controllers
         /// </summary>
         [Authorize(Roles = nameof(RoleEnums.TourGuide))]
         [HttpDelete("{cartid}/items/{id}")]
-        public async Task<IActionResult> DeleteItem(string cartId, string id)
+        public async Task<IActionResult> DeleteItem(string cartid, string id)
         {
-            var result = await _cartService.DeleteItem(cartId,id);
+            var result = await _cartService.DeleteItem(cartid,id);
             if (!result)
             {
                 return BadRequest("There is no product in cart!");
             }
             return Ok("Delete Successfully!");
+        }
+
+        [HttpGet("DemoNoti")]
+        public async Task<IActionResult> DemoNoti()
+        {
+            await _cartService.DemoNoti();
+            return Ok();
         }
     }
 }
