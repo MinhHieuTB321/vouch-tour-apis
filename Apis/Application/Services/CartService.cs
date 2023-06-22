@@ -11,6 +11,7 @@ using Application.ViewModels.Product.ProductImage;
 using Application.GlobalExceptionHandling.Exceptions;
 using Application.ViewModels.Product;
 using Application.Commons;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Services
 {
@@ -20,15 +21,16 @@ namespace Application.Services
 
         private readonly IClaimsService _claimsService;
         private readonly IMapper _mapper;
-
+        private readonly IConfiguration _config;
         private  readonly IFirebaseConfig config;
         private  readonly IFirebaseClient _client;
 
-        public CartService(IUnitOfWork unitOfWork,IClaimsService claimsService, IMapper mapper)
+        public CartService(IUnitOfWork unitOfWork,IClaimsService claimsService, IMapper mapper,IConfiguration configuration)
         {
             _unitOfWork= unitOfWork;
             _claimsService= claimsService;
             _mapper= mapper;
+            _config= configuration;
             config= new FirebaseConfig
             {
                 AuthSecret = "LBnpcQLTqzjMUbS6shchSCcfPmQvAbPkLBPTIuUj",
@@ -160,7 +162,8 @@ namespace Application.Services
 
         public async Task DemoNoti()
         {
-             await FirebaseDatabase.SendNotification("Demo", "Demo");
+            var clientToken = _config["ClientToken"];
+             await FirebaseDatabase.SendNotification(clientToken!,"Demo", "Demo");
             //if (count == 0) throw new BadRequestException("Send Fail!");
         }
     }

@@ -3,6 +3,11 @@ using WebAPI.Middlewares;
 using WebAPI;
 using System.Reflection;
 using Application.GlobalExceptionHandling.Utility;
+using FirebaseAdmin;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using Google.Apis.Auth.OAuth2;
+using Domain.Entities;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructuresService(builder.Configuration.GetConnectionString("DefaultConnection")!);
 builder.Services.AddWebAPIService(builder.Configuration["JWTSecretKey"]!);
-builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = builder.Configuration["RedisCacheUrl"]; });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

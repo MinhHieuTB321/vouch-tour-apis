@@ -10,7 +10,7 @@ namespace Application.Commons
     public static class FirebaseDatabase
     {
 
-        public static async Task SendNotification(string title, string body)
+        public static async Task SendNotification(string clientToken, string title, string body)
         {
             var message = new Message()
             {
@@ -19,7 +19,7 @@ namespace Application.Commons
                     Title = "Test Notification",
                     Body = "This is a test notification"
                 },
-                Token = "Demo"
+                Token = clientToken
             };
 
             // Send the message

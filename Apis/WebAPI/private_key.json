@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "vouch-tour-mobile-swd",
+  "private_key_id": "abb49c7be782d220940218aacdfaa17dc4c0cddb",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCrh8KhXXgiAW29\nf54rbQpQpOB6kGQ7i8HWhrh7g+U1+DKImBquu/Uzp1ftz7u/CHd9j1hCJvN7C0+p\n4rsVg7tCSWfrorLrfZcZee+PtPZcpgEObiAiaNJEOw5/db40efjuM2Dr0D5/o7vZ\n4P6HWVPXE+dmiuqhBEq+wzTNeB/3F+hU0sq7QYRaf1UalZcq2AIVfeqnEKhHhHhv\nCZoOSN4Ld7NOyfX7csXgF0m8tJ/pL7xi6gOxaC6Ev58nHfUspqnWIhBGz8rTjxid\nYrfIvyqdfZdhVcWpZDktsUOeqPlfnHC+8ah7B53ZeqBmHLY9sdJ1f2yX4oPsisgg\nz/oxIaBNAgMBAAECggEAAtxFZOC0wp5p1mbCl5dMTqF4rP8ipDKRHsVS3eVKbjNK\n/Uw3xEOxgX5UvHDCAQCAiVSZqQGbozILfHDh0d9HQR2NeiGVsuMjF9EPokKwQKEz\n6vMmi61+vrpTP6zSFxQm670grHYKYMXjC+RaYkI4xOE+V5iH9Fc64AInkDrkxm0s\nm6gNRNEkhTMSBQKtHDLV1iP4DjA1RBp/LMyq8LBSMci/6hxB+l4y58bU9d15mWF+\nWO3adxwHxSzVWvq+tWLTW/HVDJdzUbf3ZBvGWV0MNt17mMOmfcqIEIEdotrRNpLH\naMOX1p8kW/4R5LN9A7bAwxr92reX9chiGdhs+pU5OQKBgQDZalV57yadTA0UmF0u\nR1VCnC2u4MyeXahCp5WbgCC57+XLNU3YiJ6zpueeZYjvdF1mKzhyBZOb5Np8SDh4\nV+cmPISl0ZZzirSpmGilbUZCIf6oCvkxA3ACri+MYwmxYiv1E9K5rowmr7hwrCgW\nn0C1sL0ME2Ip3L3FoyKQ7q6sCQKBgQDJ+MQOnPn877TACKdcgvudxiPGHYaQvxdu\nzk7aVxUensZJxvmbA5KlSDbMyEyIflY8c9Rpdz6NkuD4pprfEpz00TXqlrQpnCA4\nVxTI+4QvBIOR8WNJ5bh7Wz/LVZVpE7gdV9ByUQIxGh1Moip/oZMsx8L/RGPiLRnT\newCiBONrJQKBgQCsndkpi2/MGXKVNHde4/HUhe1bWE39Onz6FtYYdP0Gw2peEX8x\n+R6PomdpAlJbU7dIA+630KemcWfqnuh+28PBPvFOOf5K1AimUkRbe0v5+8WVI8k/\nWexXpHZJ7uPmOvyNg2SeWfAaUw+MHZNiiqQ03RLrgIRCmmjtfp1WFrsGCQKBgEv1\nAY7ZXG7Sm3CJEKALJqPMa5HLctsm8qIadq9IhsnQPpRqf17b9h+wy+MyBQ5kLPxp\nN14+mUjXD0KULbRtJJgxwgwqhzEK5Vcq8McxSCICmZSeao/VFA9YXuKSmjE9WEW4\ny8ziSGe9AX3bkw4S7u2tZtlnmATsn0TYgoFsQzb9AoGActYxadU0YDtAm8y13iC5\nmeX6NsAfhAJX4jtqdDDWhiK/8SWt6dgektrC1un7mTQKOqgOzVIdcKHoEUMNkF+Q\nl5BMwMb1oDKVqzTVcaUYKmxfZWaLwzsnSRuq+W5f6Z637HfgIiEopeFqJd3FYUQM\nH8blgTdJM/CVy0j/Yt3AN2g=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-v4pli@vouch-tour-mobile-swd.iam.gserviceaccount.com",
+  "client_id": "112433475295140517625",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-v4pli%40vouch-tour-mobile-swd.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

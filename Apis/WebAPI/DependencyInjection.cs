@@ -68,19 +68,26 @@ namespace WebAPI
                 });
 
                 opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-        {
-            {
-                new OpenApiSecurityScheme
                 {
-                    Reference = new OpenApiReference
                     {
-                        Type=ReferenceType.SecurityScheme,
-                        Id="Bearer"
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
                     }
-                },
-                new string[]{}
-            }
-        });
+                });
+            });
+
+            var dirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location.Replace("bin\\Debug\\net7.0", string.Empty));
+            var fileName = Path.Combine(dirName!, "private_key.json");
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.FromFile(fileName)
             });
             return services;
         }
