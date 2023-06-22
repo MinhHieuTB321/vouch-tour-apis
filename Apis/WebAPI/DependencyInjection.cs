@@ -82,14 +82,6 @@ namespace WebAPI
             }
         });
             });
-
-
-            FirebaseApp.Create(new AppOptions()
-            {
-
-                Credential = GoogleCredential.FromFile("C:\\Users\\minhh\\OneDrive\\Desktop\\SWD\\vouch-tour-apis\\Apis\\WebAPI\\private_key.json")
-            });
-
             return services;
         }
     }
