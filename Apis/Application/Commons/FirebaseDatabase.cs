@@ -19,7 +19,7 @@ namespace Application.Commons
                     Title = "Test Notification",
                     Body = "This is a test notification"
                 },
-                Token = ""
+                Token = "Demo"
             };
 
             // Send the message
