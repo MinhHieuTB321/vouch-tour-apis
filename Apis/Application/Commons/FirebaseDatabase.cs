@@ -51,7 +51,7 @@ namespace Application.Commons
                     Title = "Test Notification",
                     Body = "This is a test notification"
                 },
-                Token = "eF01z7UkRjyQ-mqKLMSpNK:APA91bHuL4R5hiGxWfvAc4Hq8usmO2fbAjY2FAzywOBBTWjM3hoh1-sTHBw_LZXTgLqzAW_X3i1D2xfmasO9QDzjFG709x__4pvWsjO73eTy9BqLd2DqvB928qThUQguNRbp-p1LyuPX"
+                Token = ""
             };
 
             // Send the message
