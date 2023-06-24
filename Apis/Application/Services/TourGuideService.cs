@@ -40,8 +40,9 @@ namespace Application.Services
         public async Task<bool> DeleteTourGuideAsync(Guid id)
         {
             var tourguide=await _unitOfWork.TourGuideRepository.GetByIdAsync(id);
+            var user= await _unitOfWork.UserRepository.FindByField(x=>x.UserId==id);
             if (tourguide == null) throw new NotFoundException("Tour-Guide is not exist in system!");
-
+            _unitOfWork.UserRepository.SoftRemove(user);
             _unitOfWork.TourGuideRepository.SoftRemove(tourguide);
             var result = await _unitOfWork.SaveChangeAsync();
             return result > 0;
