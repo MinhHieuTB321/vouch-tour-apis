@@ -77,6 +77,15 @@ namespace WebAPI.Controllers
             return BadRequest("Update fail!");
         }
 
-        
+        /// <summary>
+        /// Get all orders in group by groupid
+        /// </summary>
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        [HttpGet("{groupid}/orders")]
+        public async Task<IActionResult> GetOrderByGroupId(Guid groupid)
+        {
+            var result = await _groupService.GetAllOrdersAsync(groupid);
+            return Ok(result);
+        }
     }
 }

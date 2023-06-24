@@ -1,5 +1,6 @@
 ﻿using Application.GlobalExceptionHandling.Exceptions;
 using Application.Interfaces;
+using Application.ViewModels;
 using Application.ViewModels.GroupDTOs;
 using AutoMapper;
 using Domain.Entities;
@@ -40,7 +41,7 @@ namespace Application.Services
 
         public async Task<List<GroupViewDTO>> GetAllGroupAsync()
         {
-            var listGroup = (await _unitOfWork.GroupRepository.GetAllAsync(x=>x.Menu)).Where(x=>x.TourGuideId==_claimsService.GetCurrentUser).ToList();
+            var listGroup = (await _unitOfWork.GroupRepository.GetAllAsync(x=>x.Menu!)).OrderByDescending(x=>x.CreationDate).Where(x=>x.TourGuideId==_claimsService.GetCurrentUser).ToList();
             if (listGroup.Count==0) throw new NotFoundException("No Group!");
             var mapper = _mapper.Map<List<GroupViewDTO>>(listGroup);
             return mapper;
@@ -90,6 +91,28 @@ namespace Application.Services
             group.MenuId = updateDTO.MenuId;
             _unitOfWork.GroupRepository.Update(group);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<List<OrderViewDTO>> GetAllOrdersAsync(Guid groupId)
+        {
+            var orders=await _unitOfWork.OrderRepository.FindListByField(x=>x.GroupId==groupId,x=>x.OrderDetails,x=>x.Group,x=>x.Payments);
+            if (orders.Count == 0) throw new NotFoundException("There is no order for group!");
+            orders=orders.OrderByDescending(x=>x.CreationDate).ToList();
+            var result=GetOrdersViewDTO(orders);
+            return result;
+        }
+
+        private List<OrderViewDTO> GetOrdersViewDTO(List<Order> orders)
+        {
+            var result = new List<OrderViewDTO>();
+            orders.ForEach(x =>
+            {
+                var addDTO= _mapper.Map<OrderViewDTO>(x);
+                addDTO.OrderDetails = _mapper.Map<List<OrderDetailViewDTO>>(x.OrderDetails);
+                addDTO.PaymentName=x.Payments.First().PaymentName;
+                result.Add(addDTO);
+            });
+            return result;
         }
     }
 }

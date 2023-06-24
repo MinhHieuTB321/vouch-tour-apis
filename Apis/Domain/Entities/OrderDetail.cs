@@ -7,6 +7,7 @@ namespace Domain.Entities
 {
     public class OrderDetail : BaseEntity
     {
+        public string ProductName { get; set; } = default!;
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
         public Guid OrderId { get; set; }

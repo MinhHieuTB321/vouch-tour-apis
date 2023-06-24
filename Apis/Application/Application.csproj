@@ -12,6 +12,8 @@
 		<PackageReference Include="FirebaseAdmin" Version="2.3.0" />
 		<PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
 		<PackageReference Include="FireSharp" Version="2.0.4" />
+		<PackageReference Include="Hangfire" Version="1.8.2" />
+		<PackageReference Include="Hangfire.InMemory" Version="0.4.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
 	</ItemGroup>

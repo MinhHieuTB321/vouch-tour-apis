@@ -22,7 +22,7 @@ namespace Application.Services
         private readonly IClaimsService _claimsService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
-        private  readonly IFirebaseConfig config;
+        private  readonly IFirebaseConfig _fireBaseConfig;
         private  readonly IFirebaseClient _client;
 
         public CartService(IUnitOfWork unitOfWork,IClaimsService claimsService, IMapper mapper,IConfiguration configuration)
@@ -31,12 +31,12 @@ namespace Application.Services
             _claimsService= claimsService;
             _mapper= mapper;
             _config= configuration;
-            config= new FirebaseConfig
+            _fireBaseConfig= new FirebaseConfig
             {
-                AuthSecret = "LBnpcQLTqzjMUbS6shchSCcfPmQvAbPkLBPTIuUj",
-                BasePath = "https://vouch-tour-default-rtdb.asia-southeast1.firebasedatabase.app"
+                AuthSecret = _config["RealTimeDatabase:AuthSecret"],
+                BasePath = _config["RealTimeDatabase:BasePath"],
             };
-            _client= new FireSharp.FirebaseClient(config);
+            _client= new FireSharp.FirebaseClient(_fireBaseConfig);
         }
 
         public async Task<bool> AddToCart(ItemAddDTO addDTO)
@@ -163,8 +163,26 @@ namespace Application.Services
         public async Task DemoNoti()
         {
             var clientToken = _config["ClientToken"];
-             await FirebaseDatabase.SendNotification(clientToken!,"Demo", "Demo");
+            var clientToken2 = _config["ClientToken2"];
+            var listCli = new List<string>
+            {
+                clientToken,clientToken2,
+                "fKLLjlKIRfaEW1UzF7zeMO:APA91bFQI1TWagUJMWq-6lJso9TIUcuXbVuJTqxulx0OPUQZ8KTtqDI3jqn9RQJgoXL47FzVbHmlPLAFMVVb7jH75Qit93e1ohcxiOpVNzA99NnnhFaQ9sim3Cg081ixx6_idm7ONl1B"
+            };
+             await FirebaseDatabase.SendNotification(listCli!,"Demo", "Demo");
             //if (count == 0) throw new BadRequestException("Send Fail!");
+        }
+
+        public async Task<bool> DeleteCart(string cartId)
+        {
+            var root = "Cart-" + _claimsService.GetCurrentUser;
+            if (!root.Equals(root)) throw new BadRequestException("This cart is not belong to you!");
+            FirebaseResponse response = await _client.DeleteAsync($"{cartId}/");
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

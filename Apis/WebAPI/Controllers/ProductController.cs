@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _productService.DeleteProduct(id);
-            if (result) return NoContent();
+            if (result) return Ok("Delete Successfully");
             else return BadRequest("Deleted Failed");
         }
 

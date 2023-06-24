@@ -22,11 +22,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddItem(OrderCreateDTO addDTO)
         {
-            var result = await _orderService.CreateOrder(addDTO);
-            if (!result)
-            {
-                return BadRequest("Can not add!");
-            }
+            await _orderService.CreateOrder(addDTO);
             return Ok("Adding successfully!");
         }
 
@@ -38,6 +34,27 @@ namespace WebAPI.Controllers
         {
             var result = await _orderService.GetOrderById(id);
             return Ok(result);
+        }
+
+        /// <summary>
+        ///Update Order Status
+        /// </summary>
+        [HttpPut]
+        public async Task<IActionResult> UpdateOrder(OrderUpdateDTO updateDTO)
+        {
+            await _orderService.UpdateOrder(updateDTO);
+            return NoContent();
+        }
+
+
+        /// <summary>
+        ///Delete Order
+        /// </summary>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrder(Guid id)
+        {
+            await _orderService.DeleteOrder(id);
+            return Ok("Update Successfully!");
         }
     }
 }

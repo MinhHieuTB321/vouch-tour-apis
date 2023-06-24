@@ -49,6 +49,7 @@ namespace Application.Services
             var authToken = new AuthToken
             {
                 Id=user.UserId,
+                Role=user.Role.RoleName,
                 AccessToken = GenerateJsonWebTokenString.GenerateJsonWebToken(user, secretKey!),
                 RefreshToken = GenerateRefreshTokenString.GenerateRefreshToken()
             };

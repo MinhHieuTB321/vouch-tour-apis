@@ -1,3 +1,4 @@
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace Domain.Entities
     public class Order : BaseEntity
     {
         public double TotalPrice { get; set;}
-        public string Status { get; set; } = "Created";
+        public string Status { get; set; } =OrderEnums.Waiting.ToString();
         public string CustomerName { get; set; } = default!;
         public string PhoneNumber { get; set; }=default!;
         public string Note { get; set; } = default!;

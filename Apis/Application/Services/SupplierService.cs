@@ -9,6 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.GlobalExceptionHandling.Exceptions;
+using Hangfire;
+using FireSharp.Interfaces;
+using Microsoft.Extensions.Configuration;
+using FireSharp.Config;
+using FireSharp.Response;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Application.ViewModels.CartDTO;
 
 namespace Application.Services
 {
@@ -17,11 +25,27 @@ namespace Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
-        public SupplierService(IUnitOfWork unitOfWork, IMapper mapper,IClaimsService claimsService)
+        private readonly IBackgroundJobClient _jobClient;
+        private readonly IConfiguration _config;
+        private readonly IFirebaseConfig _fireBaseConfig;
+        private readonly IFirebaseClient _client;
+        public SupplierService(IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IClaimsService claimsService,
+            IBackgroundJobClient jobClient,
+            IConfiguration config)
         {
              _mapper = mapper;
             _unitOfWork = unitOfWork;
             _claimsService = claimsService;
+            _jobClient = jobClient;
+            _config = config;
+            _fireBaseConfig = new FirebaseConfig
+            {
+                AuthSecret = _config["RealTimeDatabase:AuthSecret"],
+                BasePath = _config["RealTimeDatabase:BasePath"],
+            };
+            _client = new FireSharp.FirebaseClient(_fireBaseConfig);
         }
         public async Task<SupplierViewDTO> Create(SupplierCreateDTO createdItem)
         {
@@ -36,15 +60,69 @@ namespace Application.Services
         
         public async Task<bool> Delete(Guid id)
         {
-           var supplier=await _unitOfWork.SupplierRepository.GetByIdAsync(id);
+            var supplier=await _unitOfWork.SupplierRepository.GetByIdAsync(id,x=>x.Products);
+            var user= await _unitOfWork.UserRepository.FindByField(x=>x.UserId==id);
             if(supplier == null)
             {
                 throw new NotFoundException("Supplier is not exist in system!");
             }
-             _unitOfWork.SupplierRepository.SoftRemove(supplier);
+            _unitOfWork.SupplierRepository.SoftRemove(supplier);
+            _unitOfWork.UserRepository.SoftRemove(user);
             var result = await _unitOfWork.SaveChangeAsync();
+            var products = supplier.Products.Select(x=>x.Id).ToList();
+            _jobClient.Enqueue(() => DeleteProduct(products,id));
+            _jobClient.Enqueue(() => CheckAllCart(products));
+            _jobClient.Enqueue(() => DeleteProductInMenu(products));
             return result > 0;
         }
+
+        public async Task DeleteProduct(List<Guid> products,Guid supplierId)
+        {
+            if (products.Count == 0) return;
+            var removeList = await _unitOfWork.ProductRepository.FindListByField(x=>products.Contains(x.Id));
+            _unitOfWork.ProductRepository.SoftRemoveRange(removeList);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task DeleteProductInMenu(List<Guid> products)
+        {
+            var listProductMenus= await _unitOfWork.ProductMenuRepository.FindListByField(x=>products.Contains(x.ProductId!.Value));
+            if (listProductMenus.Count == 0) return;
+            _unitOfWork.ProductMenuRepository.SoftRemoveRange(listProductMenus);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task CheckAllCart(List<Guid> products)
+        {
+            var tourGuide= await _unitOfWork.TourGuideRepository.GetAllAsync();
+            for (int i = 0; i < tourGuide.Count; i++)
+            {
+                await DeleteProductInCart(products, tourGuide[i].Id);
+            }
+        }
+
+        public async Task DeleteProductInCart(List<Guid> products,Guid tourGuideId)
+        {
+            var root = "Cart-" + tourGuideId;
+            FirebaseResponse response = await _client.GetAsync(root);
+            dynamic data = JsonConvert.DeserializeObject<dynamic>(response.Body);
+            var list = new List<ItemViewDTO>();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    list.Add(JsonConvert.DeserializeObject<ItemViewDTO>(((JProperty)item).Value.ToString()));
+                }
+            }
+            if (list.Count == 0) return;
+            var removeList = list.Where(x => products.Contains(x.ProductId)).ToList();
+            if(removeList.Count== 0) return;
+            for (int i = 0; i < removeList.Count; i++)
+            {
+                await _client.DeleteAsync($"{root}/" + removeList[i].Id);
+            }
+        }
+
 
         public async Task<IEnumerable<SupplierViewDTO>> GetAll()
         {

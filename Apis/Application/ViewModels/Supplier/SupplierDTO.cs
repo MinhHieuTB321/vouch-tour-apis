@@ -13,7 +13,7 @@ namespace Application.ViewModels.SupplierDTO
         public string SupplierName { get; set; } = default!;
         public string Address { get; set; } = default!;
         public string PhoneNumber { get; set; } = default!;
-        public Guid AdminId { get; set; } 
+        //public Guid AdminId { get; set; } 
     }
 
     public class SupplierCreateDTO

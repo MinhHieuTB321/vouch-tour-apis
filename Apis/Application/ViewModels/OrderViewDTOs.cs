@@ -16,10 +16,15 @@ namespace Application.ViewModels
         public string CustomerName { get; set; } = default!;
         public string PhoneNumber { get; set; } = default!;
         public string Note { get; set; } = default!;
-        public GroupViewDTO Group { get; set; } = default!;
-        public ICollection<OrderDetailViewDTO> OrderDetails { get; set; } = default!;
-        public ICollection<PaymentViewDTO> Payments { get; set; } = default!;
+        public DateTime CreationDate { get;set; }
+        public string PaymentName { get; set; } = default!;
+        public Guid GroupId { get; set; }
+        public string GroupName { get; set; } = default!;
+        //public GroupViewDTO Group { get; set; } = default!;
+        public ICollection<OrderDetailViewDTO> OrderDetails { get; set; } = default!;    
     }
+
+
 
     public class OrderDetailViewDTO
     {
@@ -41,7 +46,13 @@ namespace Application.ViewModels
     public class OrderDetailCreateDTO
     {
         public Guid ProductMenuId { get; set; }
+        public string ProductName { get;set; } =default!;
         public int Quantity { get;set; }
         public double UnitPrice { get;set; }
+    }
+
+    public class OrderUpdateDTO
+    {
+        public Guid Id { get; set; }
     }
 } 

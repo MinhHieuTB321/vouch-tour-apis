@@ -16,7 +16,7 @@ namespace Application.Interfaces
 
         Task<Guid> CreateMenu(MenuCreateDTO createDTO);
 
-        Task<List<MenuViewDTO>> GetAllMenu();
+        Task<List<MenuListViewDTO>> GetAllMenu();
         Task<bool> DeleteMenu(Guid menuId);
 
         Task UpdateMenu(MenuUdpateDTO updateDTO);

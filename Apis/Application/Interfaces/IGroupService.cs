@@ -1,4 +1,5 @@
-﻿using Application.ViewModels.GroupDTOs;
+﻿using Application.ViewModels;
+using Application.ViewModels.GroupDTOs;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,6 @@ namespace Application.Interfaces
         Task<GroupViewDTO> CreateGroupAsync(GroupCreateDTO createDTO);
         Task<bool> UpdateGroupAsync(GroupUpdateDTO updateDTO);
         Task AddMenu(GroupMenuDTO updateDTO);
+        Task<List<OrderViewDTO>> GetAllOrdersAsync(Guid groupId);
     }
 }

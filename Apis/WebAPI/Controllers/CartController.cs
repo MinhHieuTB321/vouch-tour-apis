@@ -77,7 +77,7 @@ namespace WebAPI.Controllers
 
 
         /// <summary>
-        /// Update item in cart
+        /// Delete item in cart
         /// </summary>
         [Authorize(Roles = nameof(RoleEnums.TourGuide))]
         [HttpDelete("{cartid}/items/{id}")]
@@ -91,11 +91,28 @@ namespace WebAPI.Controllers
             return Ok("Delete Successfully!");
         }
 
+        /// <summary>
+        /// Delete Cart
+        /// </summary>
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        [HttpDelete("{cartid}")]
+        public async Task<IActionResult> DeleteCart(string cartid)
+        {
+            var result = await _cartService.DeleteCart(cartid);
+            if (!result)
+            {
+                return BadRequest("Delete Fail!");
+            }
+            return Ok("Delete Successfully!");
+        }
+
+
+
         [HttpGet("DemoNoti")]
         public async Task<IActionResult> DemoNoti()
         {
             await _cartService.DemoNoti();
-            return Ok();
+                return Ok();
         }
     }
 }

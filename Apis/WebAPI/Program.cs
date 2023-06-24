@@ -8,13 +8,16 @@ using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using Google.Apis.Auth.OAuth2;
 using Domain.Entities;
 using System;
+using Application.Commons;
+using Hangfire;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+var configuration = builder.Configuration.Get<AppConfiguration>();
 builder.Services.AddInfrastructuresService(builder.Configuration.GetConnectionString("DefaultConnection")!);
-builder.Services.AddWebAPIService(builder.Configuration["JWTSecretKey"]!);
+builder.Services.AddWebAPIService(configuration!);
 
 var app = builder.Build();
 
@@ -35,6 +38,12 @@ app.UseMiddleware(typeof(GlobalErrorHandlingMiddleware));
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<PerformanceMiddleware>();
 app.MapHealthChecks("/healthchecks");
+//app.UseHangfireDashboard("/hangfire", new DashboardOptions
+//{
+//    Authorization = new[] { new AuthorizationFilter() },
+//    IgnoreAntiforgeryToken = true
+//});
+app.MapHangfireDashboard("/HangfireDashBoard");
 app.UseHttpsRedirection();
 // todo authentication
 app.UseAuthentication();

@@ -10,21 +10,24 @@ namespace Application.Commons
     public static class FirebaseDatabase
     {
 
-        public static async Task SendNotification(string clientToken, string title, string body)
+        public static async Task SendNotification(List<string> clientToken, string title, string body)
         {
-            var message = new Message()
+            for (int i = 0; i < clientToken.Count; i++)
             {
-                Notification = new Notification
+                var message = new Message()
                 {
-                    Title = "Test Notification",
-                    Body = "This is a test notification"
-                },
-                Token = clientToken
-            };
+                    Notification = new Notification()
+                    {
+                        Title = title,
+                        Body = body
+                    },
+                    Token = clientToken[i]
+                };
 
-            // Send the message
-            var response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
-            Console.WriteLine($"Successfully sent message: {response}");
+                // Send the message
+                var response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+                Console.WriteLine($"Successfully sent message: {response}");
+            }     
         }
     }
 }

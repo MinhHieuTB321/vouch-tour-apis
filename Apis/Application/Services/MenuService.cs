@@ -70,6 +70,7 @@ namespace Application.Services
             for (int i = 0; i < products.Count; i++)
             {
                var product= await GetProductMenuView(products[i]);
+                product.ProductId = products[i].Id;
                result.Add(product);    
             }
             return result;
@@ -79,7 +80,7 @@ namespace Application.Services
         private async Task<ProductMenuViewDTO> GetProductMenuView(ProductInMenu productMenu)
         {
             var result = _mapper.Map<ProductMenuViewDTO>(productMenu);
-            var product = await _unitOfWork.ProductRepository.GetByIdAsync(productMenu.ProductId.Value, x => x.Supplier, x => x.Category, x => x.Images);
+            var product = await _unitOfWork.ProductRepository.GetByIdAsync(productMenu.ProductId!.Value, x => x.Supplier, x => x.Category, x => x.Images);
             if (product != null)
             {
 
@@ -103,11 +104,16 @@ namespace Application.Services
             return result.Id;
         }
 
-        public async Task<List<MenuViewDTO>> GetAllMenu()
+        public async Task<List<MenuListViewDTO>> GetAllMenu()
         {
-            var listMenu= await _unitOfWork.MenuRepository.FindListByField(x=>x.CreatedBy==_claimsService.GetCurrentUser&&x.IsDeleted==false);
+            var listMenu= await _unitOfWork.MenuRepository.FindListByField(x=>x.CreatedBy==_claimsService.GetCurrentUser&&x.IsDeleted==false,x=>x.ProductInMenus!);
             if (listMenu.Count == 0) throw new NotFoundException("There is no menu!");
-            var result= _mapper.Map<List<MenuViewDTO>>(listMenu);
+            listMenu= listMenu.OrderByDescending(x=>x.CreationDate).ToList();
+            var result= _mapper.Map<List<MenuListViewDTO>>(listMenu);
+            for (int i = 0; i < result.Count; i++)
+            {
+                result[i].NumOfProduct = listMenu[i].ProductInMenus!.Count;
+            }
             return result;
         }
 

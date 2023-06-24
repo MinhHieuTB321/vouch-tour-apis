@@ -60,7 +60,7 @@ namespace WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromForm]CategoryUpdateDTO updateDTO)
         {
-            var result = await _categoryService.Update(updateDTO);
+            await _categoryService.Update(updateDTO);
             return NoContent();
         }
 
@@ -70,9 +70,9 @@ namespace WebAPI.Controllers
         /// 
         [Authorize(Roles = nameof(RoleEnums.Admin))]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> deleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var result = await _categoryService.DeleteById(id);
+            await _categoryService.DeleteById(id);
             return Ok("Delete successfully!");
         }
 
