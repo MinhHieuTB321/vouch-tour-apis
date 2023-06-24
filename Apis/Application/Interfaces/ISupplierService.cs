@@ -1,4 +1,5 @@
-﻿using Application.ViewModels.SupplierDTO;
+﻿using Application.ViewModels.Product;
+using Application.ViewModels.SupplierDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace Application.Interfaces
         Task<SupplierViewDTO> Create(SupplierCreateDTO createdItem);
         Task<bool> Update(SupplierUpdateDTO updatedItem);
         Task<bool> Delete(Guid id);
+        Task<List<ViewProductDTO>> GetProductBySupplierId(Guid supplierId);
     }
 }
