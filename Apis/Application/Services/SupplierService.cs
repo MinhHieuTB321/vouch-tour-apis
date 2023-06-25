@@ -70,13 +70,13 @@ namespace Application.Services
             _unitOfWork.UserRepository.SoftRemove(user);
             var result = await _unitOfWork.SaveChangeAsync();
             var products = supplier.Products.Select(x=>x.Id).ToList();
-            _jobClient.Enqueue(() => DeleteProduct(products,id));
+            _jobClient.Enqueue(() => DeleteProduct(products));
             _jobClient.Enqueue(() => CheckAllCart(products));
             _jobClient.Enqueue(() => DeleteProductInMenu(products));
             return result > 0;
         }
 
-        public async Task DeleteProduct(List<Guid> products,Guid supplierId)
+        public async Task DeleteProduct(List<Guid> products)
         {
             if (products.Count == 0) return;
             var removeList = await _unitOfWork.ProductRepository.FindListByField(x=>products.Contains(x.Id));

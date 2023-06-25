@@ -108,11 +108,11 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpGet("DemoNoti")]
-        public async Task<IActionResult> DemoNoti()
-        {
-            await _cartService.DemoNoti();
-                return Ok();
-        }
+        //[HttpGet("DemoNoti")]
+        //public async Task<IActionResult> DemoNoti()
+        //{
+        //    await _cartService.DemoNoti();
+        //        return Ok();
+        //}
     }
 }

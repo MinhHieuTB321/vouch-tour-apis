@@ -160,18 +160,17 @@ namespace Application.Services
             return list;
         }
 
-        public async Task DemoNoti()
-        {
-            var clientToken = _config["ClientToken"];
-            var clientToken2 = _config["ClientToken2"];
-            var listCli = new List<string>
-            {
-                clientToken,clientToken2,
-                "fKLLjlKIRfaEW1UzF7zeMO:APA91bFQI1TWagUJMWq-6lJso9TIUcuXbVuJTqxulx0OPUQZ8KTtqDI3jqn9RQJgoXL47FzVbHmlPLAFMVVb7jH75Qit93e1ohcxiOpVNzA99NnnhFaQ9sim3Cg081ixx6_idm7ONl1B"
-            };
-             await FirebaseDatabase.SendNotification(listCli!,"Demo", "Demo");
-            //if (count == 0) throw new BadRequestException("Send Fail!");
-        }
+        //public async Task DemoNoti()
+        //{
+        //    var clientToken = _config["ClientToken"];
+        //    var clientToken2 = _config["ClientToken2"];
+        //    var listCli = new List<string>
+        //    {
+        //        clientToken,clientToken2
+        //    };
+        //     await FirebaseDatabase.SendNotification(listCli!,"Demo", "Demo");
+        //    //if (count == 0) throw new BadRequestException("Send Fail!");
+        //}
 
         public async Task<bool> DeleteCart(string cartId)
         {
