@@ -22,9 +22,9 @@ namespace WebAPI.Controllers
         /// </summary>
         [Authorize(Roles = nameof(RoleEnums.TourGuide))]
         [HttpGet("{id}/products-menu")]
-        public async Task<IActionResult> GetMenuById(Guid id)
+        public async Task<IActionResult> GetProductInMenu(Guid id)
         {
-            var result = await _menuService.GetMenuViewAsync(id);
+            var result = await _menuService.GetProductInMenuViewAsync(id);
             return Ok(result);
         }
 
@@ -38,6 +38,17 @@ namespace WebAPI.Controllers
         {
             var result = await _menuService.AddListProductToMenu(id,products);
             return CreatedAtAction(nameof(GetMenuById), new { id = result },null);
+        }
+
+        /// <summary>
+        /// add product to menu
+        /// </summary>
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMenuById(Guid id)
+        {
+            var result = await _menuService.GetMenuViewById(id);
+            return Ok(result);
         }
 
         /// <summary>

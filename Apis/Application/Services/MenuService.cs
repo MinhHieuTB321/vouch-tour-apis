@@ -50,16 +50,12 @@ namespace Application.Services
             }
         }
 
-        public async Task<MenuViewDTO> GetMenuViewAsync(Guid menuId)
+        public async Task<List<ProductMenuViewDTO>> GetProductInMenuViewAsync(Guid menuId)
         {
-            var menu = await _unitOfWork.MenuRepository.FindByField(x => x.Id == menuId);
-            if (menu == null) throw new NotFoundException("Can not found menu" + menuId);
-            var productMenus = await _unitOfWork.ProductMenuRepository.GetProductByMenuId(menu.Id);
-            var result = _mapper.Map<MenuViewDTO>(menu);
-            if(menu!=null)
+            var productMenus = await _unitOfWork.ProductMenuRepository.GetProductByMenuId(menuId);
+            if(productMenus.Count>0)
             {
-                result.Products =await GetProductInMenu(productMenus);
-                return result;
+               return await GetProductInMenu(productMenus);
             }
             throw new NotFoundException("Not Found!");
         }
@@ -135,6 +131,16 @@ namespace Application.Services
             
             _unitOfWork.MenuRepository.Update(update);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<MenuViewDTO> GetMenuViewById(Guid menuId)
+        {
+            var menu = await _unitOfWork.MenuRepository.GetByIdAsync(menuId, x => x.ProductInMenus!);
+            if (menu == null) throw new NotFoundException("Not Found!");
+
+            var result = _mapper.Map<MenuViewDTO>(menu);
+            result.NumberOfProduct = menu.ProductInMenus!.Count;
+            return result;
         }
     }
 }
