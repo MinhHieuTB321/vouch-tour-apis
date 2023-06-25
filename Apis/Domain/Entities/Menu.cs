@@ -9,7 +9,7 @@ namespace Domain.Entities
     public class Menu : BaseEntity
     {
         public string Title { get; set; } = default!;
-        public int Quantity {get;set;}
+//        public int Quantity {get;set;}
         public string Status {get;set;} = nameof(ActiveEnum.Active);
 
         public Guid TourGuideId {get;set;} 

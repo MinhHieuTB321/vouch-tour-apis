@@ -14,7 +14,7 @@ namespace Application.ViewModels.MenuDTOs
         public Guid Id { get; set; }
         public string Title { get; set; } = default!;
         public Guid TourGuideId {get;set;}
-        public int Quantity { get; set;}
+        //public int Quantity { get; set;}
         public string Status { get; set; } = default!;
         //public List<ProductMenuViewDTO> Products { get; set; } = default!;
         public int NumberOfProduct { get; set;}
@@ -25,7 +25,7 @@ namespace Application.ViewModels.MenuDTOs
         public Guid Id { get; set; }
         public string Title { get; set; } = default!;
         public Guid TourGuideId { get; set; }
-        public int Quantity { get; set; }
+        //public int Quantity { get; set; }
         public string Status { get; set; } = default!;
         public int NumOfProduct { get; set; }
     }

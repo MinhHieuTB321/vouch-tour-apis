@@ -79,14 +79,12 @@ namespace Infrastructures.Mappers
                 .ForMember(des => des.Id, opt => opt.MapFrom(opt => opt.Id))
                 .ForMember(des => des.Title, opt => opt.MapFrom(opt => opt.Title))
                 .ForMember(des => des.TourGuideId, opt => opt.MapFrom(opt => opt.TourGuideId))
-                .ForMember(des => des.Quantity, opt => opt.MapFrom(opt => opt.Quantity))
                 .ForMember(des => des.Status, opt => opt.MapFrom(opt => opt.Status))
                 .ReverseMap();
             CreateMap<Menu, MenuListViewDTO>()
                 .ForMember(des => des.Id, opt => opt.MapFrom(opt => opt.Id))
                 .ForMember(des => des.Title, opt => opt.MapFrom(opt => opt.Title))
                 .ForMember(des => des.TourGuideId, opt => opt.MapFrom(opt => opt.TourGuideId))
-                .ForMember(des => des.Quantity, opt => opt.MapFrom(opt => opt.Quantity))
                 .ForMember(des => des.Status, opt => opt.MapFrom(opt => opt.Status))
                 .ReverseMap();
             CreateMap<Menu, MenuCreateDTO>().ReverseMap();

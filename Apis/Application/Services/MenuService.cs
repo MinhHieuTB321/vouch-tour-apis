@@ -35,20 +35,10 @@ namespace Application.Services
                 listCreate[i].MenuId = menuId;
             }
             await _unitOfWork.ProductMenuRepository.AddRangeAsync(listCreate);
-            await UpdateQuantityInMenu(menuId, productMenus.Count);
             await _unitOfWork.SaveChangeAsync();
             return menuId;
         }
 
-        private async Task UpdateQuantityInMenu(Guid menuId,int quantity)
-        {
-            var menu= await _unitOfWork.MenuRepository.GetByIdAsync(menuId);
-            if(menu != null) 
-            {
-                menu.Quantity += quantity;
-                _unitOfWork.MenuRepository.Update(menu);
-            }
-        }
 
         public async Task<List<ProductMenuViewDTO>> GetProductInMenuViewAsync(Guid menuId)
         {
@@ -88,7 +78,7 @@ namespace Application.Services
 
         public async Task<Guid> CreateMenu(MenuCreateDTO createDTO)
         {
-            var newMenu = new Menu { Title = createDTO.Title, Quantity = createDTO.ProductMenus.Count,TourGuideId=_claimsService.GetCurrentUser };
+            var newMenu = new Menu { Title = createDTO.Title,TourGuideId=_claimsService.GetCurrentUser };
             var result=await _unitOfWork.MenuRepository.AddAsync(newMenu);
             var listCreate = _mapper.Map<List<ProductInMenu>>(createDTO.ProductMenus);
             for (int i = 0; i < listCreate.Count; i++)
