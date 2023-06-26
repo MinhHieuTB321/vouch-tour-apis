@@ -58,20 +58,9 @@ namespace Application.Services
 
         public async Task<bool> UpdateGroupAsync(GroupUpdateDTO updateDTO)
         {
-            var group = await _unitOfWork.GroupRepository.GetByIdAsync(updateDTO.Id,x=>x.Menu);
+            var group = await _unitOfWork.GroupRepository.GetByIdAsync(updateDTO.Id,x=>x.Menu!);
             if(group == null) throw new NotFoundException("There is no group " + updateDTO.Id + " in system!");
-            if (group.Menu == null)
-            {
-                return await Update(updateDTO, group);
-            }
-            else
-            {
-                if (group.Menu.IsDeleted == false) throw new BadRequestException("Already existing menu for group");
-                return await Update(updateDTO, group);
-            }
-
-
-            throw new BadRequestException("Already existing menu for group");
+            return await Update(updateDTO, group);
         }
 
 
