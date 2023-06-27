@@ -9,8 +9,9 @@ namespace Application.ViewModels.ProductInMenuDTOs
 {
     public class ProductMenuViewDTO
     {
+        public Guid Id { get; set; }
+       // public Guid ProductId { get; set; }
         public Guid MenuId { get; set; }
-        public Guid ProductId { get; set; }
         public string ProductName { get; set; } = default!;
         public double ActualPrice { get; set; }
         public double SupplierPrice { get; set; }

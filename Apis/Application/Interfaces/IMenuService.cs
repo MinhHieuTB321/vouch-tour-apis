@@ -23,6 +23,10 @@ namespace Application.Interfaces
         Task UpdateMenu(MenuUdpateDTO updateDTO);
 
         Task<MenuViewDTO> GetMenuViewById(Guid menuId);
+
+        Task<ProductMenuViewDTO> GetProductInMenuById(Guid menuId,Guid productId);
+
+        Task<bool> DeleteProductFromMenu(Guid MenuId,Guid productMenuId);
     }
 
    

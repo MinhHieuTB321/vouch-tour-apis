@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
         /// Create order
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> AddItem(OrderCreateDTO addDTO)
+        public async Task<IActionResult> AddOrder(OrderCreateDTO addDTO)
         {
             await _orderService.CreateOrder(addDTO);
             return Ok("Adding successfully!");
@@ -54,7 +54,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> DeleteOrder(Guid id)
         {
             await _orderService.DeleteOrder(id);
-            return Ok("Update Successfully!");
+            return Ok("Delete Successfully!");
         }
     }
 }

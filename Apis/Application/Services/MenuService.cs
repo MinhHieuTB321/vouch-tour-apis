@@ -56,7 +56,7 @@ namespace Application.Services
             for (int i = 0; i < products.Count; i++)
             {
                var product= await GetProductMenuView(products[i]);
-                product.ProductId = products[i].Id;
+               product.Id = products[i].Id;
                result.Add(product);    
             }
             return result;
@@ -131,6 +131,25 @@ namespace Application.Services
             var result = _mapper.Map<MenuViewDTO>(menu);
             result.NumberOfProduct = menu.ProductInMenus!.Count;
             return result;
+        }
+
+        public async Task<ProductMenuViewDTO> GetProductInMenuById(Guid menuId, Guid productId)
+        {
+            var product= await _unitOfWork.ProductMenuRepository.FindByField(x=>x.Id==productId& x.MenuId==menuId);
+            if (product == null) throw new NotFoundException("Product is not exist!");
+            var result= await GetProductMenuView(product);
+            result.Id= product.Id;
+            return result;
+        }
+
+        public async Task<bool> DeleteProductFromMenu(Guid MenuId, Guid productMenuId)
+        {
+            var deleteDTO = await _unitOfWork.ProductMenuRepository.FindByField(x => x.ProductId == productMenuId&x.MenuId==MenuId);
+            if (deleteDTO == null) { throw new NotFoundException("Not Found!"); }
+            deleteDTO.IsDeleted = true;
+            _unitOfWork.ProductMenuRepository.Update(deleteDTO);
+            var result = await _unitOfWork.SaveChangeAsync();
+            return result > 0;
         }
     }
 }

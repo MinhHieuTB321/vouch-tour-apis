@@ -18,6 +18,8 @@ namespace WebAPI.Controllers
                _tourGuideService = tourGuideService;
         }
 
+        #region GET
+
         /// <summary>
         /// Get All tourGuides
         /// </summary>
@@ -40,26 +42,34 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        #endregion
+
+
+        #region POST
 
         /// <summary>
         /// Create tour guide
         /// </summary>
-        [Authorize(Roles =nameof(RoleEnums.Admin))]
+        [Authorize(Roles = nameof(RoleEnums.Admin))]
         [HttpPost]
         public async Task<IActionResult> AddTourGuide(TourGuideCreateDTO dto)
         {
             var result = await _tourGuideService.AddTourGuide(dto);
-            if(result == null)
+            if (result == null)
             {
                 return BadRequest("Can not add new tour guide!");
             }
-            return CreatedAtAction(nameof(GetById), new {id=result.Id},result);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
+
+        #endregion
+
+        #region PUT
 
         /// <summary>
         /// Update tour-guide
         /// </summary>
-        [Authorize(Roles =nameof(RoleEnums.TourGuide))]
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
         [HttpPut]
         public async Task<IActionResult> UpdateTourGuide(TourGuideUpdateDTO dto)
         {
@@ -70,6 +80,12 @@ namespace WebAPI.Controllers
             }
             throw new Exception("Not Found!");
         }
+
+
+        #endregion
+
+
+        #region DELETE
 
         /// <summary>
         /// Soft remove tour-guide
@@ -85,5 +101,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest("Remove Fail!");
         }
+
+        #endregion
     }
 }

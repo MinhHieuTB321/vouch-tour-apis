@@ -27,21 +27,6 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Get user by Id
-        /// </summary>
-
-        [HttpGet("{id}")] 
-        public async Task<IActionResult> GetById(Guid Id)
-        {
-            var result = await _userService.GetUserById(Id);
-            if(result is null)
-            {
-                return BadRequest("Not found");
-            } else
-            return Ok(result);
-        }
-
 
         /// <summary>
         /// Get authenticate token

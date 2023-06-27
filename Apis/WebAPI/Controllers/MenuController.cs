@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get product in menu
         /// </summary>
-        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        //[Authorize(Roles = nameof(RoleEnums.TourGuide))]
         [HttpGet("{id}/products-menu")]
         public async Task<IActionResult> GetProductInMenu(Guid id)
         {
@@ -41,7 +41,7 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// add product to menu
+        /// Get menu by id
         /// </summary>
         [Authorize(Roles = nameof(RoleEnums.TourGuide))]
         [HttpGet("{id}")]
@@ -95,5 +95,28 @@ namespace WebAPI.Controllers
             await _menuService.UpdateMenu(udpateDTO);
             return Ok("Update successfully");
         }
+
+        /// <summary>
+        ///Get product in menu by id
+        /// </summary>
+        [HttpGet("{menuid}/products-menu/{productid}")]
+        public async Task<IActionResult> GetProductInMenuById(Guid menuid,Guid productid)
+        {
+            var result= await _menuService.GetProductInMenuById(menuid, productid);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Delete product in menu by id
+        /// </summary>
+        /// 
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        [HttpDelete("{menuid}/products-menu/{productid}")]
+        public async Task<IActionResult> Delete(Guid menuid,Guid productid)
+        {
+            var result = await _menuService.DeleteProductFromMenu(menuid,productid);
+            return Ok(result);
+        }
+
     }
 }

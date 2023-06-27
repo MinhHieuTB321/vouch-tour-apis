@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get groups by id 
         /// </summary>
-        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        //[Authorize(Roles = nameof(RoleEnums.TourGuide))]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGroupById(Guid id)
         {

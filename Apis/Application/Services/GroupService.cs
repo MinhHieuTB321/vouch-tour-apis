@@ -50,7 +50,7 @@ namespace Application.Services
 
         public async Task<GroupViewDTO> GetGroupByIdAsyn(Guid groupId)
         {
-            var group= await _unitOfWork.GroupRepository.FindByField(x=>x.Id==groupId&& x.TourGuideId==_claimsService.GetCurrentUser,x=>x.Menu);
+            var group= await _unitOfWork.GroupRepository.FindByField(x=>x.Id==groupId,x=>x.Menu!);
             if (group == null) throw new NotFoundException("There is no group " + groupId + " in system!");
             var result= _mapper.Map<GroupViewDTO>(group);
             return result;
