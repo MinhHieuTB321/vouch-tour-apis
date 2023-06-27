@@ -33,7 +33,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get all products
         /// </summary>
-        [Authorize(Role= "Admin,TourGuide")]
+        [Authorize(Roles= "Admin,TourGuide")]
         [HttpGet] 
         public async Task<IActionResult> GetAll()
         {
