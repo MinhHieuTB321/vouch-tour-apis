@@ -20,7 +20,10 @@ namespace Infrastructures.Mappers
         public MapperConfigurationsProfile()
         {
             #region UserMapping
-            CreateMap<User, UserViewDTO>().ReverseMap();
+            CreateMap<UserViewDTO,User>()
+                .ForMember(x => x.Email, o => o.MapFrom(x => x.Email))
+                .ForPath(x=>x.Role.RoleName,o=>o.MapFrom(x=>x.Role))
+                .ReverseMap();
             #endregion
 
             #region ProductMapping
