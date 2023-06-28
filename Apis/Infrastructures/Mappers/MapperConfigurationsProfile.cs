@@ -114,8 +114,8 @@ namespace Infrastructures.Mappers
 
             CreateMap<ProductInMenu,ProductMenuCreateDTO>()
                 .ForMember(v => v.ProductId, r => r.MapFrom(x => x.ProductId))
-                .ForMember(v => v.ResellPrice, r => r.MapFrom(x => x.ActualPrice))
-                .ForMember(v => v.ResellPrice, r => r.MapFrom(x => x.SupplierPrice))
+                .ForMember(v => v.ActualPrice, r => r.MapFrom(x => x.ActualPrice))
+                .ForMember(v => v.SupplierPrice, r => r.MapFrom(x => x.SupplierPrice))
                 .ForMember(v => v.Description, r => r.MapFrom(x => x.Description))
                 .ReverseMap();
             #endregion

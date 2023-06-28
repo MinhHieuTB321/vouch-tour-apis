@@ -26,7 +26,8 @@ namespace Application.ViewModels.ProductInMenuDTOs
     public class ProductMenuCreateDTO
     {
         public Guid ProductId { get; set; }
-        public double ResellPrice { get;set; }
+        public double ActualPrice { get; set; }
+        public double SupplierPrice { get; set; }
         public string Description { get; set; } = default!;
     }
 
