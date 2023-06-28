@@ -13,5 +13,6 @@ namespace Application.Interfaces
         Task<OrderViewDTO> GetOrderById(Guid orderId);
         Task<bool> UpdateOrder(OrderUpdateDTO updateDTO);
         Task<bool> DeleteOrder(Guid orderId);
+        Task<OrderViewDTO> GetOrderByPhone(string phoneNumber);
     }
 }

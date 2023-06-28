@@ -100,6 +100,16 @@ namespace Application.Services
             var result = await _unitOfWork.SaveChangeAsync();
             return result > 0;
         }
+
+        public async Task<OrderViewDTO> GetOrderByPhone(string phoneNumber)
+        {
+            var order = await _unitOfWork.OrderRepository.FindByField(x=>x.PhoneNumber==phoneNumber, x => x.Group, x => x.OrderDetails, x => x.Payments);
+            if (order == null) throw new NotFoundException("Not Found Order");
+            var result = _mapper.Map<OrderViewDTO>(order);
+            result.OrderDetails = _mapper.Map<List<OrderDetailViewDTO>>(order.OrderDetails);
+            result.PaymentName = order.Payments.First().PaymentName;
+            return result;
+        }
     }
 
 }
