@@ -17,13 +17,16 @@ namespace Application.Services
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IClaimsService _claimsService;
         private readonly IMapper _mapper;
 
         public OrderService(IUnitOfWork unitOfWork,
-                            IMapper mapper)
+                            IMapper mapper,
+                            IClaimsService claimsService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _claimsService = claimsService;
         }
         public async Task<bool> CreateOrder(OrderCreateDTO orderCreate)
         {
@@ -108,6 +111,33 @@ namespace Application.Services
             var result = _mapper.Map<OrderViewDTO>(order);
             result.OrderDetails = _mapper.Map<List<OrderDetailViewDTO>>(order.OrderDetails);
             result.PaymentName = order.Payments.First().PaymentName;
+            return result;
+        }
+
+        public async Task<List<OrderViewDTO>> GetAllOrderOfTourGuide()
+        {
+            var groups = await _unitOfWork.GroupRepository.FindListByField(x => x.TourGuideId == _claimsService.GetCurrentUser && x.IsDeleted==false,x=>x.Orders);
+            if (groups.Count == 0) throw new BadRequestException("There is no groups");
+            var result = await GetOrdersViewDTO(groups);
+            return result;
+        }
+
+        private async Task<List<OrderViewDTO>> GetOrdersViewDTO(List<Group> groups)
+        {
+            var result = new List<OrderViewDTO>();
+
+            foreach (var group in groups)
+            {
+                var order = await _unitOfWork.OrderRepository.FindListByField(x => x.GroupId == group.Id && x.IsDeleted==false, x => x.OrderDetails);
+                order.ForEach(x =>
+                {
+                    var addDTO = _mapper.Map<OrderViewDTO>(x);
+                    addDTO.OrderDetails = _mapper.Map<List<OrderDetailViewDTO>>(x.OrderDetails);
+                    addDTO.PaymentName = x.Payments.First().PaymentName;
+                    result.Add(addDTO);
+                });
+            }
+           
             return result;
         }
     }

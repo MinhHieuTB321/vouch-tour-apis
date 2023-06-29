@@ -54,7 +54,7 @@ namespace Infrastructures.Mappers
             #region Categories
             CreateMap<Category, CategoryCreateDTO>().ReverseMap();
             CreateMap<CategoryViewDTO, Category>().ReverseMap();
-            CreateMap<CategoryCreateDTO, Category>().ReverseMap();
+            CreateMap< Category, CategoryCreateDTO>().ReverseMap();
             #endregion
 
             #region TourGuides 

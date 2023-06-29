@@ -14,5 +14,7 @@ namespace Application.Interfaces
         Task<bool> UpdateOrder(OrderUpdateDTO updateDTO);
         Task<bool> DeleteOrder(Guid orderId);
         Task<OrderViewDTO> GetOrderByPhone(string phoneNumber);
+
+        Task<List<OrderViewDTO>> GetAllOrderOfTourGuide();
     }
 }

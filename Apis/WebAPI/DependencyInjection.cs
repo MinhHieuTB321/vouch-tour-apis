@@ -1,6 +1,7 @@
 ﻿using Application.Commons;
 using Application.Interfaces;
 using FirebaseAdmin;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Google.Apis.Auth.OAuth2;
 using Hangfire;
@@ -34,6 +35,8 @@ namespace WebAPI
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
+
+
             services.AddCors(options
                 => options.AddDefaultPolicy(policy
                     => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));

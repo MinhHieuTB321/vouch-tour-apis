@@ -27,6 +27,17 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
+        /// Get all  order of tour-guide
+        /// </summary>
+        [Authorize(Roles = nameof(RoleEnums.TourGuide))]
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrderOfTourGuide()
+        {
+            var result = await _orderService.GetAllOrderOfTourGuide();
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Get order by Id
         /// </summary>
         [HttpGet("{id}")]
