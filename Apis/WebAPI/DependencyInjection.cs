@@ -33,6 +33,8 @@ namespace WebAPI
             services.AddHttpContextAccessor();
 
             services.AddRouting(options => options.LowercaseUrls = true);
+
+            services.AddValidatorsFromAssembly(typeof(Program).Assembly);
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
 

@@ -151,7 +151,7 @@ namespace Application.Services
             if (!removeFile) throw new BadRequestException("Can not delete file!");
             var updateFile = await catregoryUpdateDTO.File.UploadFileAsync();
             //category=_mapper.Map(catregoryUpdateDTO, category);
-            category.CategoryName = catregoryUpdateDTO.CategoryName;
+            category.CategoryName = catregoryUpdateDTO.CategoryName.Trim();
             category.FileName = updateFile.FileName;
             category.URL = updateFile.URL;
             _unitOfWork.CategoryRepository.Update(category);

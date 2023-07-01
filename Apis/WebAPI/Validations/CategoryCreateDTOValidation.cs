@@ -7,7 +7,7 @@ namespace WebAPI.Validations
     {
         public CategoryCreateDTOValidation()
         {
-            //RuleFor(x => x.CategoryName).NotEmpty().NotEmpty().WithMessage("Name can not be empty").WithErrorCode("400");
+            //RuleFor(x => x.CategoryName).NotEmpty().NotEmpty().Matches("^[a-zA-Z]+((\\w\\  *)[a-zA-Z0-9]+)+$").WithMessage("Name can not be empty").WithErrorCode("400");
         }
     }
 }
