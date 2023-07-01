@@ -27,7 +27,6 @@ jobs:
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-        
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -54,5 +53,5 @@ jobs:
         with:
           app-name: 'vouch-tour-apis'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B30B1B167E96479AA1F22749D3B6D2EF }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EB5F5B7A580847FA9BF16944D0EA48BA }}
           package: .
