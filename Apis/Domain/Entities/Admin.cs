@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
+    // Modified
     public class Admin : BaseEntity
     {
         public string Name { get; set; } = default!;
