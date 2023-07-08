@@ -11,4 +11,12 @@ namespace WebAPI.Validations
             RuleFor(x => x.PhoneNumber).NotNull().NotEmpty().Matches("^(84|0[3|5|7|8|9])+([0-9]{8})\b$").WithMessage("Phone number is incorrect format!").WithErrorCode("400");
         }
     }
+
+    public class OrderUpdateDTOValidation : AbstractValidator<OrderUpdateDTO>
+    {
+        public OrderUpdateDTOValidation()
+        {
+            RuleFor(x => x.Status).NotNull().NotEmpty().Matches("^([Completed]{9})$|^([Canceled]{8})$").WithMessage("Status is incorrect format!").WithErrorCode("400");
+        }
+    }
 }

@@ -9,7 +9,7 @@ namespace Domain.Enums
     public enum OrderEnums
     {
         Waiting,
-        Complete,
+        Completed,
         Canceled
     }
 }

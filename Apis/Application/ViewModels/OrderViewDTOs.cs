@@ -54,5 +54,6 @@ namespace Application.ViewModels
     public class OrderUpdateDTO
     {
         public Guid Id { get; set; }
+        public string Status { get;set; } =default!;
     }
 } 

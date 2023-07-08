@@ -80,9 +80,12 @@ namespace Application.Services
         {
             var order = await _unitOfWork.OrderRepository.GetByIdAsync(updateDTO.Id);
             if (order == null) throw new BadRequestException("Order is not exist!");
-            order.Status = OrderEnums.Complete.ToString();
+            order.Status = updateDTO.Status;
             _unitOfWork.OrderRepository.Update(order);
-            await UpdatePayment(updateDTO.Id);
+            if (updateDTO.Status.Equals(OrderEnums.Completed.ToString()))
+            {
+                await UpdatePayment(updateDTO.Id);
+            }
             var result= await _unitOfWork.SaveChangeAsync();
             return result > 0;
         }
@@ -90,7 +93,7 @@ namespace Application.Services
         private async Task UpdatePayment(Guid orderId)
         {
             var payment = await _unitOfWork.PaymentRepository.FindByField(x => x.OrderId == orderId);
-            payment.Status=OrderEnums.Complete.ToString();
+            payment.Status=OrderEnums.Completed.ToString();
             payment.PaymentName = "Cash";
             _unitOfWork.PaymentRepository.Update(payment);
         }
