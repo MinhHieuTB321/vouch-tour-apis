@@ -58,15 +58,39 @@ namespace Application.Services
             throw new Exception("Not have any tour guide");
         }
 
+        /// <summary>
+        /// Get tour- guide by id
+        /// </summary>
+        /// <param Guid="id"></param>
+        /// <returns>TourGuideViewDTO</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<TourGuideViewDTO> GetById(Guid id)
         {
-            var result = await _unitOfWork.TourGuideRepository.GetByIdAsync(id);
-            if(result is not null)
+            var tourGuide = await _unitOfWork.TourGuideRepository.GetByIdAsync(id,x=>x.Groups);
+            if(tourGuide is not null)
             {
-                return _mapper.Map<TourGuideViewDTO>(result);
+                var result= _mapper.Map<TourGuideViewDTO>(tourGuide);
+                result.NumberOfGroup = tourGuide.Groups.Count(x => x.CreationDate > DateTime.Now.AddYears(-1));
+                return await GetNumberOfSuccessOrder(result);
             }
-            throw new Exception("Not found!");
+            
+            throw new NotFoundException("Not found!");
         }
+
+        private async Task<TourGuideViewDTO> GetNumberOfSuccessOrder(TourGuideViewDTO tourGuide)
+        {
+            var orders = await _unitOfWork.OrderRepository
+                        .FindListByField(x =>
+                            x.TourGuideId == _claimsService.GetCurrentUser &&
+                            x.Status == OrderEnums.Completed.ToString()&&
+                            x.CreationDate>=DateTime.Now.AddMonths(-1)
+                            , x => x.OrderDetails);
+            tourGuide.NumberOfOrderCompleted = orders.Count;
+            tourGuide.Point = orders.Count;
+            tourGuide.NumberOfProductSold = orders.Sum(x => x.OrderDetails.Count);
+            return tourGuide;
+        }
+
 
         public async Task<bool> UpdateTourGuideAsync(TourGuideUpdateDTO dto)
         {

@@ -28,15 +28,23 @@ namespace Application.Services
             _mapper = mapper;
             _claimsService = claimsService;
         }
+
+        /// <summary>
+        /// Create order
+        /// </summary>
+        /// <param name="orderCreate"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
         public async Task<bool> CreateOrder(OrderCreateDTO orderCreate)
         {
             var group= await _unitOfWork.GroupRepository.GetByIdAsync(orderCreate.GroupId);
             if (group == null) throw new NotFoundException("Not Found Group " + orderCreate.GroupId);
 
             var createDTO = _mapper.Map<Order>(orderCreate);
+            createDTO.TourGuideId=group.TourGuideId;
             createDTO.TotalPrice = GetTotalPrice(orderCreate.OrderProductDetails);
             var result = await _unitOfWork.OrderRepository.AddAsync(createDTO);
-            AddOrderDetail(result.Id, orderCreate.OrderProductDetails);
+            AddOrderDetail(result.Id, orderCreate.OrderProductDetails,group.TourGuideId);
             await AddPayment(result.Id);
             return await _unitOfWork.SaveChangeAsync()>0;
         }
@@ -56,15 +64,23 @@ namespace Application.Services
             return totalPrice;
         }
 
-        private async void AddOrderDetail(Guid orderId,List<OrderDetailCreateDTO> orderDetailCreateDTOs)
+        private async void AddOrderDetail(Guid orderId,List<OrderDetailCreateDTO> orderDetailCreateDTOs,Guid tourGuideId)
         {
             var createList = _mapper.Map<List<OrderDetail>>(orderDetailCreateDTOs);
             for (int i = 0; i < createList.Count; i++)
             {
+                createList[i].TourGuideId = tourGuideId;
                 createList[i].OrderId = orderId;
             }
             await _unitOfWork.OrderDetailRepository.AddRangeAsync(createList);
         }
+
+        /// <summary>
+        /// Get order by Id
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
 
         public async Task<OrderViewDTO> GetOrderById(Guid orderId)
         {

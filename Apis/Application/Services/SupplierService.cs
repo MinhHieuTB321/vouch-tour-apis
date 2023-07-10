@@ -47,6 +47,7 @@ namespace Application.Services
             };
             _client = new FireSharp.FirebaseClient(_fireBaseConfig);
         }
+
         public async Task<SupplierViewDTO> Create(SupplierCreateDTO createdItem)
         {
             var createDTO = _mapper.Map<Supplier>(createdItem);
@@ -76,6 +77,7 @@ namespace Application.Services
             return result > 0;
         }
 
+        #region DeleteProduct
         public async Task DeleteProduct(List<Guid> products)
         {
             if (products.Count == 0) return;
@@ -123,6 +125,7 @@ namespace Application.Services
             }
         }
 
+        #endregion
 
         public async Task<IEnumerable<SupplierViewDTO>> GetAll()
         {
@@ -131,12 +134,64 @@ namespace Application.Services
             else throw new Exception("Not have any supplier");
         }
 
+        #region Get Supplier by Id
         public async Task<SupplierViewDTO> GetById(Guid id)
         {
-            var result = await _unitOfWork.SupplierRepository.GetByIdAsync(id);
-            if (result != null) return _mapper.Map<SupplierViewDTO>(result);
+            var supplier = await _unitOfWork.SupplierRepository.GetByIdAsync(id,x=>x.Products);
+            if (supplier != null)
+            {
+                var result= _mapper.Map<SupplierViewDTO>(supplier);
+                return result;
+            }
             else throw new Exception("Not found");
         }
+        #endregion
+
+        #region Get Supplier Report
+        public async Task<SupplierReport> GetSupplierReportById(Guid id)
+        {
+            var supplier = await _unitOfWork.SupplierRepository.GetByIdAsync(id, x => x.Products);
+            if (supplier != null)
+            {
+                var result = await GetSupplierReport(supplier.Products.ToList());
+                result = _mapper.Map(supplier, result);
+                return result;
+            }
+            else throw new Exception("Not found");
+        }
+        private async Task<SupplierReport> GetSupplierReport(List<Product> products)
+        {
+            var listProductId = products.Where(x => x.IsDeleted == false).Select(x => x.Id).ToList();
+            var listProductInMenu = await GetNumberProductInMenu(listProductId);
+            var report = new SupplierReport()
+            {
+                NumberOfProducts = listProductId.Count,
+                NumberOfProductInMenu = GetNumberProductInMenu(listProductInMenu),
+                NumberOfProductOutMenu = listProductId.Count - GetNumberProductInMenu(listProductInMenu),
+                NumberOfProductSold = listProductInMenu.Sum(x => x.OrderDetails.Sum(x => x.Quantity)),
+                TotalMoneySold = listProductInMenu.Sum(x => x.OrderDetails.Sum(o => o.UnitPrice * o.Quantity))
+            };
+           
+            return report;
+        }
+
+        private async Task<List<ProductInMenu>> GetNumberProductInMenu(List<Guid> listProductId)
+        {
+            var productInMenu= await _unitOfWork.ProductMenuRepository
+                .FindListByField(x=>
+                    listProductId.Contains(x.ProductId!.Value) && 
+                    x.IsDeleted==false,
+                    x=>x.OrderDetails);
+            return productInMenu;
+        }
+
+        private int GetNumberProductInMenu(List<ProductInMenu> productInMenus)
+        {
+            productInMenus = productInMenus.DistinctBy(x => x.ProductId).ToList();
+            return productInMenus.Count;
+        }
+
+        #endregion
 
         public async Task<bool> Update(SupplierUpdateDTO updatedItem)
         {

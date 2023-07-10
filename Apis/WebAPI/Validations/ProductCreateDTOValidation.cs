@@ -9,8 +9,8 @@ namespace WebAPI.Validations
         {
             RuleFor(x=>x.ProductName).NotEmpty().NotNull().WithMessage("Name can not be null").WithErrorCode("400");
             RuleFor(x => x.Description).NotEmpty().NotNull().WithMessage("Name can not be null").WithErrorCode("400");
-            RuleFor(x => x.ResellPrice).NotEmpty().NotNull().GreaterThan(0).WithMessage("Resell Price must higher than 0").WithErrorCode("400");
-            RuleFor(x => x.RetailPrice).NotEmpty().NotNull().GreaterThan(x=>x.ResellPrice).WithMessage("Resell Price must higher than resell price!").WithErrorCode("400");
+            RuleFor(x => x.ResellPrice).NotEmpty().NotNull().GreaterThan(x=>x.RetailPrice).WithMessage("Resell Price must higher than 0").WithErrorCode("400");
+            RuleFor(x => x.RetailPrice).NotEmpty().NotNull().GreaterThan(0).WithMessage("Resell Price must higher than resell price!").WithErrorCode("400");
         }
     }
 
@@ -20,8 +20,8 @@ namespace WebAPI.Validations
         {
             RuleFor(x => x.ProductName).NotEmpty().NotNull().WithMessage("Name can not be null").WithErrorCode("400");
             RuleFor(x => x.Description).NotEmpty().NotNull().WithMessage("Name can not be null").WithErrorCode("400");
-            RuleFor(x => x.ResellPrice).NotEmpty().NotNull().GreaterThan(0).WithMessage("Resell Price must higher than 0").WithErrorCode("400");
-            RuleFor(x => x.RetailPrice).NotEmpty().NotNull().GreaterThan(x => x.ResellPrice).WithMessage("Resell Price must higher than resell price!").WithErrorCode("400");
+            RuleFor(x => x.ResellPrice).NotEmpty().NotNull().GreaterThan(x=>x.RetailPrice).WithMessage("Resell Price must higher than 0").WithErrorCode("400");
+            RuleFor(x => x.RetailPrice).NotEmpty().NotNull().GreaterThan(0).WithMessage("Resell Price must higher than resell price!").WithErrorCode("400");
         }
     }
 }

@@ -63,6 +63,8 @@ namespace Infrastructures.Mappers
                 .ForMember(des => des.Address, opt => opt.MapFrom(src => src.Address.Trim()))
                 .ForMember(des => des.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
                 .ReverseMap();
+
+            CreateMap<SupplierReport, Supplier>().ReverseMap();
             #endregion
 
             #region Categories

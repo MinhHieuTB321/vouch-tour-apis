@@ -10,6 +10,7 @@ namespace Domain.Entities
         public string ProductName { get; set; } = default!;
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
+        public Guid TourGuideId { get; set; }
         public Guid OrderId { get; set; }
         public Order Order { get; set; } = default!;
         public Guid ProductMenuId { get; set; }
