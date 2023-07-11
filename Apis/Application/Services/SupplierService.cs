@@ -148,24 +148,24 @@ namespace Application.Services
         #endregion
 
         #region Get Supplier Report
-        public async Task<SupplierReport> GetSupplierReportById(Guid id)
+        public async Task<SupplierReportView> GetSupplierReportById(Guid id, DateTime fromDate, DateTime toDate)
         {
             var supplier = await _unitOfWork.SupplierRepository.GetByIdAsync(id, x => x.Products);
             if (supplier != null)
             {
-                var result = await GetReport(supplier.Products.ToList());
+                var result = await GetReport(supplier.Products.ToList(), fromDate,toDate);
                 result = _mapper.Map(supplier, result);
                 return result;
             }
             else throw new Exception("Not found");
         }
             
-        private async Task<SupplierReport> GetReport(List<Product> products)
+        private async Task<SupplierReportView> GetReport(List<Product> products, DateTime fromDate, DateTime toDate)
         {
             var productIds = products.Select(x => x.Id).ToList();
-            var orderDetails = await GetOrderDetails(productIds);
+            var orderDetails = await GetOrderDetails(productIds,fromDate,toDate);
             var orders = orderDetails.Select(x => x.Order).ToList();
-            var report = new SupplierReport()
+            var report = new SupplierReportView()
             {
                 NumberOfProducts = products.Count,
                 NumberOfOrder = orders.Count,
@@ -181,14 +181,14 @@ namespace Application.Services
                            group o by o.CreationDate into orderbyDates
                            select new SupplierChartData()
                            {
-                               date = orderbyDates.Key,
+                               Date = orderbyDates.Key,
                                NumberOfOrderInDate = orderbyDates.Count(),
                                TotalMoneyInDate= orderbyDates.Sum(x=>x.TotalPrice)
                            };
 
             return listData.ToList();
         }
-        private async Task<List<OrderDetail>> GetOrderDetails(List<Guid> productIds)
+        private async Task<List<OrderDetail>> GetOrderDetails(List<Guid> productIds, DateTime fromDate, DateTime toDate)
         {
             var productInMenus = (await _unitOfWork
                 .ProductMenuRepository
@@ -196,7 +196,11 @@ namespace Application.Services
 
             var orders = await _unitOfWork
                 .OrderDetailRepository
-                .FindListByField(x => productInMenus.Contains(x.ProductMenuId), x => x.Order);
+                .FindListByField(x => 
+                productInMenus.Contains(x.ProductMenuId) &&
+                x.CreationDate>=fromDate &&
+                x.CreationDate<=toDate
+                , x => x.Order);
 
             return orders;  
         }

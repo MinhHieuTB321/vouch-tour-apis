@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.ViewModels.SupplierDTO;
 using Domain.Enums;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,9 +46,9 @@ namespace WebAPI.Controllers
         /// </summary>
         [Authorize(Roles = "Admin,Supplier")]
         [HttpGet("{id}/suppliers-report")]
-        public async Task<IActionResult> GetSupplierReportById(Guid id)
+        public async Task<IActionResult> GetSupplierReportById(Guid id,DateTime fromDate,DateTime toDate)
         {
-            var result = await _supplerService.GetSupplierReportById(id);
+            var result = await _supplerService.GetSupplierReportById(id, fromDate, toDate);
             return Ok(result);
         }
 

@@ -11,7 +11,7 @@ namespace WebAPI.Validations
             RuleFor(x=>x.Description).NotEmpty().NotNull().WithMessage("Name can not be null").WithErrorCode("400");
             RuleFor(x => x.Quantity).NotNull().GreaterThan(0).WithMessage("Quantity must higher than 0").WithErrorCode("400");
             RuleFor(x => x.StartDate).GreaterThanOrEqualTo(DateTime.Now).NotNull().WithMessage("Start Date must higher than now!").WithErrorCode("400");
-            RuleFor(x=>x.EndDate).GreaterThan(x=>x.StartDate).NotNull().WithMessage("Start Date must higher than start date!").WithErrorCode("400");
+            RuleFor(x=>x.EndDate).GreaterThan(x=>x.StartDate).NotNull().WithMessage("Start Date must higher than start Date!").WithErrorCode("400");
         }
     }
 
@@ -23,7 +23,7 @@ namespace WebAPI.Validations
             RuleFor(x => x.Description).NotEmpty().NotNull().WithMessage("Name can not be null").WithErrorCode("400");
             RuleFor(x => x.Quantity).NotNull().GreaterThan(0).WithMessage("Quantity must higher than 0").WithErrorCode("400");
             RuleFor(x => x.StartDate).GreaterThanOrEqualTo(DateTime.Now).NotNull().WithMessage("Start Date must higher than now!").WithErrorCode("400");
-            RuleFor(x => x.EndDate).GreaterThan(x => x.StartDate).NotNull().WithMessage("Start Date must higher than start date!").WithErrorCode("400");
+            RuleFor(x => x.EndDate).GreaterThan(x => x.StartDate).NotNull().WithMessage("Start Date must higher than start Date!").WithErrorCode("400");
         }
     }
 }

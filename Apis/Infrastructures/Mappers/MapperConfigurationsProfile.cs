@@ -64,7 +64,7 @@ namespace Infrastructures.Mappers
                 .ForMember(des => des.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
                 .ReverseMap();
 
-            CreateMap<SupplierReport, Supplier>().ReverseMap();
+            CreateMap<SupplierReportView, Supplier>().ReverseMap();
             #endregion
 
             #region Categories

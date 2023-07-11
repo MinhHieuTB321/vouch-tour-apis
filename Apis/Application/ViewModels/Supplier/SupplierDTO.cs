@@ -16,7 +16,7 @@ namespace Application.ViewModels.SupplierDTO
 
     }
 
-    public class SupplierReport
+    public class SupplierReportView
     {
         public Guid Id { get; set; }
         public string Email { get; set; } = default!;
@@ -30,7 +30,7 @@ namespace Application.ViewModels.SupplierDTO
 
     public class SupplierChartData
     {
-        public DateTime date { get; set; }
+        public DateTime Date { get; set; }
         public int NumberOfOrderInDate { get; set; }
         public double TotalMoneyInDate { get; set; }
 

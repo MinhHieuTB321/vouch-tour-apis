@@ -16,6 +16,6 @@ namespace Application.Interfaces
         Task<bool> Update(SupplierUpdateDTO updatedItem);
         Task<bool> Delete(Guid id);
         Task<List<ViewProductDTO>> GetProductBySupplierId(Guid supplierId);
-        Task<SupplierReport> GetSupplierReportById(Guid id);
+        Task<SupplierReportView> GetSupplierReportById(Guid id,DateTime fromDate,DateTime toDate);
     }
 }
