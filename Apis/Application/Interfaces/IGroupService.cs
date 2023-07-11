@@ -17,5 +17,7 @@ namespace Application.Interfaces
         Task<bool> UpdateGroupAsync(GroupUpdateDTO updateDTO);
         Task AddMenu(GroupMenuDTO updateDTO);
         Task<List<OrderViewDTO>> GetAllOrdersAsync(Guid groupId);
+        Task<bool>DeleteGroup(Guid groupId);
+        Task UpdateGroupStatus();
     }
 }

@@ -4,6 +4,7 @@ using Application.ViewModels;
 using Application.ViewModels.GroupDTOs;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,10 @@ namespace Application.Services
         {
             var groupDTO = _mapper.Map<Group>(createDTO);
             groupDTO.TourGuideId=_claimsService.GetCurrentUser;
+            if (createDTO.StartDate <= DateTime.Now)
+            {
+                groupDTO.Status=GroupEnums.InProgress.ToString();
+            }
             var result= await _unitOfWork.GroupRepository.AddAsync(groupDTO);
             if (await _unitOfWork.SaveChangeAsync() > 0)
             {
@@ -55,7 +60,7 @@ namespace Application.Services
             var result= _mapper.Map<GroupViewDTO>(group);
             return result;
         }
-
+        #region Update Group
         public async Task<bool> UpdateGroupAsync(GroupUpdateDTO updateDTO)
         {
             var group = await _unitOfWork.GroupRepository.GetByIdAsync(updateDTO.Id,x=>x.Menu!);
@@ -67,11 +72,14 @@ namespace Application.Services
         private async Task<bool> Update(GroupUpdateDTO updateDTO,Group group)
         {
             var mapper = _mapper.Map(updateDTO, group);
+            if (updateDTO.StartDate <= DateTime.Now) { mapper.Status=GroupEnums.InProgress.ToString(); }
             mapper.Menu = await _unitOfWork.MenuRepository.GetByIdAsync(updateDTO.MenuId);
             _unitOfWork.GroupRepository.Update(group);
             var result = await _unitOfWork.SaveChangeAsync();
             return result > 0;
         }
+
+        #endregion
         public async Task AddMenu(GroupMenuDTO updateDTO)
         {
             var group = await _unitOfWork.GroupRepository.GetByIdAsync(updateDTO.Id,x=>x.Menu);
@@ -102,6 +110,29 @@ namespace Application.Services
                 result.Add(addDTO);
             });
             return result;
+        }
+
+        public async Task<bool> DeleteGroup(Guid groupId)
+        {
+            var group= await _unitOfWork.GroupRepository.GetByIdAsync(groupId);
+            if (group == null) throw new NotFoundException($"Group {groupId} is not exist in system");
+            _unitOfWork.GroupRepository.SoftRemove(group);
+            var result = await _unitOfWork.SaveChangeAsync();
+            return result>0;
+        }
+
+        public async Task UpdateGroupStatus()
+        {
+            var group = await _unitOfWork.GroupRepository.GetAllAsync();
+            group.ForEach(async x =>
+            {
+                if (x.EndDate < DateTime.Now)
+                {
+                    x.Status=GroupEnums.Commplete.ToString();
+                    _unitOfWork.GroupRepository.Update(x);
+                    await _unitOfWork.SaveChangeAsync();
+                }
+            });
         }
     }
 }

@@ -11,6 +11,8 @@ using System;
 using Application.Commons;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Application.Repositories;
+using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,8 +53,9 @@ app.UseAuthorization();
 
 
 app.MapControllers();
-
+RecurringJob.AddOrUpdate<IGroupService>("Update Group Status",util => util.UpdateGroupStatus(),Cron.Daily);
 app.Run();
+
 
 // this line tell intergrasion test
 // https://stackoverflow.com/questions/69991983/deps-file-missing-for-dotnet-6-integration-tests

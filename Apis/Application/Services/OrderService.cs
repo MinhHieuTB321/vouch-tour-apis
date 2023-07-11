@@ -147,10 +147,12 @@ namespace Application.Services
 
             foreach (var group in groups)
             {
-                var order = await _unitOfWork.OrderRepository.FindListByField(x => x.GroupId == group.Id && x.IsDeleted==false, x => x.OrderDetails);
+                var order = await _unitOfWork.OrderRepository.FindListByField(x => x.GroupId == group.Id && x.IsDeleted==false, x => x.OrderDetails,x=>x.Payments);
                 order.ForEach(x =>
                 {
                     var addDTO = _mapper.Map<OrderViewDTO>(x);
+                    addDTO.GroupId = group.Id;
+                    addDTO.GroupName = group.GroupName;
                     addDTO.OrderDetails = _mapper.Map<List<OrderDetailViewDTO>>(x.OrderDetails);
                     addDTO.PaymentName = x.Payments.First().PaymentName;
                     result.Add(addDTO);

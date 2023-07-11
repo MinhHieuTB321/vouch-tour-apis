@@ -23,8 +23,5 @@ namespace Domain.Entities
         public Category Category { get; set; } = default!;
         public ICollection<ProductInMenu> ProductInMenus { get; set;} = default!;
 
-
-
-
     }
 }

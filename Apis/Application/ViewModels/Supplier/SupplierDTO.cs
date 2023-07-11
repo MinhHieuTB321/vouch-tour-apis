@@ -22,11 +22,21 @@ namespace Application.ViewModels.SupplierDTO
         public string Email { get; set; } = default!;
         public string SupplierName { get; set; } = default!;
         public int NumberOfProducts { get; set; }
-        public int NumberOfProductInMenu { get; set; }
-        public int NumberOfProductOutMenu { get; set; }
-        public int NumberOfProductSold { get; set; }
+        public int NumberOfOrder { get;set; }
         public double TotalMoneySold { get; set; }
+        public List<SupplierChartData> ChartDatas { get; set; } = default!;
+
     }
+
+    public class SupplierChartData
+    {
+        public DateTime date { get; set; }
+        public int NumberOfOrderInDate { get; set; }
+        public double TotalMoneyInDate { get; set; }
+
+    }
+
+
 
     public class SupplierCreateDTO
     {

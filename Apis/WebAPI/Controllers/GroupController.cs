@@ -18,15 +18,17 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete product
+        /// Delete Group
         /// </summary>
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(Guid id)
-        //{
-        //    var result = await _productService.DeleteProduct(id);
-        //    if (result) return NoContent();
-        //    else return BadRequest("Deleted Failed");
-        //}
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _groupService.DeleteGroup(id);
+            if (result) return NoContent();
+            else return BadRequest("Deleted Failed");
+        }
 
         /// <summary>
         /// Get all groups of tour-guide

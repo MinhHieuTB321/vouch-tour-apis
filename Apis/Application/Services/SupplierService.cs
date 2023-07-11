@@ -153,42 +153,52 @@ namespace Application.Services
             var supplier = await _unitOfWork.SupplierRepository.GetByIdAsync(id, x => x.Products);
             if (supplier != null)
             {
-                var result = await GetSupplierReport(supplier.Products.ToList());
+                var result = await GetReport(supplier.Products.ToList());
                 result = _mapper.Map(supplier, result);
                 return result;
             }
             else throw new Exception("Not found");
         }
-        private async Task<SupplierReport> GetSupplierReport(List<Product> products)
+            
+        private async Task<SupplierReport> GetReport(List<Product> products)
         {
-            var listProductId = products.Where(x => x.IsDeleted == false).Select(x => x.Id).ToList();
-            var listProductInMenu = await GetNumberProductInMenu(listProductId);
+            var productIds = products.Select(x => x.Id).ToList();
+            var orderDetails = await GetOrderDetails(productIds);
+            var orders = orderDetails.Select(x => x.Order).ToList();
             var report = new SupplierReport()
             {
-                NumberOfProducts = listProductId.Count,
-                NumberOfProductInMenu = GetNumberProductInMenu(listProductInMenu),
-                NumberOfProductOutMenu = listProductId.Count - GetNumberProductInMenu(listProductInMenu),
-                NumberOfProductSold = listProductInMenu.Sum(x => x.OrderDetails.Sum(x => x.Quantity)),
-                TotalMoneySold = listProductInMenu.Sum(x => x.OrderDetails.Sum(o => o.UnitPrice * o.Quantity))
+                NumberOfProducts = products.Count,
+                NumberOfOrder = orders.Count,
+                TotalMoneySold = orderDetails.Sum(x=>x.Quantity*x.UnitPrice),
+                ChartDatas = GetChartData(orders)
             };
-           
             return report;
         }
 
-        private async Task<List<ProductInMenu>> GetNumberProductInMenu(List<Guid> listProductId)
+        private List<SupplierChartData> GetChartData(List<Order> orders)
         {
-            var productInMenu= await _unitOfWork.ProductMenuRepository
-                .FindListByField(x=>
-                    listProductId.Contains(x.ProductId!.Value) && 
-                    x.IsDeleted==false,
-                    x=>x.OrderDetails);
-            return productInMenu;
-        }
+            var listData = from o in orders
+                           group o by o.CreationDate into orderbyDates
+                           select new SupplierChartData()
+                           {
+                               date = orderbyDates.Key,
+                               NumberOfOrderInDate = orderbyDates.Count(),
+                               TotalMoneyInDate= orderbyDates.Sum(x=>x.TotalPrice)
+                           };
 
-        private int GetNumberProductInMenu(List<ProductInMenu> productInMenus)
+            return listData.ToList();
+        }
+        private async Task<List<OrderDetail>> GetOrderDetails(List<Guid> productIds)
         {
-            productInMenus = productInMenus.DistinctBy(x => x.ProductId).ToList();
-            return productInMenus.Count;
+            var productInMenus = (await _unitOfWork
+                .ProductMenuRepository
+                .FindListByField(x => productIds.Contains(x.ProductId!.Value) && x.IsDeleted == false)).Select(x=>x.Id);
+
+            var orders = await _unitOfWork
+                .OrderDetailRepository
+                .FindListByField(x => productInMenus.Contains(x.ProductMenuId), x => x.Order);
+
+            return orders;  
         }
 
         #endregion

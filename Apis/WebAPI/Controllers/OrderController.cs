@@ -47,15 +47,6 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Get order by phone number
-        /// </summary>
-        [HttpGet("{phonenumber}")]
-        public async Task<IActionResult> GetOrderByPhone(string phonenumber)
-        {
-            var result = await _orderService.GetOrderByPhone(phonenumber);
-            return Ok(result);
-        }
 
         /// <summary>
         ///Update Order Status
