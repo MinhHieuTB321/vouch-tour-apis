@@ -39,6 +39,8 @@ namespace Application.Services
             _client= new FireSharp.FirebaseClient(_fireBaseConfig);
         }
 
+
+        #region Add Product to Cart
         public async Task<bool> AddToCart(ItemAddDTO addDTO)
         {
             var root = "Cart-" + _claimsService.GetCurrentUser;
@@ -80,7 +82,9 @@ namespace Application.Services
             }
             return false;
         }
-        
+        #endregion
+
+        #region Delete Item in Cart
         public async Task<bool> DeleteItem(string cartId,string id)
         {
             //var root = "Cart-" + _claimsService.GetCurrentUser;
@@ -91,7 +95,9 @@ namespace Application.Services
             }
             return false;
         }
+        #endregion
 
+        #region Get All Item in Cart
         public async Task<List<ItemViewDTO>> GetAllItems()
         {
             var root = "Cart-" + _claimsService.GetCurrentUser;
@@ -109,6 +115,9 @@ namespace Application.Services
             return list;
         }
 
+        #endregion
+
+        #region Update Item in Cart
         public async Task<bool> UpdateItem(ItemUpdateDTO updateDTO)
         {
             var root = "Cart-" + _claimsService.GetCurrentUser;
@@ -124,6 +133,9 @@ namespace Application.Services
             return false;
         }
 
+        #endregion
+
+        #region Get Item by Id
         public async Task<ItemViewDTO> GetItemById(String cartid, string id)
         {
             FirebaseResponse response = await _client.GetAsync($"{cartid}/" + id);
@@ -131,7 +143,9 @@ namespace Application.Services
             if (data == null) throw new NotFoundException("Not found item with" + id);
             return data;
         }
+        #endregion
 
+        #region Get All Item are not in Cart
         public async Task<List<ViewProductDTO>> GetAllProductOutCart(string cartId)
         {
             var items = await GetItems(cartId);
@@ -159,19 +173,9 @@ namespace Application.Services
             }
             return list;
         }
+        #endregion
 
-        //public async Task DemoNoti()
-        //{
-        //    var clientToken = _config["ClientToken"];
-        //    var clientToken2 = _config["ClientToken2"];
-        //    var listCli = new List<string>
-        //    {
-        //        clientToken,clientToken2
-        //    };
-        //     await FirebaseDatabase.SendNotification(listCli!,"Demo", "Demo");
-        //    //if (count == 0) throw new BadRequestException("Send Fail!");
-        //}
-
+        #region Delete Cart
         public async Task<bool> DeleteCart(string cartId)
         {
             var root = "Cart-" + _claimsService.GetCurrentUser;
@@ -183,5 +187,6 @@ namespace Application.Services
             }
             return false;
         }
+        #endregion
     }
 }

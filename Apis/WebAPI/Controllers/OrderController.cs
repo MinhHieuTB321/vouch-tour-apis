@@ -26,6 +26,7 @@ namespace WebAPI.Controllers
             return Ok("Adding successfully!");
         }
 
+        #region GET
         /// <summary>
         /// Get all  order of tour-guide
         /// </summary>
@@ -46,7 +47,7 @@ namespace WebAPI.Controllers
             var result = await _orderService.GetOrderById(id);
             return Ok(result);
         }
-
+        #endregion
 
         /// <summary>
         ///Update Order Status

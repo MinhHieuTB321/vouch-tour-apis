@@ -10,9 +10,7 @@ namespace Application.Interfaces
     public interface ITourGuideService
     {
         public Task<IEnumerable<TourGuideViewDTO>> GetAll();
-
         public Task<TourGuideViewDTO> GetById(Guid id);
-
         public Task<TourGuideViewDTO> AddTourGuide(TourGuideCreateDTO dto);
         public Task<bool> UpdateTourGuideAsync(TourGuideUpdateDTO dto);
         public Task<bool> DeleteTourGuideAsync(Guid id);

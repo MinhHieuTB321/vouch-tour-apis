@@ -5,6 +5,7 @@ using Application.ViewModels.GroupDTOs;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using Hangfire.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace Application.Services
             _claimsService = claimsService;
         }
 
+        #region Create Order
         /// <summary>
         /// Create order
         /// </summary>
@@ -75,13 +77,15 @@ namespace Application.Services
             await _unitOfWork.OrderDetailRepository.AddRangeAsync(createList);
         }
 
+        #endregion
+
+        #region Get Order By id
         /// <summary>
         /// Get order by Id
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
-
         public async Task<OrderViewDTO> GetOrderById(Guid orderId)
         {
             var order=await _unitOfWork.OrderRepository.GetByIdAsync(orderId,x=>x.Group,x=>x.OrderDetails,x=>x.Payments);
@@ -91,7 +95,9 @@ namespace Application.Services
             result.PaymentName = order.Payments.First().PaymentName;
             return result;
         }
+        #endregion
 
+        #region Update Order
         public async Task<bool> UpdateOrder(OrderUpdateDTO updateDTO)
         {
             var order = await _unitOfWork.OrderRepository.GetByIdAsync(updateDTO.Id);
@@ -113,7 +119,9 @@ namespace Application.Services
             payment.PaymentName = "Cash";
             _unitOfWork.PaymentRepository.Update(payment);
         }
-     
+        #endregion
+
+        #region Delete Order By Id
         public async Task<bool> DeleteOrder(Guid orderId)
         {
             var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
@@ -122,17 +130,30 @@ namespace Application.Services
             var result = await _unitOfWork.SaveChangeAsync();
             return result > 0;
         }
+        #endregion
 
-        public async Task<OrderViewDTO> GetOrderByPhone(string phoneNumber)
+        #region GetOrderByPhone
+        public async Task<List<OrderViewDTO>> GetOrderByPhone(string phoneNumber)
         {
-            var order = await _unitOfWork.OrderRepository.FindByField(x=>x.PhoneNumber==phoneNumber, x => x.Group, x => x.OrderDetails, x => x.Payments);
-            if (order == null) throw new NotFoundException("Not Found Order");
-            var result = _mapper.Map<OrderViewDTO>(order);
-            result.OrderDetails = _mapper.Map<List<OrderDetailViewDTO>>(order.OrderDetails);
-            result.PaymentName = order.Payments.First().PaymentName;
+            var orders = await _unitOfWork.OrderRepository.FindListByField(x=>x.PhoneNumber==phoneNumber, x => x.Group, x => x.OrderDetails, x => x.Payments);
+            if (orders.Count==0) throw new NotFoundException("Not Found Order");
+            var result = MapperOrderView(orders);
             return result;
         }
 
+        private List<OrderViewDTO> MapperOrderView(List<Order> orders)
+        {
+            var result = _mapper.Map<List<OrderViewDTO>>(orders);
+            for (int i = 0; i < result.Count; i++)
+            {
+                result[i].OrderDetails = _mapper.Map<List<OrderDetailViewDTO>>(orders[i].OrderDetails);
+                result[i].PaymentName = orders[i].Payments.First().PaymentName;
+            }
+            return result;
+        }
+        #endregion
+
+        #region GetAl Order of Tour
         public async Task<List<OrderViewDTO>> GetAllOrderOfTourGuide()
         {
             var groups = await _unitOfWork.GroupRepository.FindListByField(x => x.TourGuideId == _claimsService.GetCurrentUser && x.IsDeleted==false,x=>x.Orders);
@@ -147,20 +168,12 @@ namespace Application.Services
 
             foreach (var group in groups)
             {
-                var order = await _unitOfWork.OrderRepository.FindListByField(x => x.GroupId == group.Id && x.IsDeleted==false, x => x.OrderDetails,x=>x.Payments);
-                order.ForEach(x =>
-                {
-                    var addDTO = _mapper.Map<OrderViewDTO>(x);
-                    addDTO.GroupId = group.Id;
-                    addDTO.GroupName = group.GroupName;
-                    addDTO.OrderDetails = _mapper.Map<List<OrderDetailViewDTO>>(x.OrderDetails);
-                    addDTO.PaymentName = x.Payments.First().PaymentName;
-                    result.Add(addDTO);
-                });
+                var order = await _unitOfWork.OrderRepository.FindListByField(x => x.GroupId == group.Id && x.IsDeleted==false, x => x.OrderDetails,x=>x.Payments,x=>x.Group);
+                result.AddRange(MapperOrderView(order));
             }
-           
             return result;
         }
+        #endregion
     }
 
 }

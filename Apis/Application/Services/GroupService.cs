@@ -27,6 +27,7 @@ namespace Application.Services
             _mapper = mapper;
         }
 
+        #region Create Group
         public async Task<GroupViewDTO> CreateGroupAsync(GroupCreateDTO createDTO)
         {
             var groupDTO = _mapper.Map<Group>(createDTO);
@@ -44,6 +45,9 @@ namespace Application.Services
             throw new BadRequestException("Create fail!");
         }
 
+        #endregion
+
+        #region GetAll Group
         public async Task<List<GroupViewDTO>> GetAllGroupAsync()
         {
             var listGroup = (await _unitOfWork.GroupRepository.GetAllAsync(x=>x.Menu!)).OrderByDescending(x=>x.CreationDate).Where(x=>x.TourGuideId==_claimsService.GetCurrentUser).ToList();
@@ -51,8 +55,9 @@ namespace Application.Services
             var mapper = _mapper.Map<List<GroupViewDTO>>(listGroup);
             return mapper;
         }
+        #endregion
 
-
+        #region Get Group By Id
         public async Task<GroupViewDTO> GetGroupByIdAsyn(Guid groupId)
         {
             var group= await _unitOfWork.GroupRepository.FindByField(x=>x.Id==groupId,x=>x.Menu!);
@@ -60,6 +65,8 @@ namespace Application.Services
             var result= _mapper.Map<GroupViewDTO>(group);
             return result;
         }
+        #endregion
+
         #region Update Group
         public async Task<bool> UpdateGroupAsync(GroupUpdateDTO updateDTO)
         {
@@ -80,16 +87,20 @@ namespace Application.Services
         }
 
         #endregion
+
+        #region Add Menu for Group
         public async Task AddMenu(GroupMenuDTO updateDTO)
         {
-            var group = await _unitOfWork.GroupRepository.GetByIdAsync(updateDTO.Id,x=>x.Menu);
+            var group = await _unitOfWork.GroupRepository.GetByIdAsync(updateDTO.Id,x=>x.Menu!);
             if (group == null) throw new NotFoundException("There is no group " + updateDTO.Id + " in system!");
             if (group.Menu==null) throw new BadRequestException("Already existing menu for group");
             group.MenuId = updateDTO.MenuId;
             _unitOfWork.GroupRepository.Update(group);
             await _unitOfWork.SaveChangeAsync();
         }
+        #endregion
 
+        #region Get All Order By Group Id
         public async Task<List<OrderViewDTO>> GetAllOrdersAsync(Guid groupId)
         {
             var orders=await _unitOfWork.OrderRepository.FindListByField(x=>x.GroupId==groupId,x=>x.OrderDetails,x=>x.Group,x=>x.Payments);
@@ -111,7 +122,9 @@ namespace Application.Services
             });
             return result;
         }
+        #endregion
 
+        #region Delete group
         public async Task<bool> DeleteGroup(Guid groupId)
         {
             var group= await _unitOfWork.GroupRepository.GetByIdAsync(groupId);
@@ -120,7 +133,9 @@ namespace Application.Services
             var result = await _unitOfWork.SaveChangeAsync();
             return result>0;
         }
+        #endregion
 
+        #region Update group Status
         public async Task UpdateGroupStatus()
         {
             var group = await _unitOfWork.GroupRepository.GetAllAsync();
@@ -134,5 +149,6 @@ namespace Application.Services
                 }
             });
         }
+        #endregion
     }
 }

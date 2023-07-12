@@ -30,8 +30,7 @@ namespace Application.Services
         private readonly IConfiguration _config;
         private readonly IFirebaseConfig _fireBaseConfig;
         private readonly IFirebaseClient _client;
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, IBackgroundJobClient jobClient,
-            IConfiguration config)
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, IBackgroundJobClient jobClient,IConfiguration config)
         {
                 _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -45,6 +44,7 @@ namespace Application.Services
             _client = new FireSharp.FirebaseClient(_fireBaseConfig);
         }
 
+        #region Create Category
         public async Task<CategoryViewDTO> Create(CategoryCreateDTO categoryCreateDTO)
         {
             var file = await categoryCreateDTO.File.UploadFileAsync();
@@ -55,7 +55,9 @@ namespace Application.Services
             await _unitOfWork.SaveChangeAsync();
             return _mapper.Map<CategoryViewDTO>(result);
         }
+        #endregion
 
+        #region Delete Cate By ID
         public async Task<bool> DeleteById(Guid Id)
         {
             var category=await _unitOfWork.CategoryRepository.GetByIdAsync(Id,x=>x.Products);
@@ -119,20 +121,27 @@ namespace Application.Services
         }
 
 
+        #endregion
+
+        #region Get All Cate
         public async Task<IEnumerable<CategoryViewDTO>> GetAll()
         {
             var result =  await _unitOfWork.CategoryRepository.GetAllAsync();
             if (result.Count() > 0) return _mapper.Map<IEnumerable<CategoryViewDTO>>(result);
             else throw new Exception("Not have any category");
         }
+        #endregion
 
+        #region Get Cate By ID
         public async Task<CategoryViewDTO> GetById(Guid id)
         {
             var result = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
             if (result is not null) return _mapper.Map<CategoryViewDTO>(result);
             else throw new Exception("Not Found");
         }
+        #endregion
 
+        #region Get Product By Cate Id
         public async Task<List<ViewProductDTO>> GetProuductByCategoryId(Guid Id)
         {
             var products=await _unitOfWork.ProductRepository.FindListByField(x=>x.CategoryId==Id && x.IsDeleted==false);
@@ -142,7 +151,9 @@ namespace Application.Services
             }
             throw new NotFoundException("Not Found");
         }
+        #endregion
 
+        #region Update Cate
         public async Task<bool> Update(CategoryUpdateDTO catregoryUpdateDTO)
         {
             var category = await _unitOfWork.CategoryRepository.GetByIdAsync(catregoryUpdateDTO.Id);
@@ -158,5 +169,7 @@ namespace Application.Services
             var result=await _unitOfWork.SaveChangeAsync();
             return (result > 0);
         }
+        #endregion
+
     }
 }

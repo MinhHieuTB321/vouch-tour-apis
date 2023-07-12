@@ -24,6 +24,7 @@ namespace Infrastructures.Repositories
            .Aggregate(_dbSet.AsQueryable(),
                (entity, property) => entity.Include(property).IgnoreAutoIncludes())
            .Where(x => x.IsDeleted == false)
+            .OrderByDescending(x=>x.CreationDate)
            .ToListAsync();
 
         public async Task<TEntity?> GetByIdAsync(Guid id, params Expression<Func<TEntity, object>>[] includes)
@@ -111,14 +112,17 @@ namespace Infrastructures.Repositories
         public async Task<TEntity> FindByField(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] includes)
         => await includes
            .Aggregate(_dbSet!.AsQueryable(),
-               (entity, property) => entity.Include(property)).AsNoTracking()
-           .Where(expression!).FirstOrDefaultAsync(x=>x.IsDeleted==false);
+               (entity, property) => entity!.Include(property)).AsNoTracking()
+           .Where(expression!)
+            .FirstOrDefaultAsync(x=>x.IsDeleted==false);
 
         public async Task<List<TEntity>> FindListByField(Expression<Func<TEntity, bool>> expression, params Expression<Func<TEntity, object>>[] includes)
         => await includes
            .Aggregate(_dbSet!.AsQueryable(),
                (entity, property) => entity.Include(property)).AsNoTracking()
-           .Where(expression!).ToListAsync();
+           .Where(expression!)
+            .OrderByDescending(x=>x.CreationDate)
+            .ToListAsync();
     }
 }
 

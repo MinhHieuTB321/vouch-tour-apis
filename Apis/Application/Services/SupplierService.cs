@@ -29,6 +29,7 @@ namespace Application.Services
         private readonly IConfiguration _config;
         private readonly IFirebaseConfig _fireBaseConfig;
         private readonly IFirebaseClient _client;
+        #region Contructor
         public SupplierService(IUnitOfWork unitOfWork,
             IMapper mapper,
             IClaimsService claimsService,
@@ -48,6 +49,9 @@ namespace Application.Services
             _client = new FireSharp.FirebaseClient(_fireBaseConfig);
         }
 
+        #endregion
+
+        #region Create Supplier
         public async Task<SupplierViewDTO> Create(SupplierCreateDTO createdItem)
         {
             var createDTO = _mapper.Map<Supplier>(createdItem);
@@ -58,7 +62,9 @@ namespace Application.Services
             await _unitOfWork.SaveChangeAsync();
             return _mapper.Map<SupplierViewDTO>(supplier);
         }
-        
+        #endregion
+
+        #region Delete Supplier by Id
         public async Task<bool> Delete(Guid id)
         {
             var supplier=await _unitOfWork.SupplierRepository.GetByIdAsync(id,x=>x.Products);
@@ -76,6 +82,7 @@ namespace Application.Services
             _jobClient.Enqueue(() => DeleteProductInMenu(products));
             return result > 0;
         }
+        #endregion
 
         #region DeleteProduct
         public async Task DeleteProduct(List<Guid> products)
@@ -127,12 +134,14 @@ namespace Application.Services
 
         #endregion
 
+        #region Get All Supplier
         public async Task<IEnumerable<SupplierViewDTO>> GetAll()
         {
             var result = await _unitOfWork.SupplierRepository.GetAllAsync();
             if (result.Count > 0) return _mapper.Map<IEnumerable<SupplierViewDTO>>(result);
             else throw new Exception("Not have any supplier");
         }
+        #endregion
 
         #region Get Supplier by Id
         public async Task<SupplierViewDTO> GetById(Guid id)
@@ -207,6 +216,7 @@ namespace Application.Services
 
         #endregion
 
+        #region Update Supplier
         public async Task<bool> Update(SupplierUpdateDTO updatedItem)
         {
             var supplier = await _unitOfWork.SupplierRepository.GetByIdAsync(_claimsService.GetCurrentUser);
@@ -220,7 +230,9 @@ namespace Application.Services
             return result > 0;
             
         }
+        #endregion
 
+        #region Get Product By Supplier Id
         public async Task<List<ViewProductDTO>> GetProductBySupplierId(Guid supplierId)
         {
             var result = await _unitOfWork.ProductRepository.FindListByField(x=>x.SupplierId==supplierId,x => x.Images, x => x.Category, x => x.Supplier);
@@ -233,5 +245,6 @@ namespace Application.Services
 
 
         }
+        #endregion
     }
 }

@@ -30,6 +30,8 @@ namespace Application.Services
         private readonly IConfiguration _config;
         private readonly IFirebaseConfig _fireBaseConfig;
         private readonly IFirebaseClient _client;
+
+        #region Contructor
         public ProductService( IMapper mapper, 
             IUnitOfWork unitOfWork,
             IClaimsService claimsService,
@@ -48,6 +50,10 @@ namespace Application.Services
             };
             _client = new FireSharp.FirebaseClient(_fireBaseConfig);
         }
+
+        #endregion
+
+        #region Create Product
         public async Task<Product> CreateProduct(CreateProductDTO createDTO)
         {   
             var createItem = _mapper.Map<Product>(createDTO);
@@ -61,8 +67,9 @@ namespace Application.Services
             else throw new Exception("Error Mapping");
         }
 
-        
+        #endregion
 
+        #region Delete Product
         public async Task<bool> DeleteProduct(Guid id)
         {
             var deletedItem = await _unitOfWork.ProductRepository.FindByField(x=>x.Id==id && x.SupplierId==_claimsService.GetCurrentUser, x => x.Images);
@@ -120,6 +127,9 @@ namespace Application.Services
             }
         }
 
+        #endregion
+
+        #region Get All Product
         public async Task<IEnumerable<ViewProductDTO>> GetAll()
         {
             var result =  await _unitOfWork.ProductRepository.GetAllAsync(x => x.Images, x => x.Category, x=> x.Supplier);
@@ -132,14 +142,18 @@ namespace Application.Services
 
 
         }
+        #endregion
 
+        #region GetProduct By Id
         public async Task<ViewProductDTO> GetById(Guid id)
         {
             var result = await _unitOfWork.ProductRepository.GetByIdAsync(id);
             if (result is not null) return _mapper.Map<ViewProductDTO>(result);
             else throw new Exception("Not found");
         }
+        #endregion
 
+        #region Update Product
         public async Task<bool> UpdateProduct(UpdateProductDTO updateDTO)
         {
             var updatedItem = await _unitOfWork.ProductRepository.GetByIdAsync(updateDTO.ProductId);
@@ -152,5 +166,6 @@ namespace Application.Services
             }
             else throw new Exception("Not found");
         }
+        #endregion
     }
 }

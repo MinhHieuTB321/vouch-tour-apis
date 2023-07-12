@@ -25,6 +25,7 @@ namespace Application.Services
             _claimsService = claimsService;
         }
 
+        #region Add TourGuide
         public async Task<TourGuideViewDTO> AddTourGuide(TourGuideCreateDTO dto)
         {
             var createDTO = _mapper.Map<TourGuide>(dto);
@@ -36,7 +37,9 @@ namespace Application.Services
             var result = _mapper.Map<TourGuideViewDTO>(tourGuide);
             return result;
         }
+        #endregion
 
+        #region Delete TourGuide
         public async Task<bool> DeleteTourGuideAsync(Guid id)
         {
             var tourguide=await _unitOfWork.TourGuideRepository.GetByIdAsync(id);
@@ -47,16 +50,27 @@ namespace Application.Services
             var result = await _unitOfWork.SaveChangeAsync();
             return result > 0;
         }
+        #endregion
 
+        #region Get All Tourguide
         public async Task<IEnumerable<TourGuideViewDTO>> GetAll()
         {
-            var result = await _unitOfWork.TourGuideRepository.GetAllAsync();
-            if(result.Count() > 0)
+            var tourGuides = await _unitOfWork.TourGuideRepository.GetAllAsync(x=>x.Groups);
+            if(tourGuides.Count() > 0)
             {
-                return _mapper.Map<List<TourGuideViewDTO>>(result);
+                var result= _mapper.Map<List<TourGuideViewDTO>>(tourGuides);
+                for (int i = 0; i < result.Count; i++)
+                {
+                    result[i].NumberOfGroup = tourGuides[i].Groups.Count;
+                    result[i] = await GetNumberOfSuccessOrder(result[i]);
+                }
+                return result;
             }
             throw new Exception("Not have any tour guide");
         }
+        #endregion
+
+        #region Get Tour-Guide by Id
 
         /// <summary>
         /// Get tour- guide by id
@@ -81,7 +95,7 @@ namespace Application.Services
         {
             var orders = await _unitOfWork.OrderRepository
                         .FindListByField(x =>
-                            x.TourGuideId == _claimsService.GetCurrentUser &&
+                            x.TourGuideId == tourGuide.Id &&
                             x.Status == OrderEnums.Completed.ToString()&&
                             x.CreationDate>=DateTime.Now.AddMonths(-1)
                             , x => x.OrderDetails);
@@ -90,8 +104,9 @@ namespace Application.Services
             tourGuide.NumberOfProductSold = orders.Sum(x => x.OrderDetails.Count);
             return tourGuide;
         }
+        #endregion
 
-
+        #region Update TourGuide
         public async Task<bool> UpdateTourGuideAsync(TourGuideUpdateDTO dto)
         {
             var tourguide = await _unitOfWork.TourGuideRepository.GetByIdAsync(_claimsService.GetCurrentUser);
@@ -104,5 +119,6 @@ namespace Application.Services
             var result = await _unitOfWork.SaveChangeAsync();
             return result > 0;
         }
+        #endregion
     }
 }

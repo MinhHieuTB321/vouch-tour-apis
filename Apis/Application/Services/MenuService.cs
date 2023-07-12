@@ -27,6 +27,7 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
         }
 
+        #region Add List Product to Menu
         public async Task<Guid> AddListProductToMenu(Guid menuId,List<ProductMenuCreateDTO> productMenus)
         {
             var listCreate = _mapper.Map<List<ProductInMenu>>(productMenus);
@@ -38,8 +39,10 @@ namespace Application.Services
             await _unitOfWork.SaveChangeAsync();
             return menuId;
         }
+        #endregion
 
 
+        #region Get Product In Menu
         public async Task<List<ProductMenuViewDTO>> GetProductInMenuViewAsync(Guid menuId)
         {
             var productMenus = await _unitOfWork.ProductMenuRepository.GetProductByMenuId(menuId);
@@ -76,6 +79,9 @@ namespace Application.Services
             return result;
         }
 
+        #endregion
+
+        #region Create Menu
         public async Task<Guid> CreateMenu(MenuCreateDTO createDTO)
         {
             var newMenu = new Menu { Title = createDTO.Title,TourGuideId=_claimsService.GetCurrentUser };
@@ -90,6 +96,9 @@ namespace Application.Services
             return result.Id;
         }
 
+        #endregion
+
+        #region Get All Menu 
         public async Task<List<MenuListViewDTO>> GetAllMenu()
         {
             var listMenu= await _unitOfWork.MenuRepository.FindListByField(x=>x.CreatedBy==_claimsService.GetCurrentUser&&x.IsDeleted==false,x=>x.ProductInMenus!);
@@ -102,6 +111,9 @@ namespace Application.Services
             }
             return result;
         }
+        #endregion
+
+        #region Delete Menu
 
         public async Task<bool> DeleteMenu(Guid menuId)
         {
@@ -112,7 +124,9 @@ namespace Application.Services
             var result= await _unitOfWork.SaveChangeAsync();
             return result > 0;
         }
+        #endregion
 
+        #region Update Menu
         public async Task UpdateMenu(MenuUdpateDTO updateDTO)
         {
             var menu =await _unitOfWork.MenuRepository.GetByIdAsync(updateDTO.MenuId);
@@ -123,6 +137,9 @@ namespace Application.Services
             await _unitOfWork.SaveChangeAsync();
         }
 
+        #endregion
+
+        #region Get Menu By Id
         public async Task<MenuViewDTO> GetMenuViewById(Guid menuId)
         {
             var menu = await _unitOfWork.MenuRepository.GetByIdAsync(menuId, x => x.ProductInMenus!);
@@ -133,6 +150,10 @@ namespace Application.Services
             return result;
         }
 
+        #endregion
+
+        #region Get Product In Menu by Id
+
         public async Task<ProductMenuViewDTO> GetProductInMenuById(Guid menuId, Guid productId)
         {
             var product= await _unitOfWork.ProductMenuRepository.FindByField(x=>x.Id==productId& x.MenuId==menuId);
@@ -141,7 +162,9 @@ namespace Application.Services
             result.Id= product.Id;
             return result;
         }
+        #endregion
 
+        #region Delete product in Menu
         public async Task<bool> DeleteProductFromMenu(Guid MenuId, Guid productMenuId)
         {
             var deleteDTO = await _unitOfWork.ProductMenuRepository.FindByField(x => x.ProductId == productMenuId&x.MenuId==MenuId);
@@ -151,5 +174,6 @@ namespace Application.Services
             var result = await _unitOfWork.SaveChangeAsync();
             return result > 0;
         }
+        #endregion
     }
 }
