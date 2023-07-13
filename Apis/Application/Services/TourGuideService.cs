@@ -61,8 +61,9 @@ namespace Application.Services
                 var result= _mapper.Map<List<TourGuideViewDTO>>(tourGuides);
                 for (int i = 0; i < result.Count; i++)
                 {
-                    result[i].NumberOfGroup = tourGuides[i].Groups.Count;
-                    result[i] = await GetNumberOfSuccessOrder(result[i]);
+                    var report = await GetTourGuideReport(result[i].Id);
+                    result[i].ReportInMonth = _mapper.Map(report, result[i].ReportInMonth);
+                    result[i].ReportInMonth.NumberOfGroup = tourGuides[i].Groups.Count;
                 }
                 return result;
             }
@@ -84,25 +85,41 @@ namespace Application.Services
             if(tourGuide is not null)
             {
                 var result= _mapper.Map<TourGuideViewDTO>(tourGuide);
-                result.NumberOfGroup = tourGuide.Groups.Count(x => x.CreationDate > DateTime.Now.AddYears(-1));
-                return await GetNumberOfSuccessOrder(result);
+                var report = await GetTourGuideReport(tourGuide.Id);
+                result.ReportInMonth = _mapper.Map(report, result.ReportInMonth);
+                result.ReportInMonth.NumberOfGroup = tourGuide.Groups.Count(x => x.CreationDate > DateTime.Now.AddYears(-1));
+                return result;
             }
             
             throw new NotFoundException("Not found!");
         }
 
-        private async Task<TourGuideViewDTO> GetNumberOfSuccessOrder(TourGuideViewDTO tourGuide)
+        private async Task<TourGuideReport> GetTourGuideReport(Guid tourGuideId)
         {
             var orders = await _unitOfWork.OrderRepository
                         .FindListByField(x =>
-                            x.TourGuideId == tourGuide.Id &&
-                            x.Status == OrderEnums.Completed.ToString()&&
+                            x.TourGuideId == tourGuideId &&
                             x.CreationDate>=DateTime.Now.AddMonths(-1)
                             , x => x.OrderDetails);
-            tourGuide.NumberOfOrderCompleted = orders.Count;
-            tourGuide.Point = orders.Count;
-            tourGuide.NumberOfProductSold = orders.Sum(x => x.OrderDetails.Count);
-            return tourGuide;
+            var result = new TourGuideReport()
+            {
+                NumberOfOrderCompleted = orders.Count(x=>x.Status==OrderEnums.Completed.ToString()),
+                NumberOfOrderCanceled= orders.Count(x => x.Status == OrderEnums.Canceled.ToString()),
+                NumberOfOrderWaiting = orders.Count(x => x.Status == OrderEnums.Waiting.ToString()),
+                Point=GetPoint(orders.Count(x => x.Status == OrderEnums.Completed.ToString()))
+            };
+            return result;
+        }
+
+        private int GetPoint(int orderSuccess)
+        {
+            if(orderSuccess > 5)
+            {
+                orderSuccess += (orderSuccess / 10) * 5;
+                return orderSuccess;
+            }
+
+            return orderSuccess;
         }
         #endregion
 
