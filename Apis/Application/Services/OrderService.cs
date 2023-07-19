@@ -71,11 +71,11 @@ namespace Application.Services
             return await _unitOfWork.SaveChangeAsync()>0;
         }
 
-        private async Task NotifiTourguide(Guid id,String cusName)
+        public async Task NotifiTourguide(Guid id,String cusName)
         {
             await FirebaseDatabase.SendNotification(_client, id, "You have a new order", $"Request from {cusName}");
         }
-        private async Task AddPayment(Guid orderId)
+        public async Task AddPayment(Guid orderId)
         {
             var payment = new Payment
             {
@@ -85,13 +85,13 @@ namespace Application.Services
             };
             await _unitOfWork.PaymentRepository.AddAsync(payment);
         }
-        private double GetTotalPrice(List<OrderDetailCreateDTO> orderProducts)
+        public double GetTotalPrice(List<OrderDetailCreateDTO> orderProducts)
         {
             var totalPrice = orderProducts.Sum(x => x.UnitPrice * x.Quantity);
             return totalPrice;
         }
 
-        private async void AddOrderDetail(Guid orderId,List<OrderDetailCreateDTO> orderDetailCreateDTOs,Guid tourGuideId)
+        public async void AddOrderDetail(Guid orderId,List<OrderDetailCreateDTO> orderDetailCreateDTOs,Guid tourGuideId)
         {
             var createList = _mapper.Map<List<OrderDetail>>(orderDetailCreateDTOs);
             for (int i = 0; i < createList.Count; i++)
