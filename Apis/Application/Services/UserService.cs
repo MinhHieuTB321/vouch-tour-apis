@@ -46,7 +46,6 @@ namespace Application.Services
         public async Task<List<UserViewDTO>> GetAllUsers()
         {
             var users = await _unitOfWork.UserRepository.GetAllAsync(x=>x.Role);
-            await FirebaseDatabase.SendNotification(_client, _claimsService.GetCurrentUser, "Demo", "Demo");
             return _mapper.Map<List<UserViewDTO>>(users);
         }
 

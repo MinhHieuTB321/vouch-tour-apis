@@ -17,7 +17,6 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get All Users
         /// </summary>
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> DemoApi()
         {
