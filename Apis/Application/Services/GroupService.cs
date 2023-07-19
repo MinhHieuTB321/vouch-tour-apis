@@ -139,15 +139,22 @@ namespace Application.Services
         public async Task UpdateGroupStatus()
         {
             var group = await _unitOfWork.GroupRepository.GetAllAsync();
-            group.ForEach(async x =>
+            for (int i = 0; i < group.Count; i++)
             {
-                if (x.EndDate < DateTime.Now)
+                if (group[i].EndDate < DateTime.Now)
                 {
-                    x.Status=GroupEnums.Commplete.ToString();
-                    _unitOfWork.GroupRepository.Update(x);
+                    group[i].Status=GroupEnums.Commplete.ToString();
+                    _unitOfWork.GroupRepository.Update(group[i]);
                     await _unitOfWork.SaveChangeAsync();
                 }
-            });
+                if (group[i].StartDate <= DateTime.Now && group[i].EndDate >= DateTime.Now)
+                {
+                    group[i].Status = GroupEnums.Commplete.ToString();
+                    _unitOfWork.GroupRepository.Update(group[i]);
+                    await _unitOfWork.SaveChangeAsync();
+                }
+
+            };
         }
         #endregion
     }

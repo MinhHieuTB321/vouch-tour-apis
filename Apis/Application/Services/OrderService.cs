@@ -1,11 +1,16 @@
-﻿using Application.GlobalExceptionHandling.Exceptions;
+﻿using Application.Commons;
+using Application.GlobalExceptionHandling.Exceptions;
 using Application.Interfaces;
 using Application.ViewModels;
 using Application.ViewModels.GroupDTOs;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using FireSharp.Config;
+using FireSharp.Interfaces;
+using Hangfire;
 using Hangfire.Server;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +25,28 @@ namespace Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IClaimsService _claimsService;
         private readonly IMapper _mapper;
+        private readonly IBackgroundJobClient _jobClient;
+        private readonly IConfiguration _config;
+        private readonly IFirebaseConfig _fireBaseConfig;
+        private readonly IFirebaseClient _client;
 
         public OrderService(IUnitOfWork unitOfWork,
                             IMapper mapper,
-                            IClaimsService claimsService)
+                            IClaimsService claimsService,
+                            IBackgroundJobClient jobClient,
+                            IConfiguration config)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _claimsService = claimsService;
+            _jobClient = jobClient;
+            _config = config;
+            _fireBaseConfig = new FirebaseConfig
+            {
+                AuthSecret = _config["RealTimeDatabase:AuthSecret"],
+                BasePath = _config["RealTimeDatabase:BasePath"],
+            };
+            _client = new FireSharp.FirebaseClient(_fireBaseConfig);
         }
 
         #region Create Order
@@ -48,7 +67,13 @@ namespace Application.Services
             var result = await _unitOfWork.OrderRepository.AddAsync(createDTO);
             AddOrderDetail(result.Id, orderCreate.OrderProductDetails,group.TourGuideId);
             await AddPayment(result.Id);
+            _jobClient.Enqueue(() => NotifiTourguide(group.TourGuideId, orderCreate.CustomerName));
             return await _unitOfWork.SaveChangeAsync()>0;
+        }
+
+        private async Task NotifiTourguide(Guid id,String cusName)
+        {
+            await FirebaseDatabase.SendNotification(_client, id, "You have a new order", $"Request from {cusName}");
         }
         private async Task AddPayment(Guid orderId)
         {

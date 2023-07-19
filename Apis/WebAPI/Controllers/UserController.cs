@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.ViewModels.UserDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -16,6 +17,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get All Users
         /// </summary>
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> DemoApi()
         {

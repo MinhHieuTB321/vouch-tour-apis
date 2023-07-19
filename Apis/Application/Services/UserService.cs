@@ -1,10 +1,13 @@
-﻿using Application.GlobalExceptionHandling.Exceptions;
+﻿using Application.Commons;
+using Application.GlobalExceptionHandling.Exceptions;
 using Application.Interfaces;
 using Application.Utils;
 using Application.ViewModels;
 using Application.ViewModels.UserDTOs;
 using AutoMapper;
 using Domain.Entities;
+using FireSharp.Config;
+using FireSharp.Interfaces;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -19,19 +22,31 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IClaimsService _claimsService;
         private readonly IConfiguration _config;
+        private readonly IFirebaseConfig _fireBaseConfig;
+        private readonly IFirebaseClient _client;
         public UserService(IUnitOfWork unitOfWork, 
                             IMapper mapper,
-                            IConfiguration config)
+                            IConfiguration config,
+                            IClaimsService claimsService)
         {
+            _claimsService = claimsService;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _config = config;
+            _fireBaseConfig = new FirebaseConfig
+            {
+                AuthSecret = _config["RealTimeDatabase:AuthSecret"],
+                BasePath = _config["RealTimeDatabase:BasePath"],
+            };
+            _client = new FireSharp.FirebaseClient(_fireBaseConfig);
         }
 
         public async Task<List<UserViewDTO>> GetAllUsers()
         {
             var users = await _unitOfWork.UserRepository.GetAllAsync(x=>x.Role);
+            await FirebaseDatabase.SendNotification(_client, _claimsService.GetCurrentUser, "Demo", "Demo");
             return _mapper.Map<List<UserViewDTO>>(users);
         }
 

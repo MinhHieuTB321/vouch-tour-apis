@@ -106,9 +106,20 @@ namespace Application.Services
                 NumberOfOrderCompleted = orders.Count(x=>x.Status==OrderEnums.Completed.ToString()),
                 NumberOfOrderCanceled= orders.Count(x => x.Status == OrderEnums.Canceled.ToString()),
                 NumberOfOrderWaiting = orders.Count(x => x.Status == OrderEnums.Waiting.ToString()),
+                NumberOfProductSold=GetNumberOfProductSold(orders.Where(x=>x.Status==OrderEnums.Completed.ToString()).ToList()),
                 Point=GetPoint(orders.Count(x => x.Status == OrderEnums.Completed.ToString()))
             };
             return result;
+        }
+
+        private int GetNumberOfProductSold(List<Order> orders)
+        {
+            int num = 0;
+            orders.ForEach(x =>
+            {
+                num += x.OrderDetails.Sum(od => od.Quantity);
+            });
+            return num;
         }
 
         private int GetPoint(int orderSuccess)

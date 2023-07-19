@@ -53,7 +53,14 @@ app.UseAuthorization();
 
 
 app.MapControllers();
-RecurringJob.AddOrUpdate<IGroupService>("Update Group Status",util => util.UpdateGroupStatus(),Cron.Daily);
+
+await app.StartAsync();
+RecurringJob.AddOrUpdate<IGroupService>("Update Group Status",util => util.UpdateGroupStatus(),Cron.Hourly);
+RecurringJob.AddOrUpdate<INotificationService>("Notification before start date", util => util.PushNotiBeforeStartDate(), Cron.Daily(19));
+RecurringJob.AddOrUpdate<INotificationService>("Notification on start date", util => util.PushNotiOnStartDate(),Cron.Daily(18));
+RecurringJob.AddOrUpdate<INotificationService>("Notification after end date", util => util.PushNotiAfterEndDate(),Cron.Daily(17));
+await app.WaitForShutdownAsync();
+
 app.Run();
 
 
