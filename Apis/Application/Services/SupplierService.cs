@@ -235,7 +235,7 @@ namespace Application.Services
         #region Get Product By Supplier Id
         public async Task<List<ViewProductDTO>> GetProductBySupplierId(Guid supplierId)
         {
-            var result = await _unitOfWork.ProductRepository.FindListByField(x=>x.SupplierId==supplierId,x => x.Images, x => x.Category, x => x.Supplier);
+            var result = await _unitOfWork.ProductRepository.FindListByField(x=>x.SupplierId==supplierId && x.IsDeleted==false,x => x.Images, x => x.Category, x => x.Supplier);
             if (result.Count > 0)
             {
                 result = result.OrderByDescending(x => x.CreationDate).ToList();
