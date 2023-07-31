@@ -22,6 +22,7 @@ namespace Domain.Entities
         public Guid CategoryId { get; set; } = default!;
         public Category Category { get; set; } = default!;
         public ICollection<ProductInMenu> ProductInMenus { get; set;} = default!;
+        public ICollection<OrderDetail>? OrderDetails { get; set; } = default!;
 
     }
 }

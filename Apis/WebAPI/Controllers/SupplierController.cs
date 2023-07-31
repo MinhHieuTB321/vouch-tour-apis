@@ -54,6 +54,17 @@ namespace WebAPI.Controllers
 
 
         /// <summary>
+        /// Get supplier report by id
+        /// </summary>
+        [Authorize(Roles = "Supplier")]
+        [HttpGet("{id}/orders-detail")]
+        public async Task<IActionResult> GetOrderDetailBySupId(Guid id)
+        {
+            var result = await _supplerService.GetOrderDetailBySupId(id);
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Get product by supplier id
         /// </summary>
         [Authorize(Roles = nameof(RoleEnums.Supplier))]

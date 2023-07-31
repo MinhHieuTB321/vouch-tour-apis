@@ -16,6 +16,5 @@ namespace Domain.Entities
         public Guid? ProductId {get;set;} 
         public Product? Product {get;set;} = default!;
 
-        public ICollection<OrderDetail> OrderDetails {get;set;} = default!;
     }
 }

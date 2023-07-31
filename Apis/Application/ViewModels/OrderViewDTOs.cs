@@ -1,5 +1,6 @@
 ﻿using Application.ViewModels.GroupDTOs;
 using Domain.Entities;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Application.ViewModels
         public string CustomerName { get; set; } = default!;
         public string PhoneNumber { get; set; } = default!;
         public string Note { get; set; } = default!;
+        public string? ShipAddress { get; set; } = default!;
         public DateTime CreationDate { get;set; }
         public string PaymentName { get; set; } = default!;
         public Guid GroupId { get; set; }
@@ -24,16 +26,19 @@ namespace Application.ViewModels
         public ICollection<OrderDetailViewDTO> OrderDetails { get; set; } = default!;    
     }
 
-
-
     public class OrderDetailViewDTO
     {
-        public Guid ProductMenuId { get; set; }
+        public Guid Id { get; set; }
+        public Guid ProductId { get; set; }
         public string ProductName { get; set; }=default!;
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
+        public string Status { get; set; } = default!;
+        public string? Reason { get; set; } = default!;
+        public string? ShipAddress { get; set; } = default!;
 
     }
+
     public class OrderCreateDTO
     {
         public Guid GroupId { get; set; }
@@ -45,8 +50,8 @@ namespace Application.ViewModels
 
     public class OrderDetailCreateDTO
     {
-        public Guid ProductMenuId { get; set; }
-        public string ProductName { get;set; } =default!;
+        public Guid ProductId { get; set; }
+        public Guid SupplierId { get; set; }
         public int Quantity { get;set; }
         public double UnitPrice { get;set; }
     }
@@ -54,7 +59,15 @@ namespace Application.ViewModels
     public class OrderUpdateDTO
     {
         public Guid Id { get; set; }
+        public string? ShipAddress { get; set; } = default!;
         public string Status { get;set; } =default!;
+    }
+
+    public class OrderDetailUpdateDTO
+    {
+        public Guid Id { get; set; }
+        public string Status { get; set; } = default!;
+        public string? Reason { get; set; } = default!;
     }
 
 } 

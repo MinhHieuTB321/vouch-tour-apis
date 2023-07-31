@@ -179,7 +179,12 @@ namespace Infrastructures.Mappers
 
             #region OrderDetailMapping
             CreateMap<OrderDetailCreateDTO, OrderDetail>().ReverseMap();
-            CreateMap<OrderDetailViewDTO, OrderDetail>().ReverseMap();
+            CreateMap<OrderDetailViewDTO, OrderDetail>()
+                .ForPath(d => d.Product.ProductName, o => o.MapFrom(s => s.ProductName))
+                .ForPath(d => d.Order.ShipAddress, o => o.MapFrom(s => s.ShipAddress))
+                .ReverseMap();
+
+            CreateMap<OrderDetailUpdateDTO, OrderDetail>().ReverseMap();
             #endregion
 
             #region Payment

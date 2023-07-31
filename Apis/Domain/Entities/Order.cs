@@ -13,6 +13,7 @@ namespace Domain.Entities
         public string CustomerName { get; set; } = default!;
         public string PhoneNumber { get; set; }=default!;
         public string Note { get; set; } = default!;
+        public string? ShipAddress { get; set; } = default!;
         public Guid TourGuideId {  get; set; }
         public Guid GroupId { get;set; }
         public Group Group {get;set;} = default!;

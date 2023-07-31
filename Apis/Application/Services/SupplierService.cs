@@ -17,6 +17,7 @@ using FireSharp.Response;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Application.ViewModels.CartDTO;
+using Application.ViewModels;
 
 namespace Application.Services
 {
@@ -206,7 +207,7 @@ namespace Application.Services
             var orders = await _unitOfWork
                 .OrderDetailRepository
                 .FindListByField(x => 
-                productInMenus.Contains(x.ProductMenuId) &&
+                //productInMenus.Contains(x.ProductMenuId) &&
                 x.CreationDate>=fromDate &&
                 x.CreationDate<=toDate
                 , x => x.Order);
@@ -245,6 +246,19 @@ namespace Application.Services
 
 
         }
+
+
         #endregion
+
+        public async Task<List<OrderDetailViewDTO>> GetOrderDetailBySupId(Guid supplierId)
+        {
+            var orderDetails = await _unitOfWork.OrderDetailRepository.FindListByField(x => x.SupplierId == supplierId, x => x.Product, x => x.Order);
+            if(orderDetails.Count == 0)
+            {
+                throw new NotFoundException("There is no order exist!");
+            }
+            var result = _mapper.Map<List<OrderDetailViewDTO>>(orderDetails);
+            return result;
+        }
     }
 }

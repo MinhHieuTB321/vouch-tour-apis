@@ -1,3 +1,4 @@
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +8,16 @@ namespace Domain.Entities
 {
     public class OrderDetail : BaseEntity
     {
-        public string ProductName { get; set; } = default!;
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
+        public Guid SupplierId { get; set; }
+        public string Status { get; set; } = OrderDetailEnums.Waiting.ToString();
+        public string? Reason { get; set; } = default!;
         public Guid TourGuideId { get; set; }
         public Guid OrderId { get; set; }
         public Order Order { get; set; } = default!;
-        public Guid ProductMenuId { get; set; }
-        public ProductInMenu ProductMenu { get; set; } = default!;
+        public Guid ProductId { get; set; }
+        public Product Product { get; set; } = default!;
    
     }
 }

@@ -1,4 +1,5 @@
-﻿using Application.ViewModels.Product;
+﻿using Application.ViewModels;
+using Application.ViewModels.Product;
 using Application.ViewModels.SupplierDTO;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,7 @@ namespace Application.Interfaces
         Task<bool> Delete(Guid id);
         Task<List<ViewProductDTO>> GetProductBySupplierId(Guid supplierId);
         Task<SupplierReportView> GetSupplierReportById(Guid id,DateTime fromDate,DateTime toDate);
+        
+        Task<List<OrderDetailViewDTO>> GetOrderDetailBySupId(Guid supplierId);
     }
 }

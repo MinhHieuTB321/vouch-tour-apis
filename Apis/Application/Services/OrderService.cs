@@ -50,12 +50,6 @@ namespace Application.Services
         }
 
         #region Create Order
-        /// <summary>
-        /// Create order
-        /// </summary>
-        /// <param name="orderCreate"></param>
-        /// <returns></returns>
-        /// <exception cref="NotFoundException"></exception>
         public async Task<bool> CreateOrder(OrderCreateDTO orderCreate)
         {
             var group= await _unitOfWork.GroupRepository.GetByIdAsync(orderCreate.GroupId);
@@ -105,29 +99,33 @@ namespace Application.Services
         #endregion
 
         #region Get Order By id
-        /// <summary>
-        /// Get order by Id
-        /// </summary>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
-        /// <exception cref="NotFoundException"></exception>
         public async Task<OrderViewDTO> GetOrderById(Guid orderId)
         {
             var order=await _unitOfWork.OrderRepository.GetByIdAsync(orderId,x=>x.Group,x=>x.OrderDetails,x=>x.Payments);
             if (order == null) throw new NotFoundException("Not Found Order");
             var result= _mapper.Map<OrderViewDTO>(order);
-            result.OrderDetails=_mapper.Map<List<OrderDetailViewDTO>>(order.OrderDetails);
+            result.OrderDetails=await GetListOrderDetailViews(order);
             result.PaymentName = order.Payments.First().PaymentName;
             return result;
         }
         #endregion
 
+
+        private async Task<List<OrderDetailViewDTO>> GetListOrderDetailViews(Order order)
+        {
+            var listId= order.OrderDetails.Select(x=>x.Id).ToList();
+            var orderDetails= await _unitOfWork.OrderDetailRepository.FindListByField(x=>listId.Contains(x.Id),x=>x.Product,x=>x.Order);
+            var result= _mapper.Map<List<OrderDetailViewDTO>>(orderDetails);
+            return result;
+        }
+
         #region Update Order
         public async Task<bool> UpdateOrder(OrderUpdateDTO updateDTO)
         {
-            var order = await _unitOfWork.OrderRepository.GetByIdAsync(updateDTO.Id);
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(updateDTO.Id,x=>x.OrderDetails);
             if (order == null) throw new BadRequestException("Order is not exist!");
             order.Status = updateDTO.Status;
+            order.ShipAddress= updateDTO.ShipAddress;
             _unitOfWork.OrderRepository.Update(order);
             if (updateDTO.Status.Equals(OrderEnums.Completed.ToString()))
             {
@@ -162,16 +160,16 @@ namespace Application.Services
         {
             var orders = await _unitOfWork.OrderRepository.FindListByField(x=>x.PhoneNumber==phoneNumber, x => x.Group, x => x.OrderDetails, x => x.Payments);
             if (orders.Count==0) throw new NotFoundException("Not Found Order");
-            var result = MapperOrderView(orders);
+            var result = await MapperOrderView(orders);
             return result;
         }
 
-        private List<OrderViewDTO> MapperOrderView(List<Order> orders)
+        private async Task<List<OrderViewDTO>> MapperOrderView(List<Order> orders)
         {
             var result = _mapper.Map<List<OrderViewDTO>>(orders);
             for (int i = 0; i < result.Count; i++)
             {
-                result[i].OrderDetails = _mapper.Map<List<OrderDetailViewDTO>>(orders[i].OrderDetails);
+                result[i].OrderDetails = await GetListOrderDetailViews(orders[i]);
                 result[i].PaymentName = orders[i].Payments.First().PaymentName;
             }
             return result;
@@ -194,11 +192,11 @@ namespace Application.Services
             foreach (var group in groups)
             {
                 var order = await _unitOfWork.OrderRepository.FindListByField(x => x.GroupId == group.Id && x.IsDeleted==false, x => x.OrderDetails,x=>x.Payments,x=>x.Group);
-                result.AddRange(MapperOrderView(order));
+                result.AddRange(await MapperOrderView(order));
             }
             return result;
         }
-        #endregion
+        #endregion  
     }
 
 }

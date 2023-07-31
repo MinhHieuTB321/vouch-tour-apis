@@ -59,7 +59,7 @@ namespace Application.Services
             for (int i = 0; i < products.Count; i++)
             {
                var product= await GetProductMenuView(products[i]);
-               product.Id = products[i].Id;
+               product.Id = products[i]!.ProductId.Value;
                result.Add(product);    
             }
             return result;
