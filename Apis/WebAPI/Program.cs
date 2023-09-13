@@ -15,7 +15,7 @@ using Application.Repositories;
 using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
-
+//demo
 // Add services to the container.
 var configuration = builder.Configuration.Get<AppConfiguration>();
 builder.Services.AddInfrastructuresService(builder.Configuration.GetConnectionString("DefaultConnection")!);
