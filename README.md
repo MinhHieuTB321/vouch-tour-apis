@@ -7,5 +7,4 @@ Source Code BackEnd API of Vouch-Tour-Group
 4. SE161967_Vương Hữu Hiếu (FrontEnd)
 5. SE162003_Nguyễn Hiển Vinh (Mobile)
 6. SE161820_Phạm Trọng Nghĩa (Mobile)
-## ***Resources***
-<a href="https://drive.google.com/drive/folders/1Ywa_Wa9KuPOdNWxuxkYaKGll6vrodGcv">Group Resources</a>
+
